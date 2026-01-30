@@ -4,12 +4,8 @@ import {useState} from "react";
 
 const Navbar = () => {
   const [activeItem, setActiveItem] = useState("About Us");
-<<<<<<< HEAD
 
   const menuItems = ["About", "Services", "Solutions"];
-=======
-  const menuItems = ["About", "Services", "Solutions", "Contact"];
->>>>>>> 87241a0a51db9f2fe4b129e5434892802fa1b823
 
   return (
     <nav className="custom-navbar">

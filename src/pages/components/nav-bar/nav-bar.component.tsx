@@ -5,7 +5,7 @@ import "./nav-bar.component.scss";
 const Navbar = () => {
   const [activeItem, setActiveItem] = useState("About Us");
 
-  const menuItems = ["About", "Services", "Solutions", "Contact"];
+  const menuItems = ["About", "Services", "Solutions"];
 
   return (
     <nav className="custom-navbar">
@@ -33,7 +33,7 @@ const Navbar = () => {
             thickness={1}
             className="login-button"
           >
-            Log-in
+            Contact
           </StarBorder>
         </div>
       </div>

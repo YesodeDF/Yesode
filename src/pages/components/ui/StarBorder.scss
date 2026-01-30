@@ -1,0 +1,77 @@
+.star-border-container {
+  display: inline-block;
+  position: relative;
+  border-radius: 20px;
+  overflow: hidden;
+}
+
+.border-gradient-bottom {
+  position: absolute;
+  width: 400%;
+  height: 60%;
+  opacity: 0.9;
+  bottom: -14px;
+  right: -300%;
+  border-radius: 50%;
+  animation: star-movement-bottom 3s linear infinite;
+  z-index: 0;
+  filter: blur(2px);
+}
+
+.border-gradient-top {
+  position: absolute;
+  opacity: 0.9;
+  width: 400%;
+  height: 60%;
+  top: -14px;
+  left: -300%;
+  border-radius: 50%;
+  animation: star-movement-top 3s linear infinite;
+  z-index: 0;
+  filter: blur(2px);
+}
+
+.inner-content {
+  position: relative;
+  border: 1px solid #222;
+  background: #000;
+  color: white;
+  font-size: 16px;
+  text-align: center;
+  padding: 10px 22px;   // um pouco menor para navbar
+  border-radius: 20px;
+  z-index: 1;
+  white-space: nowrap;
+}
+
+@keyframes star-movement-bottom {
+  0% {
+    transform: translateX(0%);
+    opacity: 0.8;
+  }
+
+  50% {
+    opacity: 1;
+  }
+
+  100% {
+    transform: translateX(-150%);
+    opacity: 0;
+  }
+}
+
+@keyframes star-movement-top {
+  0% {
+    transform: translateX(0%);
+    opacity: 0.8;
+  }
+
+  50% {
+    opacity: 1;
+  }
+
+  100% {
+    transform: translateX(150%);
+    opacity: 0;
+  }
+}

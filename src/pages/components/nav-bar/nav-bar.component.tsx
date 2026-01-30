@@ -1,10 +1,9 @@
-import React, { useState } from "react";
 import StarBorder from "../ui/StarBorder";
 import "./nav-bar.component.scss";
+import {useState} from "react";
 
 const Navbar = () => {
   const [activeItem, setActiveItem] = useState("About Us");
-
   const menuItems = ["About", "Services", "Solutions", "Contact"];
 
   return (

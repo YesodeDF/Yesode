@@ -1,84 +1,137 @@
-@import url("https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600;700&display=swap");
 
-.custom-navbar {
-  width: 100%;
-  background: #000000;
-  padding: 0 2rem;
+.navbar {
   position: fixed;
   top: 0;
-  left: 0;
-  right: 0;
+  width: 100%;
   z-index: 1000;
-  height: 80px;
-  display: flex;
-  align-items: center;
-  font-family: "Fira Code", "Courier New", monospace;
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(12px);
+  font-family: "Fira Code", monospace;
 
-  .navbar-container {
-    width: 100%;
-    max-width: 1600px;
-    margin: 0 auto;
-    display: grid;
-    grid-template-columns: auto 1fr auto;
+  &__container {
+    height: 64px;
+    padding: 0 1rem;
+    display: flex;
     align-items: center;
+    justify-content: space-between;
+    max-width: 1280px;
+    margin: 0 auto;
   }
 
-  .navbar-logo {
+  /* Logo */
+  &__logo {
     display: flex;
-    justify-content: flex-start;
-    color: #d3ac68;
-    font-weight: bold;
-    font-size: 1.2rem;
+    align-items: center;
+    gap: 0.5rem;
+    background: none;
+    border: none;
+    cursor: pointer;
   }
 
-  .navbar-menu {
+  &__logo-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    background: #d3ac68;
+    color: #000;
     display: flex;
+    align-items: center;
     justify-content: center;
+    font-weight: 700;
+  }
+
+  &__logo-text {
+    color: #fff;
+    font-size: 1.1rem;
+    font-weight: 700;
+  }
+
+  /* Desktop menu */
+  &__menu {
+    display: none;
+    list-style: none;
     gap: 2rem;
 
-    .menu-item {
-      color: #e6e6e6;
+    li button {
+      background: none;
+      border: none;
+      color: #b5b5b5;
+      font-size: 0.9rem;
       cursor: pointer;
-      font-size: 1rem;
-      transition: all 0.2s;
-      display: flex;
-      align-items: center;
-      gap: 8px;
+      transition: color 0.2s;
 
       &:hover {
-        color: #ffffff;
-      }
-
-      &.active {
-        color: #ffffff;
-      }
-
-      .bracket {
-        color: #d3ac68;
-        font-weight: bold;
+        color: #fff;
       }
     }
   }
 
-  .navbar-actions {
-    display: flex;
-    justify-content: flex-end;
+  &__cta {
+    display: none;
+    background: #d3ac68;
+    color: #000;
+    border: none;
+    padding: 0.5rem 1.25rem;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+  }
 
-    .login-button {
-      background: transparent;
-      border: 1px solid #d3ac68;
-      color: #ffffff;
-      padding: 10px 20px;
-      margin-left: 2rem; // move botão para direita sem sumir
-      border-radius: 8px;
+  &__toggle {
+    background: none;
+    border: none;
+    color: #fff;
+    cursor: pointer;
+  }
+
+  /* Mobile menu */
+  &__mobile {
+    background: rgba(0, 0, 0, 0.9);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    flex-direction: column;
+    padding: 1.5rem 1rem;
+    gap: 1rem;
+
+    button {
+      background: none;
+      border: none;
+      color: #e0e0e0;
+      text-align: left;
+      font-size: 1rem;
       cursor: pointer;
-      font-family: inherit;
-      transition: all 0.3s ease;
 
       &:hover {
-        background: rgba(211, 172, 104, 0.1);
-        box-shadow: 0 0 10px #d3ac68;
+        color: #fff;
       }
+    }
+  }
+
+  &__mobile-cta {
+    margin-top: 0.5rem;
+    background: #d3ac68;
+    color: #000;
+    border: none;
+    height: 40px;
+    border-radius: 8px;
+    font-weight: 600;
+  }
+}
+
+/* Tablet+ */
+@media (min-width: 768px) {
+  .navbar {
+    &__menu {
+      display: flex;
+    }
+
+    &__cta {
+      display: inline-flex;
+    }
+
+    &__toggle {
+      display: none;
     }
   }
 }

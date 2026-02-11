@@ -1,0 +1,159 @@
+.hero {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  color: #ffffff;
+
+  &__background {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0.4;
+    }
+  }
+
+  &__overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, 0.6),
+      rgba(0, 0, 0, 0.85)
+    );
+  }
+
+  &__float {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    opacity: 0.4;
+    animation: float 6s ease-in-out infinite;
+    z-index: 2;
+  }
+
+  &__content {
+    position: relative;
+    z-index: 3;
+    max-width: 960px;
+    padding: 0 1rem;
+    text-align: center;
+  }
+
+  &__badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(8px);
+    border-radius: 999px;
+    padding: 0.4rem 0.75rem;
+    margin-bottom: 2rem;
+    font-size: 0.75rem;
+    color: #00BFFF;
+  }
+
+  &__title {
+    font-size: 2.2rem;
+    font-weight: 800;
+    line-height: 1.1;
+    margin-bottom: 1.5rem;
+
+    span {
+      background: linear-gradient(90deg,rgba(0, 191, 255, 1) 20%, rgba(0, 68, 255, 1) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+  }
+
+  &__description {
+    max-width: 640px;
+    margin: 0 auto 2.5rem;
+    font-size: 1rem;
+    color: #cfcfcf;
+    line-height: 1.6;
+  }
+
+  &__actions {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1.5rem;
+    width: 100%;
+    margin-top: 2rem;
+  }
+
+  &__primary-btn {
+    height: 48px;
+    padding: 0 2rem;
+    border-radius: 10px;
+    background: #00BFFF;
+    color: #000;
+    border: none;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+  }
+
+  &__secondary-btn {
+    height: 48px;
+    padding: 0 2rem;
+    border-radius: 10px;
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: #fff;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+  }
+}
+
+/* Tablet+ */
+@media (min-width: 768px) {
+  .hero {
+    &__title {
+      font-size: 3.5rem;
+    }
+
+    &__description {
+      font-size: 1.1rem;
+    }
+
+    &__actions {
+      flex-direction: row;
+    }
+  }
+}
+
+/* Desktop+ */
+@media (min-width: 1024px) {
+  .hero {
+    &__title {
+      font-size: 5rem;
+      line-height: 1;
+    }
+  }
+}
+
+@keyframes float {
+  0% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}

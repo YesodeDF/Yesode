@@ -1,149 +1,118 @@
-@import url("https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600;700&display=swap");
-
-// Global Reset
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
 
 body {
+  margin: 0;
   width: 100%;
-  overflow-x: hidden; // Evita scroll horizontal indesejado
+  overflow-x: hidden;
 }
 
 .navbar {
-  position: fixed;
+  position: sticky;
   top: 0;
   width: 100%;
+  background: #e0dcd3;
+
+  padding: 0.5rem 2rem; 
+  font-family: "Saira", sans-serif;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   z-index: 1000;
-  background: rgba(0, 0, 0, 0.75);
-  backdrop-filter: blur(12px);
-  font-family: "Fira Code", monospace;
+  box-sizing: border-box;
 
-  &__container {
-    height: 64px;
-    padding: 0 1rem;
-    max-width: 1440px;
-    margin: 0 auto;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
+  min-height: 60px; 
 
-  /* Logo */
   &__logo {
+    flex: 1;
     display: flex;
     align-items: center;
-    gap: 0.5rem;
-    background: none;
-    border: none;
-    cursor: pointer;
+    gap: 0.6rem;
+    text-decoration: none;
+
+    img {
+      width: 28px;
+      height: 28px;
+      object-fit: contain;
+    }
+
+    span {
+      font-weight: 700;
+      color: #1a1a1a;
+      font-size: 1.1rem;
+    }
   }
 
-  &__logo-icon {
-    width: 32px;
-    height: 32px;
-    border-radius: 8px;
-    background: #00BFFF;
-    color: #000;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: 700;
-  }
-
-  &__logo-text {
-    color: #fff;
-    font-size: 1.1rem;
-    font-weight: 700;
-  }
-
-  /* Desktop menu */
   &__menu {
     display: none;
-    list-style: none;
-    gap: 2rem;
+    flex: 0 1 auto;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    gap: 0.5rem;
+    padding: 0.4rem;
+    border-radius: 999px;
+    white-space: nowrap;
+    background: rgba(255, 255, 255, 0.25); 
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
 
-    li button {
-      background: none;
-      border: none;
-      color: #b5b5b5;
-      font-size: 0.9rem;
-      cursor: pointer;
-      transition: color 0.2s;
+    a {
+      text-decoration: none;
+      font-size: 0.8rem;
+      color: #1a1a1a;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      padding: 0.4rem 1.2rem;
+      border-radius: 999px;
+      transition: all 0.3s ease;
+      display: inline-block;
 
-      &:hover {
-        color: #fff;
+      &:hover { 
+        color: #a68a64; 
+      }
+
+      // 🔥 O ESTADO ATIVO
+      &.active {
+        background: #a68a64;
+        color: #ffffff;
+        box-shadow: 0 4px 10px rgba(166, 138, 100, 0.3);
+        
+        &:hover {
+          color: #ffffff;
+          filter: brightness(1.1);
+        }
       }
     }
   }
 
-  &__cta {
-    display: none;
-    background: #00BFFF;
-    color: #000;
-    border: none;
-    padding: 0.5rem 1.25rem;
-    border-radius: 8px;
-    font-weight: 600;
-    cursor: pointer;
+  &__button-container {
+    flex: 1; 
+    display: flex;
+    justify-content: flex-end;
   }
 
-  &__toggle {
-    background: none;
+  &__button {
+    background: #a68a64;
     border: none;
+    border-radius: 6px;
+    padding: 0.5rem 1.2rem; 
+    font-size: 0.85rem;
+    font-weight: 600;
     color: #fff;
     cursor: pointer;
-  }
-
-  /* Mobile menu */
-  &__mobile {
-    background: rgba(0, 0, 0, 0.9);
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
-    display: flex;
-    flex-direction: column;
-    padding: 1.5rem 1rem;
-    gap: 1rem;
-
-    button {
-      background: none;
-      border: none;
-      color: #e0e0e0;
-      text-align: left;
-      font-size: 1rem;
-      cursor: pointer;
-
-      &:hover {
-        color: #fff;
-      }
-    }
-  }
-
-  &__mobile-cta {
-    margin-top: 0.5rem;
-    background: #d3ac68;
-    color: #000;
-    border: none;
-    height: 40px;
-    border-radius: 8px;
-    font-weight: 600;
+    box-shadow: 0 4px 12px rgba(166, 138, 100, 0.2);
   }
 }
 
-/* Tablet+ */
-@media (min-width: 768px) {
+/* ====== DESKTOP ====== */
+@media (min-width: 992px) {
   .navbar {
+    padding: 0.6rem 5%; 
+
     &__menu {
       display: flex;
-    }
-
-    &__cta {
-      display: inline-flex;
-    }
-
-    &__toggle {
-      display: none;
     }
   }
 }

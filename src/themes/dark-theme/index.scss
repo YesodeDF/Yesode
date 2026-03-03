@@ -1,0 +1,11 @@
+/* Dark Theme */
+[data-theme="dark"] {
+  --bg-color: #1a1a1a;
+  --text-color: #ffffff;
+  --accent-color: #F59E0B;
+}
+
+body[data-theme="dark"] {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+}

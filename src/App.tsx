@@ -9,10 +9,9 @@ function App() {
     <>
       <main>
         <Routes>
-          <Route path="/" element={<ProposalMiAbuela />} />
+          <Route path="*" element={<Navigate to="/proposal-mi-abuela" replace />} />
           <Route path="/invite" element={<SendInvite />} />
           <Route path="/proposal-mi-abuela" element={<ProposalMiAbuela />} />
-          <Route path="*" element={<Navigate to="/proposal-mi-abuela" replace />} />
         </Routes>
 
       </main>

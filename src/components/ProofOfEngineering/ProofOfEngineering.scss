@@ -1,0 +1,73 @@
+@use '../../styles/tokens' as *;
+
+.ys-proof {
+  padding: 6rem 0;
+  background-color: transparent;
+
+  .ys-arch-block {
+    background-color: $cards-dark;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+    max-width: 600px;
+    margin: 0 auto;
+    overflow: hidden;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+
+    .ys-arch-header {
+      background-color: rgba(0,0,0,0.3);
+      padding: 0.75rem 1rem;
+      display: flex;
+      align-items: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+
+      .ys-dot {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        margin-right: 8px;
+        
+        &.bg-red { background-color: #ff5f56; }
+        &.bg-yellow { background-color: #ffbd2e; }
+        &.bg-green { background-color: #27c93f; }
+      }
+
+      .ys-arch-title {
+        margin-left: auto;
+        margin-right: auto;
+        color: $text-dark;
+        font-size: 0.875rem;
+      }
+    }
+
+    .ys-arch-body {
+      padding: 3rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      color: $headings-dark;
+      font-size: 1rem;
+
+      .ys-arch-node {
+        padding: 1rem 2rem;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 4px;
+        background: rgba(255, 255, 255, 0.02);
+        width: 100%;
+        text-align: center;
+        letter-spacing: 0.05em;
+
+        &.ys-arch-highlight {
+          border-color: $primary;
+          color: $primary;
+          background: rgba(196, 169, 98, 0.05);
+        }
+      }
+
+      .ys-arch-flow {
+        padding: 1rem 0;
+        color: $text-dark;
+        font-size: 1.5rem;
+      }
+    }
+  }
+}

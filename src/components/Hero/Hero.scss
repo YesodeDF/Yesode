@@ -1,0 +1,63 @@
+@use '../../styles/tokens' as *;
+
+.ys-hero {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-top: 80px; // account for header
+  overflow: hidden;
+
+  .ys-hero-grid {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    background-size: 50px 50px;
+    background-image: 
+      linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+    mask-image: radial-gradient(circle at center, black 40%, transparent 80%);
+    -webkit-mask-image: radial-gradient(circle at center, black 40%, transparent 80%);
+  }
+
+  .ys-hero-content {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    max-width: 900px;
+  }
+
+  .ys-hero-title {
+    font-size: clamp(3rem, 6vw, 5rem);
+    line-height: 1.1;
+    letter-spacing: -0.03em;
+    margin-bottom: 2rem;
+    
+    span {
+      color: $primary;
+      font-style: italic;
+      padding-right: 0.2em;
+    }
+  }
+
+  .ys-hero-subtitle {
+    font-size: clamp(1.125rem, 2vw, 1.375rem);
+    color: $text-dark;
+    margin-bottom: 3rem;
+    line-height: 1.6;
+    font-weight: 400;
+  }
+
+  .ys-hero-actions {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    
+    .p-button {
+      padding: 1rem 2rem !important;
+      font-size: 1.125rem !important;
+      letter-spacing: -0.01em;
+    }
+  }
+}

@@ -11,6 +11,9 @@ importers:
 
   .:
     dependencies:
+      '@ant-design/icons':
+        specifier: ^6.1.0
+        version: 6.1.0(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
       '@gsap/react':
         specifier: ^2.1.2
         version: 2.1.2(gsap@3.14.2)(react@19.2.3)
@@ -62,6 +65,9 @@ importers:
       react-router-dom:
         specifier: ^7.13.1
         version: 7.13.1(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
+      sass:
+        specifier: ^1.98.0
+        version: 1.98.0
       sass-embedded:
         specifier: ^1.97.2
         version: 1.97.2
@@ -71,7 +77,7 @@ importers:
         version: 9.39.2
       '@tailwindcss/vite':
         specifier: ^4.2.1
-        version: 4.2.1(rolldown-vite@7.2.5(@types/node@24.10.9)(jiti@2.6.1)(sass-embedded@1.97.2)(sass@1.97.2)(tsx@4.21.0))
+        version: 4.2.1(rolldown-vite@7.2.5(@types/node@24.12.0)(jiti@2.6.1)(sass-embedded@1.97.2)(sass@1.98.0)(tsx@4.21.0))
       '@types/cors':
         specifier: ^2.8.19
         version: 2.8.19
@@ -79,8 +85,8 @@ importers:
         specifier: ^5.0.6
         version: 5.0.6
       '@types/node':
-        specifier: ^24.10.1
-        version: 24.10.9
+        specifier: ^24.12.0
+        version: 24.12.0
       '@types/nodemailer':
         specifier: ^7.0.11
         version: 7.0.11
@@ -95,7 +101,7 @@ importers:
         version: 5.6.10
       '@vitejs/plugin-react':
         specifier: ^5.1.1
-        version: 5.1.2(rolldown-vite@7.2.5(@types/node@24.10.9)(jiti@2.6.1)(sass-embedded@1.97.2)(sass@1.97.2)(tsx@4.21.0))
+        version: 5.1.2(rolldown-vite@7.2.5(@types/node@24.12.0)(jiti@2.6.1)(sass-embedded@1.97.2)(sass@1.98.0)(tsx@4.21.0))
       autoprefixer:
         specifier: ^10.4.27
         version: 10.4.27(postcss@8.5.6)
@@ -137,9 +143,26 @@ importers:
         version: 8.53.1(eslint@9.39.2(jiti@2.6.1))(typescript@5.9.3)
       vite:
         specifier: npm:rolldown-vite@7.2.5
-        version: rolldown-vite@7.2.5(@types/node@24.10.9)(jiti@2.6.1)(sass-embedded@1.97.2)(sass@1.97.2)(tsx@4.21.0)
+        version: rolldown-vite@7.2.5(@types/node@24.12.0)(jiti@2.6.1)(sass-embedded@1.97.2)(sass@1.98.0)(tsx@4.21.0)
 
 packages:
+
+  '@ant-design/colors@8.0.1':
+    resolution: {integrity: sha512-foPVl0+SWIslGUtD/xBr1p9U4AKzPhNYEseXYRRo5QSzGACYZrQbe11AYJbYfAWnWSpGBx6JjBmSeugUsD9vqQ==}
+
+  '@ant-design/fast-color@3.0.1':
+    resolution: {integrity: sha512-esKJegpW4nckh0o6kV3Tkb7NPIZYbPnnFxmQDUmL08ukXZAvV85TZBr70eGuke/CIArLaP6aw8lt9KILjnWuOw==}
+    engines: {node: '>=8.x'}
+
+  '@ant-design/icons-svg@4.4.2':
+    resolution: {integrity: sha512-vHbT+zJEVzllwP+CM+ul7reTEfBR0vgxFe7+lREAsAA7YGsYpboiq2sQNeQeRvh09GfQgs/GyFEvZpJ9cLXpXA==}
+
+  '@ant-design/icons@6.1.0':
+    resolution: {integrity: sha512-KrWMu1fIg3w/1F2zfn+JlfNDU8dDqILfA5Tg85iqs1lf8ooyGlbkA+TkwfOKKgqpUmAiRY1PTFpuOU2DAIgSUg==}
+    engines: {node: '>=8'}
+    peerDependencies:
+      react: '>=16.0.0'
+      react-dom: '>=16.0.0'
 
   '@babel/code-frame@7.28.6':
     resolution: {integrity: sha512-JYgintcMjRiCvS8mMECzaEn+m3PfoQiyqukOMCCVQtoJGYJw8j/8LBJEiqkHLkfwCcs74E3pbAUFNg7d9VNJ+Q==}
@@ -785,6 +808,12 @@ packages:
     resolution: {integrity: sha512-WYa2tUVV5HiArWPB3ydlOc4R2ivq0IDrlqhMi3l7mVsFEXNcTfxYFPIHXHXIh/ca/y/V5N4E1zecyxdIBjYnkQ==}
     engines: {node: '>= 10.0.0'}
 
+  '@rc-component/util@1.9.0':
+    resolution: {integrity: sha512-5uW6AfhIigCWeEQDthTozlxiT4Prn6xYQWeO0xokjcaa186OtwPRHBZJ2o0T0FhbjGhZ3vXdbkv0sx3gAYW7Vg==}
+    peerDependencies:
+      react: '>=18.0.0'
+      react-dom: '>=18.0.0'
+
   '@renovatebot/pep440@4.2.1':
     resolution: {integrity: sha512-2FK1hF93Fuf1laSdfiEmJvSJPVIDHEUTz68D3Fi9s0IZrrpaEcj6pTFBTbYvsgC5du4ogrtf5re7yMMvrKNgkw==}
     engines: {node: ^20.9.0 || ^22.11.0 || ^24, pnpm: ^10.0.0}
@@ -1030,8 +1059,8 @@ packages:
   '@types/node@20.11.0':
     resolution: {integrity: sha512-o9bjXmDNcF7GbM4CNQpmi+TutCgap/K3w1JyKgxAjqx41zp9qlIAVFi0IhCNsJcXolEqLWhbFbEeL0PvYm4pcQ==}
 
-  '@types/node@24.10.9':
-    resolution: {integrity: sha512-ne4A0IpG3+2ETuREInjPNhUGis1SFjv1d5asp8MzEAGtOZeTeHVDOYqOgqfhvseqg/iXty2hjBf1zAOb7RNiNw==}
+  '@types/node@24.12.0':
+    resolution: {integrity: sha512-GYDxsZi3ChgmckRT9HPU0WEhKLP08ev/Yfcq2AstjrDASOYCSXeyjDsHg4v5t4jOj7cyDX3vmprafKlWIG9MXQ==}
 
   '@types/nodemailer@7.0.11':
     resolution: {integrity: sha512-E+U4RzR2dKrx+u3N4DlsmLaDC6mMZOM/TPROxA0UAPiTgI0y4CEFBmZE+coGWTjakDriRsXG368lNk1u9Q0a2g==}
@@ -1343,6 +1372,10 @@ packages:
 
   clivas@0.2.0:
     resolution: {integrity: sha512-5C5CLP3PwH3MrZA44G/gKwGyqCJYeA4Ct8dN9eVDjYlktYx4Gmf7072QhxECPvzemLGT5nSG+QWmpeJeb56bPA==}
+
+  clsx@2.1.1:
+    resolution: {integrity: sha512-eYm0QWBtUrBWZWG0d386OGAw16Z995PiOVo2B7bjWSbHedGl5e0ZWaq65kOGgUSNesEIDkB9ISbTg/JK9dhCZA==}
+    engines: {node: '>=6'}
 
   code-block-writer@10.1.1:
     resolution: {integrity: sha512-67ueh2IRGst/51p0n6FvPrnRjAGHY5F8xdjkgrYE7DDzpJe6qA07RYQ9VcoUeo5ATOjSOiWpSL3SWBRRbempMw==}
@@ -1743,6 +1776,9 @@ packages:
   immutable@5.1.4:
     resolution: {integrity: sha512-p6u1bG3YSnINT5RQmx/yRZBpenIl30kVxkTLDyHLIMk0gict704Q9n+thfDI7lTRm9vXdDYutVzXhzcThxTnXA==}
 
+  immutable@5.1.5:
+    resolution: {integrity: sha512-t7xcm2siw+hlUM68I+UEOK+z84RzmN59as9DZ7P1l0994DKUWV7UXBMQZVxaoMSRQ+PBZbHCOoBt7a2wxOMt+A==}
+
   import-fresh@3.3.1:
     resolution: {integrity: sha512-TR3KfrTZTYLPB6jUjfx6MF9WcWrHL9su5TObK4ZkYgBdWKPOFoSoQIdEuTuR82pmtxH2spWG9h6etwfr1pLBqQ==}
     engines: {node: '>=6'}
@@ -1769,6 +1805,9 @@ packages:
   is-glob@4.0.3:
     resolution: {integrity: sha512-xelSayHH36ZgE7ZWhli7pW34hNbNl8Ojv5KVmkJD4hBdD3th8Tfk9vYasLM+mXWOZhFkgZfxhLSnrwRr4elSSg==}
     engines: {node: '>=0.10.0'}
+
+  is-mobile@5.0.0:
+    resolution: {integrity: sha512-Tz/yndySvLAEXh+Uk8liFCxOwVH6YutuR74utvOcu7I9Di+DwM0mtdPVZNaVvvBUM2OXxne/NhOs1zAO7riusQ==}
 
   is-number@7.0.0:
     resolution: {integrity: sha512-41Cifkg6e8TylSpdtTpeLVMqvSBEVzTttHvERD741+pnZ8ANv0004MRL43QKPDlK9cGvNp6NZWZUBlbGXYxxng==}
@@ -2274,6 +2313,9 @@ packages:
   react-is@16.13.1:
     resolution: {integrity: sha512-24e6ynE2H+OKt4kqsOvNd8kBpV65zoxbA4BVsEOB3ARVWQki/DHzaUoC5KuON/BiccDaCCTZBuOcfZs70kR8bQ==}
 
+  react-is@18.3.1:
+    resolution: {integrity: sha512-/LLMVyas0ljjAtoYiPqYiL8VWXzUUdThrmU5+n20DZv+a+ClRoevUzw5JxU+Ieh5/c87ytoTBV9G1FiKfNJdmg==}
+
   react-refresh@0.18.0:
     resolution: {integrity: sha512-QgT5//D3jfjJb6Gsjxv0Slpj23ip+HtOpnNgnb2S5zU3CB26G/IDPGoy4RJB42wzFE46DRsstbW6tKHoKbhAxw==}
     engines: {node: '>=0.10.0'}
@@ -2509,6 +2551,11 @@ packages:
 
   sass@1.97.2:
     resolution: {integrity: sha512-y5LWb0IlbO4e97Zr7c3mlpabcbBtS+ieiZ9iwDooShpFKWXf62zz5pEPdwrLYm+Bxn1fnbwFGzHuCLSA9tBmrw==}
+    engines: {node: '>=14.0.0'}
+    hasBin: true
+
+  sass@1.98.0:
+    resolution: {integrity: sha512-+4N/u9dZ4PrgzGgPlKnaaRQx64RO0JBKs9sDhQ2pLgN6JQZ25uPQZKQYaBJU48Kd5BxgXoJ4e09Dq7nMcOUW3A==}
     engines: {node: '>=14.0.0'}
     hasBin: true
 
@@ -2776,6 +2823,23 @@ packages:
     resolution: {integrity: sha512-k7Nwx6vuWx1IJ9Bjuf4Zt1PEllcwe7cls3VNzm4CQ1/hgtFUK2bRNG3rvnpPUhFjmqJKAKtjV576KnUkHocg/g==}
 
 snapshots:
+
+  '@ant-design/colors@8.0.1':
+    dependencies:
+      '@ant-design/fast-color': 3.0.1
+
+  '@ant-design/fast-color@3.0.1': {}
+
+  '@ant-design/icons-svg@4.4.2': {}
+
+  '@ant-design/icons@6.1.0(react-dom@19.2.3(react@19.2.3))(react@19.2.3)':
+    dependencies:
+      '@ant-design/colors': 8.0.1
+      '@ant-design/icons-svg': 4.4.2
+      '@rc-component/util': 1.9.0(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
+      clsx: 2.1.1
+      react: 19.2.3
+      react-dom: 19.2.3(react@19.2.3)
 
   '@babel/code-frame@7.28.6':
     dependencies:
@@ -3271,6 +3335,13 @@ snapshots:
       '@parcel/watcher-win32-x64': 2.5.4
     optional: true
 
+  '@rc-component/util@1.9.0(react-dom@19.2.3(react@19.2.3))(react@19.2.3)':
+    dependencies:
+      is-mobile: 5.0.0
+      react: 19.2.3
+      react-dom: 19.2.3(react@19.2.3)
+      react-is: 18.3.1
+
   '@renovatebot/pep440@4.2.1': {}
 
   '@rolldown/binding-android-arm64@1.0.0-beta.50':
@@ -3388,12 +3459,12 @@ snapshots:
       '@tailwindcss/oxide-win32-arm64-msvc': 4.2.1
       '@tailwindcss/oxide-win32-x64-msvc': 4.2.1
 
-  '@tailwindcss/vite@4.2.1(rolldown-vite@7.2.5(@types/node@24.10.9)(jiti@2.6.1)(sass-embedded@1.97.2)(sass@1.97.2)(tsx@4.21.0))':
+  '@tailwindcss/vite@4.2.1(rolldown-vite@7.2.5(@types/node@24.12.0)(jiti@2.6.1)(sass-embedded@1.97.2)(sass@1.98.0)(tsx@4.21.0))':
     dependencies:
       '@tailwindcss/node': 4.2.1
       '@tailwindcss/oxide': 4.2.1
       tailwindcss: 4.2.1
-      vite: rolldown-vite@7.2.5(@types/node@24.10.9)(jiti@2.6.1)(sass-embedded@1.97.2)(sass@1.97.2)(tsx@4.21.0)
+      vite: rolldown-vite@7.2.5(@types/node@24.12.0)(jiti@2.6.1)(sass-embedded@1.97.2)(sass@1.98.0)(tsx@4.21.0)
 
   '@ts-morph/common@0.11.1':
     dependencies:
@@ -3431,21 +3502,21 @@ snapshots:
   '@types/body-parser@1.19.6':
     dependencies:
       '@types/connect': 3.4.38
-      '@types/node': 24.10.9
+      '@types/node': 24.12.0
 
   '@types/connect@3.4.38':
     dependencies:
-      '@types/node': 24.10.9
+      '@types/node': 24.12.0
 
   '@types/cors@2.8.19':
     dependencies:
-      '@types/node': 24.10.9
+      '@types/node': 24.12.0
 
   '@types/estree@1.0.8': {}
 
   '@types/express-serve-static-core@5.1.1':
     dependencies:
-      '@types/node': 24.10.9
+      '@types/node': 24.12.0
       '@types/qs': 6.14.0
       '@types/range-parser': 1.2.7
       '@types/send': 1.2.1
@@ -3464,13 +3535,13 @@ snapshots:
     dependencies:
       undici-types: 5.26.5
 
-  '@types/node@24.10.9':
+  '@types/node@24.12.0':
     dependencies:
       undici-types: 7.16.0
 
   '@types/nodemailer@7.0.11':
     dependencies:
-      '@types/node': 24.10.9
+      '@types/node': 24.12.0
 
   '@types/qs@6.14.0': {}
 
@@ -3490,12 +3561,12 @@ snapshots:
 
   '@types/send@1.2.1':
     dependencies:
-      '@types/node': 24.10.9
+      '@types/node': 24.12.0
 
   '@types/serve-static@2.2.0':
     dependencies:
       '@types/http-errors': 2.0.5
-      '@types/node': 24.10.9
+      '@types/node': 24.12.0
 
   '@typescript-eslint/eslint-plugin@8.53.1(@typescript-eslint/parser@8.53.1(eslint@9.39.2(jiti@2.6.1))(typescript@5.9.3))(eslint@9.39.2(jiti@2.6.1))(typescript@5.9.3)':
     dependencies:
@@ -3667,7 +3738,7 @@ snapshots:
       json-schema-to-ts: 1.6.4
       ts-morph: 12.0.0
 
-  '@vitejs/plugin-react@5.1.2(rolldown-vite@7.2.5(@types/node@24.10.9)(jiti@2.6.1)(sass-embedded@1.97.2)(sass@1.97.2)(tsx@4.21.0))':
+  '@vitejs/plugin-react@5.1.2(rolldown-vite@7.2.5(@types/node@24.12.0)(jiti@2.6.1)(sass-embedded@1.97.2)(sass@1.98.0)(tsx@4.21.0))':
     dependencies:
       '@babel/core': 7.28.6
       '@babel/plugin-transform-react-jsx-self': 7.27.1(@babel/core@7.28.6)
@@ -3675,7 +3746,7 @@ snapshots:
       '@rolldown/pluginutils': 1.0.0-beta.53
       '@types/babel__core': 7.20.5
       react-refresh: 0.18.0
-      vite: rolldown-vite@7.2.5(@types/node@24.10.9)(jiti@2.6.1)(sass-embedded@1.97.2)(sass@1.97.2)(tsx@4.21.0)
+      vite: rolldown-vite@7.2.5(@types/node@24.12.0)(jiti@2.6.1)(sass-embedded@1.97.2)(sass@1.98.0)(tsx@4.21.0)
     transitivePeerDependencies:
       - supports-color
 
@@ -3816,7 +3887,6 @@ snapshots:
   chokidar@4.0.3:
     dependencies:
       readdirp: 4.1.2
-    optional: true
 
   chownr@3.0.0: {}
 
@@ -3829,6 +3899,8 @@ snapshots:
       wrap-ansi: 7.0.0
 
   clivas@0.2.0: {}
+
+  clsx@2.1.1: {}
 
   code-block-writer@10.1.1: {}
 
@@ -4297,6 +4369,8 @@ snapshots:
 
   immutable@5.1.4: {}
 
+  immutable@5.1.5: {}
+
   import-fresh@3.3.1:
     dependencies:
       parent-module: 1.0.1
@@ -4315,6 +4389,8 @@ snapshots:
   is-glob@4.0.3:
     dependencies:
       is-extglob: 2.1.1
+
+  is-mobile@5.0.0: {}
 
   is-number@7.0.0: {}
 
@@ -4703,6 +4779,8 @@ snapshots:
 
   react-is@16.13.1: {}
 
+  react-is@18.3.1: {}
+
   react-refresh@0.18.0: {}
 
   react-router-dom@7.13.1(react-dom@19.2.3(react@19.2.3))(react@19.2.3):
@@ -4730,8 +4808,7 @@ snapshots:
 
   react@19.2.3: {}
 
-  readdirp@4.1.2:
-    optional: true
+  readdirp@4.1.2: {}
 
   require-directory@2.1.1: {}
 
@@ -4745,7 +4822,7 @@ snapshots:
 
   reusify@1.1.0: {}
 
-  rolldown-vite@7.2.5(@types/node@24.10.9)(jiti@2.6.1)(sass-embedded@1.97.2)(sass@1.97.2)(tsx@4.21.0):
+  rolldown-vite@7.2.5(@types/node@24.12.0)(jiti@2.6.1)(sass-embedded@1.97.2)(sass@1.98.0)(tsx@4.21.0):
     dependencies:
       '@oxc-project/runtime': 0.97.0
       fdir: 6.5.0(picomatch@4.0.3)
@@ -4755,10 +4832,10 @@ snapshots:
       rolldown: 1.0.0-beta.50
       tinyglobby: 0.2.15
     optionalDependencies:
-      '@types/node': 24.10.9
+      '@types/node': 24.12.0
       fsevents: 2.3.3
       jiti: 2.6.1
-      sass: 1.97.2
+      sass: 1.98.0
       sass-embedded: 1.97.2
       tsx: 4.21.0
 
@@ -4898,6 +4975,14 @@ snapshots:
     optionalDependencies:
       '@parcel/watcher': 2.5.4
     optional: true
+
+  sass@1.98.0:
+    dependencies:
+      chokidar: 4.0.3
+      immutable: 5.1.5
+      source-map-js: 1.2.1
+    optionalDependencies:
+      '@parcel/watcher': 2.5.4
 
   scheduler@0.27.0: {}
 

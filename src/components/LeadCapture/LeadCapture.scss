@@ -1,0 +1,44 @@
+@use '../../styles/tokens' as *;
+
+.ys-capture {
+  padding: 6rem 0;
+
+  .ys-capture-box {
+    max-width: 500px;
+    margin: 0 auto;
+    background-color: $cards-dark;
+    padding: 3rem;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+
+    .ys-capture-title {
+      font-size: 1.5rem;
+      margin-bottom: 2rem;
+      text-align: center;
+    }
+
+    .ys-capture-form {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+
+      .p-inputgroup {
+        .p-inputtext {
+          width: 100%;
+          padding: 1rem;
+        }
+        .p-inputgroup-addon {
+          background-color: transparent;
+          border-color: rgba(255, 255, 255, 0.1);
+          color: $text-dark;
+        }
+      }
+
+      .p-button {
+        width: 100%;
+        padding: 1rem;
+        font-size: 1.125rem;
+      }
+    }
+  }
+}

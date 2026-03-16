@@ -1,0 +1,41 @@
+@use '../../styles/tokens' as *;
+
+.ys-pillars {
+  padding: 6rem 0;
+
+  .ys-pillars-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+  }
+
+  .ys-pillar-card {
+    background-color: $cards-dark;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+    box-shadow: none;
+    transition: $transition-smooth;
+
+    &:hover {
+      border-color: rgba($primary, 0.5);
+      transform: translateY(-5px);
+    }
+
+    .p-card-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: $headings-dark;
+      margin-bottom: 1rem;
+    }
+
+    .p-card-content {
+      padding: 0;
+    }
+
+    p {
+      color: $text-dark;
+      line-height: 1.6;
+      font-size: 1rem;
+    }
+  }
+}

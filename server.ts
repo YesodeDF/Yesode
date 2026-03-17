@@ -1,13 +1,13 @@
 import express from 'express';
 import cors from 'cors';
-import nodemailer from 'nodemailer';
+import { z } from 'zod';
+import { Resend } from 'resend';
 import dotenv from 'dotenv';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
 dotenv.config();
 
-// Configurações para lidar com caminhos de arquivo no modo ES Module ("type": "module")
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -17,51 +17,68 @@ const port = process.env.PORT || 3001;
 app.use(cors());
 app.use(express.json());
 
-// Rota de API
-app.post('/api/send-invite', async (req, res) => {
-  try {
-    const { to, cc, subject, html } = req.body;
+// Resend instance
+const resend = new Resend(process.env.RESEND_API_KEY || 're_mock_key');
 
-    if (!to || !subject || !html) {
-      return res.status(400).json({ error: 'Missing required fields' });
+// Estrito de validação
+const leadSchema = z.object({
+  name: z.string().min(3),
+  email: z.string().email().refine((email) => {
+    const blockedDomains = ['gmail.com', 'hotmail.com', 'outlook.com', 'yahoo.com', 'icloud.com'];
+    const domain = email.split('@')[1];
+    return !blockedDomains.includes(domain);
+  }, "Por favor, utilize seu e-mail corporativo"),
+  company: z.string().min(2)
+});
+
+// Dual-Routing B2B Lead Gateway
+app.post('/api/leads', async (req, res) => {
+  try {
+    const result = leadSchema.safeParse(req.body);
+    if (!result.success) {
+      return res.status(400).json({ success: false, errors: result.error.errors });
     }
 
-    const transporter = nodemailer.createTransport({
-      service: 'gmail',
-      auth: {
-        user: process.env.GMAIL_USER,
-        pass: process.env.GMAIL_APP_PASSWORD,
-      },
-      logger: true,
-      debug: true
-    });
+    const { name, email, company } = result.data;
+    const timestamp = new Date().toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' });
 
-    const mailOptions = {
-      from: `"Yesod" <${process.env.GMAIL_USER}>`,
-      to,
-      cc,
-      subject,
-      html,
-    };
+    // Disparo Triplo assíncrono via Resend
+    await Promise.all([
+      // 1. Roteamento Interno (Diretoria)
+      resend.emails.send({
+        from: 'Gateway Yesode <leads@yesode.com.br>',
+        to: ['filipe@yesode.com.br', 'davi@yesode.com.br'],
+        subject: `[YESODE B2B] Novo Lead High-Ticket: ${company}`,
+        html: `
+          <div style="font-family: monospace; font-size: 14px; max-width: 600px;">
+            <strong style="color: #C4A962;">[ Novo Lead Detectado ]</strong><br/><br/>
+            Nome:&emsp;&emsp;${name}<br/>
+            E-mail:&emsp;${email}<br/>
+            Empresa:&emsp;${company}<br/>
+            Time:&emsp;&emsp;${timestamp}<br/><br/>
+            <em>Via API Gateway</em>
+          </div>
+        `
+      }),
+      // 2. Auto-responder Premium (Lead/Cliente)
+      resend.emails.send({
+        from: 'Yesode Engineering <hello@yesode.com.br>',
+        to: email,
+        subject: 'Mapeando sua arquitetura corporativa',
+        text: `Olá ${name},\n\nRecebemos sua solicitação de consultoria estratégica para a ${company}.\n\nUm de nossos engenheiros fundadores está analisando seu contexto atual. Em breve, entraremos em contato direto para propormos a arquitetura do seu próximo passo.\n\nAtenciosamente,\n\nEquipe Yesode\nyesode.com.br`
+      })
+    ]);
 
-    transporter.sendMail(mailOptions, (error, info) => {
-      if (error) {
-        console.error('Nodemailer Error:', error);
-        return res.status(500).json({ error: error.message });
-      }
-      console.log('Message sent: %s', info.messageId);
-      res.status(200).json({ success: true, message: 'Email sent successfully' });
-    });
+    return res.status(200).json({ success: true, message: 'Lead routing completed.' });
+
   } catch (error: any) {
-    console.error('Express Error sending email:', error);
-    res.status(500).json({ error: error.message || 'Failed to send email' });
+    console.error('API /leads Gateway Exception:', error.message);
+    // Silent fail para não expor a infraestrutura
+    return res.status(500).json({ success: false, message: 'Serviço temporariamente indisponível.' });
   }
 });
 
-// Em Produção, sirva os arquivos estáticos do front-end compilado pelo Vite (pasta dist/)
 app.use(express.static(path.join(__dirname, 'dist')));
-
-// Fallback para SPA (Single Page Application): Qualquer rota não encontrada na API vai retornar o index.html da pasta dist
 app.use((req, res, next) => {
     if (req.method === 'GET' && req.accepts('html')) {
         res.sendFile(path.join(__dirname, 'dist', 'index.html'));
@@ -71,5 +88,5 @@ app.use((req, res, next) => {
 });
 
 app.listen(port, () => {
-  console.log(`Server running at http://localhost:${port}`);
+  console.log(`Gateway & UI running at http://localhost:${port}`);
 });

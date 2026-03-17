@@ -1,0 +1,11 @@
+/* Light Theme */
+[data-theme="light"] {
+  --bg-color: #f8fafc;
+  --text-color: #0f172a;
+  --accent-color: #F59E0B;
+}
+
+body[data-theme="light"] {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+}

@@ -1,21 +1,25 @@
-import { Routes, Route } from "react-router-dom";
-import Navbar from "./pages/components/nav-bar/nav-bar.component";
-import HeroSection from "./pages/components/hero-section/hero-section.component";
-import SendInvite from "./pages/send-invite/send-invite.component";
+import React from 'react';
+import { Header } from './components/Header/Header';
+import { Hero } from './components/Hero/Hero';
+import { ProofOfEngineering } from './components/ProofOfEngineering/ProofOfEngineering';
+import { ValuePillars } from './components/ValuePillars/ValuePillars';
+import { EngineeringApproach } from './components/EngineeringApproach/EngineeringApproach';
+import { LeadCapture } from './components/LeadCapture/LeadCapture';
+import { Footer } from './components/Footer/Footer';
+import './styles/global.scss';
 
-function App() {
+const App: React.FC = () => {
   return (
     <>
-      <main>
-        <Routes>
-          <Route path="/" element={
-            <><Navbar /><HeroSection /></>
-          } />
-          <Route path="/invite" element={<SendInvite />} />
-        </Routes>
-      </main>
+      <Header />
+      <Hero />
+      <ProofOfEngineering />
+      <ValuePillars />
+      <EngineeringApproach />
+      <LeadCapture />
+      <Footer />
     </>
   );
-}
+};
 
 export default App;

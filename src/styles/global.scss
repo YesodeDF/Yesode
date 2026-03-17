@@ -1,0 +1,112 @@
+@use 'tokens' as *;
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Fira+Code:wght@400;500&display=swap');
+
+:root {
+  color-scheme: light dark;
+}
+
+/* Force light theme by default as requested */
+body {
+  margin: 0;
+  padding: 0;
+  font-family: $font-ui;
+  background-color: $bg-light;
+  color: $text-light;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: $headings-light;
+  font-weight: 700;
+  margin: 0;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+  transition: $transition-smooth;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+// Global PrimeReact Overrides for Yesode Theme
+.p-button {
+  background-color: transparent !important;
+  border: 1px solid $primary !important;
+  color: $primary !important;
+  transition: $transition-smooth !important;
+  font-family: $font-ui !important;
+  font-weight: 500 !important;
+  border-radius: 4px !important;
+  
+  &:hover {
+    background-color: rgba(196, 169, 98, 0.1) !important;
+  }
+
+  &.p-button-primary {
+    background-color: $primary !important;
+    color: $bg-light !important;
+    
+    &:hover {
+      background-color: darken(#C4A962, 5%) !important;
+    }
+  }
+}
+
+.p-inputtext {
+  background-color: $cards-light !important;
+  border: 1px solid rgba(0,0,0,0.1) !important;
+  color: $text-light !important;
+  font-family: $font-ui !important;
+  border-radius: 4px !important;
+  
+  &:focus {
+    border-color: $primary !important;
+    box-shadow: 0 0 0 1px rgba(196, 169, 98, 0.2) !important;
+  }
+}
+
+// Utility classes
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+.text-primary {
+  color: $primary;
+}
+
+.font-code {
+  font-family: $font-code;
+}
+
+/* Dark Theme Overrides triggered by .dark-theme class on html root */
+html.dark-theme {
+  body {
+    background-color: $bg-dark;
+    color: $text-dark;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    color: $headings-dark;
+  }
+  .p-button-primary {
+    color: $bg-dark !important;
+  }
+}
+
+html:not(.dark-theme) {
+  --text-light: #4B5563;
+  --headings-light: #111827;
+  --bg-light: #FFFFFF;
+}
+
+html.dark-theme {
+  --text-dark: #9CA3AF;
+  --headings-dark: #FFFFFF;
+  --bg-dark: #0F1115;
+}

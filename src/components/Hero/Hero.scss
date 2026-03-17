@@ -1,0 +1,208 @@
+@use '../../styles/tokens' as *;
+
+.ys-hero {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 140px;
+  overflow: hidden;
+  background-color: transparent;
+
+  .ys-hero-glow {
+    position: absolute;
+    top: 20%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60vw;
+    height: 400px;
+    background: radial-gradient(ellipse at center, rgba($primary, 0.08) 0%, transparent 60%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .ys-hero-grid {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    background-size: 40px 40px;
+    background-image: 
+      linear-gradient(to right, rgba(0, 0, 0, 0.03) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(0, 0, 0, 0.03) 1px, transparent 1px);
+    mask-image: linear-gradient(to bottom, black 20%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to bottom, black 20%, transparent 100%);
+  }
+
+  .ys-hero-content {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    max-width: 900px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex-grow: 1;
+    justify-content: center;
+    margin-bottom: 0;
+  }
+
+  .ys-hero-badge {
+    margin-bottom: 2rem;
+    
+    .ys-chip {
+      background: rgba($primary, 0.1);
+      color: darken($primary, 15%);
+      border: 1px solid rgba($primary, 0.2);
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      padding: 0.25rem 1rem;
+      border-radius: 999px;
+      
+      .pi {
+        font-size: 0.7rem;
+        margin-right: 0.5rem;
+      }
+    }
+  }
+
+  .ys-hero-title {
+    font-size: clamp(3.5rem, 7vw, 5.5rem);
+    line-height: 1.05;
+    letter-spacing: -0.04em;
+    margin-bottom: 1.5rem;
+    color: $headings-light;
+    
+    span {
+      color: $primary;
+      display: inline-block;
+    }
+  }
+
+  .ys-hero-subtitle {
+    font-size: clamp(1.125rem, 2vw, 1.25rem);
+    color: lighten($text-light, 10%);
+    margin-bottom: 3rem;
+    line-height: 1.6;
+    font-weight: 400;
+    max-width: 700px;
+  }
+
+  .ys-hero-actions {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+    
+    .p-button {
+      padding: 0.875rem 2rem !important;
+      font-size: 1rem !important;
+      font-weight: 600 !important;
+      letter-spacing: -0.01em;
+      border-radius: 8px !important;
+    }
+
+    .ys-btn-primary {
+      box-shadow: 0 4px 14px 0 rgba($primary, 0.2);
+      border: 1px solid transparent !important;
+      &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba($primary, 0.3);
+      }
+    }
+
+    .ys-btn-outline {
+      background: transparent !important;
+      color: $text-light !important;
+      border: 1px solid rgba(0,0,0,0.1) !important;
+      &:hover {
+        background: rgba(0,0,0,0.03) !important;
+        border-color: rgba(0,0,0,0.2) !important;
+      }
+    }
+  }
+
+  // Metrics Bar
+  .ys-hero-metrics {
+    width: 100%;
+    position: relative;
+    z-index: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 2rem;
+    background: rgba(255,255,255,0.5);
+    backdrop-filter: blur(10px);
+    border-top: 1px solid rgba(0,0,0,0.05);
+
+    .ys-metric {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 0 3rem;
+
+      .ys-metric-val {
+        font-family: $font-code;
+        font-weight: 600;
+        font-size: 1.25rem;
+        color: $headings-light;
+        margin-bottom: 0.25rem;
+      }
+
+      .ys-metric-label {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: $text-light;
+        font-weight: 500;
+      }
+    }
+
+    .ys-metric-divider {
+      width: 1px;
+      height: 24px;
+      background: rgba(0,0,0,0.1);
+    }
+  }
+
+  @media (max-width: 768px) {
+    .ys-hero-metrics {
+      flex-direction: column;
+      gap: 1.5rem;
+      border-top: none;
+      background: transparent;
+      .ys-metric-divider { display: none; }
+      .ys-metric { padding: 0; }
+    }
+  }
+}
+
+html.dark-theme .ys-hero {
+  .ys-hero-grid {
+    background-image: 
+      linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+  }
+  .ys-hero-badge .ys-chip {
+    color: lighten($primary, 20%);
+    background: rgba($primary, 0.15);
+  }
+  .ys-hero-title { color: $headings-dark; }
+  .ys-hero-subtitle { color: darken($text-dark, 10%); }
+  
+  .ys-btn-outline {
+    color: $text-dark !important;
+    border-color: rgba(255,255,255,0.1) !important;
+    &:hover { background: rgba(255,255,255,0.05) !important; }
+  }
+
+  .ys-hero-metrics {
+    background: rgba(0,0,0,0.3);
+    border-top: 1px solid rgba(255,255,255,0.05);
+    .ys-metric-val { color: $headings-dark; }
+    .ys-metric-label { color: $text-dark; }
+    .ys-metric-divider { background: rgba(255,255,255,0.1); }
+  }
+}

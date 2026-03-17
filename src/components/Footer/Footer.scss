@@ -1,0 +1,33 @@
+@use '../../styles/tokens' as *;
+
+.ys-footer {
+  padding: 3rem 0;
+  border-top: 1px solid rgba(0, 0, 0, 0.05);
+
+  .ys-footer-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: $text-light;
+    font-size: 0.875rem;
+  }
+
+  .ys-footer-links {
+    display: flex;
+    gap: 1.5rem;
+
+    a {
+      &:hover {
+        color: $primary;
+      }
+    }
+  }
+}
+
+html.dark-theme .ys-footer {
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+
+  .ys-footer-content {
+    color: $text-dark;
+  }
+}

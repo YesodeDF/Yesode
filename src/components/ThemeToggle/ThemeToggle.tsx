@@ -7,7 +7,7 @@ export const ThemeToggle: React.FC = () => {
   useEffect(() => {
     // Check initial OS preference or local storage
     const storedTheme = localStorage.getItem('theme');
-    const prefersDark = window.matchMatchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
     
     if (storedTheme === 'dark' || (!storedTheme && prefersDark)) {
       document.documentElement.classList.add('dark-theme');

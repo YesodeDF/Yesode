@@ -11,9 +11,9 @@ export const Header: React.FC = () => {
           <span className="ys-logo-text">Yesode</span>
           <span className="ys-logo-dot">.</span>
         </div>
-        <div className="ys-cta" style={{ display: "flex", alignItems: "center" }}>
+        <div className="ys-operations">
           <ThemeToggle />
-          <Button label="Agendar Consultoria Gratuita" className="p-button-outlined" />
+          <Button label="Agendar Consultoria Gratuita" className="p-button-primary ys-cta-btn" />
         </div>
       </div>
     </header>

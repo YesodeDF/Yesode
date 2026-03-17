@@ -6,18 +6,19 @@
   color-scheme: light dark;
 }
 
+/* Force light theme by default as requested */
 body {
   margin: 0;
   padding: 0;
   font-family: $font-ui;
-  background-color: $bg-dark;
-  color: $text-dark;
+  background-color: $bg-light;
+  color: $text-light;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 h1, h2, h3, h4, h5, h6 {
-  color: $headings-dark;
+  color: $headings-light;
   font-weight: 700;
   margin: 0;
 }
@@ -48,18 +49,18 @@ a {
 
   &.p-button-primary {
     background-color: $primary !important;
-    color: $bg-dark !important;
+    color: $bg-light !important;
     
     &:hover {
-      background-color: lighten(#C4A962, 5%) !important;
+      background-color: darken(#C4A962, 5%) !important;
     }
   }
 }
 
 .p-inputtext {
-  background-color: $cards-dark !important;
-  border: 1px solid rgba(255,255,255,0.1) !important;
-  color: $text-dark !important;
+  background-color: $cards-light !important;
+  border: 1px solid rgba(0,0,0,0.1) !important;
+  color: $text-light !important;
   font-family: $font-ui !important;
   border-radius: 4px !important;
   
@@ -82,4 +83,18 @@ a {
 
 .font-code {
   font-family: $font-code;
+}
+
+/* Dark Theme Overrides triggered by .dark-theme class on html root */
+html.dark-theme {
+  body {
+    background-color: $bg-dark;
+    color: $text-dark;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    color: $headings-dark;
+  }
+  .p-button-primary {
+    color: $bg-dark !important;
+  }
 }

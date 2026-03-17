@@ -10,8 +10,8 @@
   }
 
   .ys-pillar-card {
-    background-color: $cards-dark;
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    background-color: $cards-light;
+    border: 1px solid rgba(0, 0, 0, 0.05);
     border-radius: 8px;
     box-shadow: none;
     transition: $transition-smooth;
@@ -24,7 +24,7 @@
     .p-card-title {
       font-size: 1.25rem;
       font-weight: 700;
-      color: $headings-dark;
+      color: $headings-light;
       margin-bottom: 1rem;
     }
 
@@ -33,9 +33,24 @@
     }
 
     p {
-      color: $text-dark;
+      color: $text-light;
       line-height: 1.6;
       font-size: 1rem;
+    }
+  }
+}
+
+html.dark-theme .ys-pillars {
+  .ys-pillar-card {
+    background-color: $cards-dark;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+
+    .p-card-title {
+      color: $headings-dark;
+    }
+
+    p {
+      color: $text-dark;
     }
   }
 }

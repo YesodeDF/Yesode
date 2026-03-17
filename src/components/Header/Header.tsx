@@ -1,5 +1,6 @@
 import React from 'react';
 import { Button } from 'primereact/button';
+import { ThemeToggle } from '../ThemeToggle/ThemeToggle';
 import './Header.scss';
 
 export const Header: React.FC = () => {
@@ -10,7 +11,8 @@ export const Header: React.FC = () => {
           <span className="ys-logo-text">Yesode</span>
           <span className="ys-logo-dot">.</span>
         </div>
-        <div className="ys-cta">
+        <div className="ys-cta" style={{ display: "flex", alignItems: "center" }}>
+          <ThemeToggle />
           <Button label="Agendar Consultoria Gratuita" className="p-button-outlined" />
         </div>
       </div>

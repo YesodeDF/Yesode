@@ -19,6 +19,12 @@
   .ys-approach-text {
     font-size: 1.25rem;
     line-height: 1.8;
+    color: $text-light;
+  }
+}
+
+html.dark-theme .ys-approach {
+  .ys-approach-text {
     color: $text-dark;
   }
 }

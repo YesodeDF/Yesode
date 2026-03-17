@@ -6,10 +6,10 @@
   .ys-capture-box {
     max-width: 500px;
     margin: 0 auto;
-    background-color: $cards-dark;
+    background-color: $cards-light;
     padding: 3rem;
     border-radius: 8px;
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(0, 0, 0, 0.05);
 
     .ys-capture-title {
       font-size: 1.5rem;
@@ -29,8 +29,8 @@
         }
         .p-inputgroup-addon {
           background-color: transparent;
-          border-color: rgba(255, 255, 255, 0.1);
-          color: $text-dark;
+          border-color: rgba(0, 0, 0, 0.1);
+          color: $text-light;
         }
       }
 
@@ -46,10 +46,10 @@
 // Toast B2B Premium Overrides
 .ys-toast-premium {
   .p-toast-message {
-    background: rgba($bg-dark, 0.95);
+    background: rgba($bg-light, 0.95);
     backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    color: $text-dark;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    color: $text-light;
     box-shadow: 0 10px 40px rgba(0,0,0,0.5);
     border-radius: 8px;
 
@@ -58,7 +58,7 @@
     }
 
     .p-toast-icon-close {
-      color: $text-dark;
+      color: $text-light;
       &:hover {
         background: rgba(255,255,255,0.05);
       }
@@ -68,18 +68,37 @@
   .p-toast-message-success {
     border-left: 4px solid $primary;
     .p-toast-message-icon { color: $primary; }
-    .p-toast-summary { color: $headings-dark; }
+    .p-toast-summary { color: $headings-light; }
   }
 
   .p-toast-message-error {
     border-left: 4px solid #ff5f56;
     .p-toast-message-icon { color: #ff5f56; }
-    .p-toast-summary { color: $headings-dark; }
+    .p-toast-summary { color: $headings-light; }
   }
 
   .p-toast-message-info {
     border-left: 4px solid $primary; // Elegantly mask the crash
     .p-toast-message-icon { color: $primary; }
-    .p-toast-summary { color: $headings-dark; }
+    .p-toast-summary { color: $headings-light; }
+  }
+}
+
+html.dark-theme .ys-capture {
+  .ys-capture-box {
+    background-color: $cards-dark;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+
+    .p-inputgroup {
+      .p-inputtext {
+        background-color: $cards-dark !important;
+        border: 1px solid rgba(255,255,255,0.1) !important;
+        color: $text-dark !important;
+      }
+      .p-inputgroup-addon {
+        border-color: rgba(255, 255, 255, 0.1);
+        color: $text-dark;
+      }
+    }
   }
 }

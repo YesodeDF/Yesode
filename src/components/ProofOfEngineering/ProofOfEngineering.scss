@@ -5,20 +5,20 @@
   background-color: transparent;
 
   .ys-arch-block {
-    background-color: $cards-dark;
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    background-color: $cards-light;
+    border: 1px solid rgba(0, 0, 0, 0.05);
     border-radius: 8px;
     max-width: 600px;
     margin: 0 auto;
     overflow: hidden;
-    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.1);
 
     .ys-arch-header {
-      background-color: rgba(0,0,0,0.3);
+      background-color: rgba(0,0,0,0.05);
       padding: 0.75rem 1rem;
       display: flex;
       align-items: center;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      border-bottom: 1px solid rgba(0, 0, 0, 0.05);
 
       .ys-dot {
         width: 12px;
@@ -34,7 +34,7 @@
       .ys-arch-title {
         margin-left: auto;
         margin-right: auto;
-        color: $text-dark;
+        color: $text-light;
         font-size: 0.875rem;
       }
     }
@@ -44,14 +44,14 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      color: $headings-dark;
+      color: $headings-light;
       font-size: 1rem;
 
       .ys-arch-node {
         padding: 1rem 2rem;
-        border: 1px solid rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(0, 0, 0, 0.1);
         border-radius: 4px;
-        background: rgba(255, 255, 255, 0.02);
+        background: rgba(0, 0, 0, 0.02);
         width: 100%;
         text-align: center;
         letter-spacing: 0.05em;
@@ -65,9 +65,39 @@
 
       .ys-arch-flow {
         padding: 1rem 0;
-        color: $text-dark;
+        color: $text-light;
         font-size: 1.5rem;
       }
+    }
+  }
+}
+
+html.dark-theme .ys-proof {
+  .ys-arch-block {
+    background-color: $cards-dark;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+
+    .ys-arch-header {
+      background-color: rgba(0,0,0,0.3);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      .ys-arch-title { color: $text-dark; }
+    }
+
+    .ys-arch-body {
+      color: $headings-dark;
+
+      .ys-arch-node {
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        background: rgba(255, 255, 255, 0.02);
+
+        &.ys-arch-highlight {
+          border-color: $primary;
+          color: $primary;
+          background: rgba(196, 169, 98, 0.05);
+        }
+      }
+      .ys-arch-flow { color: $text-dark; }
     }
   }
 }

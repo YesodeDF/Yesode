@@ -5,13 +5,15 @@ export const ThemeToggle: React.FC = () => {
   const [isDark, setIsDark] = useState(false);
 
   useEffect(() => {
-    // Check initial OS preference or local storage
+    // Default to Light
     const storedTheme = localStorage.getItem('theme');
-    const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
     
-    if (storedTheme === 'dark' || (!storedTheme && prefersDark)) {
+    if (storedTheme === 'dark') {
       document.documentElement.classList.add('dark-theme');
       setIsDark(true);
+    } else {
+      document.documentElement.classList.remove('dark-theme');
+      setIsDark(false);
     }
   }, []);
 
@@ -31,9 +33,13 @@ export const ThemeToggle: React.FC = () => {
     <Button 
       icon={isDark ? "pi pi-sun" : "pi pi-moon"} 
       onClick={toggleTheme} 
-      className="p-button-text p-button-sm p-0 m-0 w-2rem h-2rem mr-3" 
+      className="p-button-rounded p-button-text p-button-sm" 
       aria-label="Toggle Theme"
-      style={{ color: 'var(--text-light)', border: 'none' }}
+      style={{ 
+        width: '38px', 
+        height: '38px', 
+        color: "currentColor"
+      }}
     />
   );
 };

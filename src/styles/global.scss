@@ -98,3 +98,15 @@ html.dark-theme {
     color: $bg-dark !important;
   }
 }
+
+html:not(.dark-theme) {
+  --text-light: #4B5563;
+  --headings-light: #111827;
+  --bg-light: #FFFFFF;
+}
+
+html.dark-theme {
+  --text-dark: #9CA3AF;
+  --headings-dark: #FFFFFF;
+  --bg-dark: #0F1115;
+}

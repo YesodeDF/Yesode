@@ -42,3 +42,44 @@
     }
   }
 }
+
+// Toast B2B Premium Overrides
+.ys-toast-premium {
+  .p-toast-message {
+    background: rgba($bg-dark, 0.95);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: $text-dark;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+    border-radius: 8px;
+
+    .p-toast-message-content {
+      align-items: center;
+    }
+
+    .p-toast-icon-close {
+      color: $text-dark;
+      &:hover {
+        background: rgba(255,255,255,0.05);
+      }
+    }
+  }
+
+  .p-toast-message-success {
+    border-left: 4px solid $primary;
+    .p-toast-message-icon { color: $primary; }
+    .p-toast-summary { color: $headings-dark; }
+  }
+
+  .p-toast-message-error {
+    border-left: 4px solid #ff5f56;
+    .p-toast-message-icon { color: #ff5f56; }
+    .p-toast-summary { color: $headings-dark; }
+  }
+
+  .p-toast-message-info {
+    border-left: 4px solid $primary; // Elegantly mask the crash
+    .p-toast-message-icon { color: $primary; }
+    .p-toast-summary { color: $headings-dark; }
+  }
+}

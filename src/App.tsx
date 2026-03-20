@@ -1,5 +1,7 @@
 import React from 'react';
 import { ThemeProvider, useTheme } from './ThemeContext';
+import './index.css';
+import './App.css';
 
 const Landing = () => {
   const { theme, setTheme } = useTheme();
@@ -71,8 +73,8 @@ const Landing = () => {
         <section id="lead-capture" className="bg-gray-50 dark:bg-gray-800 p-8 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
           <h2 className="text-2xl font-bold mb-6">Diagnóstico Gratuito</h2>
           <form className="space-y-4 flex flex-col" onSubmit={e => e.preventDefault()}>
-            <label className="flex flex-col"><span className="font-medium mb-1">Nome</span><input type="text" required className="p-3 border rounded dark:bg-gray-900 dark:border-gray-700"/></label>
-            <label className="flex flex-col"><span className="font-medium mb-1">Empresa</span><input type="text" required className="p-3 border rounded dark:bg-gray-900 dark:border-gray-700"/></label>
+            <label className="flex flex-col"><span className="font-medium mb-1">Nome</span><input type="text" required className="p-3 border rounded dark:bg-gray-900 dark:border-gray-700" /></label>
+            <label className="flex flex-col"><span className="font-medium mb-1">Empresa</span><input type="text" required className="p-3 border rounded dark:bg-gray-900 dark:border-gray-700" /></label>
             <label className="flex flex-col"><span className="font-medium mb-1">Desafio principal</span><textarea required className="p-3 border rounded dark:bg-gray-900 dark:border-gray-700 h-24"></textarea></label>
             <label className="flex flex-col"><span className="font-medium mb-1">Faturamento mensal</span>
               <select required className="p-3 border rounded dark:bg-gray-900 dark:border-gray-700">

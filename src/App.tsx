@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { motion, Variants } from 'framer-motion';
+import { motion, type Variants } from 'framer-motion';
 import { CheckCircle2, AlertTriangle, Clock, TrendingDown, Target, Zap, ShieldCheck } from 'lucide-react';
 import './index.css';
 import './App.css';

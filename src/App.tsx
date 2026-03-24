@@ -1,15 +1,15 @@
-import React, { useEffect } from 'react';
-import { motion } from 'framer-motion';
+import { useEffect } from 'react';
+import { motion, Variants } from 'framer-motion';
 import { CheckCircle2, AlertTriangle, Clock, TrendingDown, Target, Zap, ShieldCheck } from 'lucide-react';
 import './index.css';
 import './App.css';
 
-const fadeUp = {
+const fadeUp: Variants = {
   hidden: { opacity: 0, y: 20 },
   visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] } }
 };
 
-const stagger = {
+const stagger: Variants = {
   hidden: { opacity: 0 },
   visible: { opacity: 1, transition: { staggerChildren: 0.15 } }
 };

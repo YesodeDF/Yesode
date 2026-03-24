@@ -1,6 +1,8 @@
 import React, { useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { CheckCircle2, AlertTriangle, Clock, TrendingDown, Target, Zap, ShieldCheck } from 'lucide-react';
+import './index.css';
+import './App.css';
 
 const fadeUp = {
   hidden: { opacity: 0, y: 20 },

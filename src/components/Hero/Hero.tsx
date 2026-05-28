@@ -1,42 +1,85 @@
 import React from 'react';
 import { Button } from 'primereact/button';
-import { Chip } from 'primereact/chip';
+import { ArrowRight, Activity } from 'lucide-react';
+import { scrollToSection } from '../../utils/scrollToSection';
 import './Hero.scss';
 
 export const Hero: React.FC = () => {
   return (
     <section className="ys-hero">
-      <div className="ys-hero-grid"></div>
-      <div className="ys-hero-glow"></div>
-      
+      <div className="ys-grid-bg" />
+      <div className="ys-orb ys-orb--gold" />
+      <div className="ys-orb ys-orb--violet" />
+
       <div className="container ys-hero-content">
-        <div className="ys-hero-badge">
-          <Chip label="System Online: Yesode V1.0.0" className="ys-chip" icon="pi pi-check-circle" />
+        <div className="ys-hero-status">
+          <span className="ys-status-dot">
+            <span className="ys-status-dot-pulse" />
+          </span>
+          <span className="ys-status-text">
+            <Activity size={12} strokeWidth={2.5} />
+            System Online — Yesode V1.0.0
+          </span>
         </div>
-        
+
         <h1 className="ys-hero-title">
-          Construímos arquitetura,<br/>
-          não <span>templates.</span>
+          <span className="gradient-text">Construímos arquitetura,</span><br />
+          não <span className="gradient-text-gold">templates.</span>
         </h1>
+
         <p className="ys-hero-subtitle">
-          Projetamos software sob medida para operações corporativas críticas.<br />
+          Projetamos software sob medida para operações corporativas críticas.
           Trazemos a estabilidade da engenharia de ponta para o seu negócio.
         </p>
-        
+
         <div className="ys-hero-actions">
-          <Button label="Agendar Consultoria Gratuita" className="p-button-primary p-button-lg ys-btn-primary" />
-          <Button label="Explorar Arquitetura" className="p-button-outlined p-button-secondary p-button-lg ys-btn-outline" />
+          <Button
+            className="p-button-primary ys-btn-primary"
+            onClick={() => scrollToSection('contact')}
+          >
+            <span>Agendar Consultoria Gratuita</span>
+            <ArrowRight size={16} strokeWidth={2.5} />
+          </Button>
+          <Button
+            label="Explorar Arquitetura"
+            className="p-button-outlined ys-btn-outline"
+            onClick={() => scrollToSection('proof')}
+          />
+        </div>
+
+        <div className="ys-hero-trustline">
+          <span className="ys-trustline-label">Stack</span>
+          <span className="ys-trustline-items">
+            <span>TypeScript</span><span>·</span>
+            <span>Go</span><span>·</span>
+            <span>Rust</span><span>·</span>
+            <span>Kubernetes</span><span>·</span>
+            <span>PostgreSQL</span><span>·</span>
+            <span>AWS</span>
+          </span>
         </div>
       </div>
 
       <div className="ys-hero-metrics">
-        <div className="ys-metric"><span className="ys-metric-val">99.99%</span><span className="ys-metric-label">Uptime SLA</span></div>
-        <div className="ys-metric-divider"></div>
-        <div className="ys-metric"><span className="ys-metric-val">&lt; 20ms</span><span className="ys-metric-label">Latency Edge</span></div>
-        <div className="ys-metric-divider"></div>
-        <div className="ys-metric"><span className="ys-metric-val">Global</span><span className="ys-metric-label">Mesh Network</span></div>
-        <div className="ys-metric-divider"></div>
-        <div className="ys-metric"><span className="ys-metric-val">Zero</span><span className="ys-metric-label">Vendor Lock-in</span></div>
+        <div className="ys-metric">
+          <span className="ys-metric-val">99.99<small>%</small></span>
+          <span className="ys-metric-label">Uptime SLA</span>
+        </div>
+        <div className="ys-metric-divider" />
+        <div className="ys-metric">
+          <span className="ys-metric-val">&lt; 20<small>ms</small></span>
+          <span className="ys-metric-label">Edge Latency</span>
+        </div>
+        <div className="ys-metric-divider" />
+        <div className="ys-metric">
+          <span className="ys-metric-val">Global</span>
+          <span className="ys-metric-label">Mesh Network</span>
+        </div>
+        <div className="ys-metric-divider" />
+        <div className="ys-metric">
+          <span className="ys-metric-val">Zero</span>
+          <span className="ys-metric-label">Vendor Lock-in</span>
+        </div>
       </div>
     </section>
   );

@@ -1,104 +1,230 @@
 @use '../../styles/tokens' as *;
 
 .ys-capture {
-  padding: 6rem 0;
+  position: relative;
+  background:
+    radial-gradient(ellipse at bottom right, rgba($primary, 0.06) 0%, transparent 50%),
+    transparent;
+  overflow: hidden;
+  isolation: isolate;
 
-  .ys-capture-box {
-    max-width: 500px;
-    margin: 0 auto;
-    background-color: $cards-light;
-    padding: 3rem;
-    border-radius: 8px;
-    border: 1px solid rgba(0, 0, 0, 0.05);
+  .ys-orb--gold-soft {
+    width: 480px;
+    height: 480px;
+    top: 20%;
+    left: -150px;
+    background: radial-gradient(circle, rgba($primary, 0.18) 0%, transparent 70%);
+  }
 
-    .ys-capture-title {
-      font-size: 1.5rem;
+  .ys-capture-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: center;
+    position: relative;
+    z-index: 1;
+
+    @media (max-width: 960px) {
+      grid-template-columns: 1fr;
+      gap: 2.5rem;
+    }
+  }
+
+  // ============== CONTEXT PANEL =================
+  .ys-capture-context {
+    .ys-capture-headline {
+      font-size: clamp(2rem, 3.5vw, 2.75rem);
+      line-height: 1.1;
+      letter-spacing: -0.03em;
+      color: var(--headings);
+      margin-bottom: 1.25rem;
+      font-weight: 800;
+    }
+
+    .ys-capture-pitch {
+      font-size: 1.0625rem;
+      line-height: 1.6;
+      color: var(--text);
       margin-bottom: 2rem;
-      text-align: center;
+      max-width: 460px;
+    }
+
+    .ys-capture-perks {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 0.875rem;
+
+      li {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        font-size: 0.9375rem;
+        color: var(--text);
+
+        strong { color: var(--headings); font-weight: 600; }
+      }
+
+      .ys-capture-perk-icon {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 28px;
+        height: 28px;
+        border-radius: $radius-full;
+        background: rgba($primary, 0.12);
+        color: $primary;
+        flex-shrink: 0;
+      }
+    }
+  }
+
+  // ============== FORM CARD =================
+  .ys-capture-box {
+    background: var(--cards);
+    border: 1px solid var(--border-strong);
+    border-radius: $radius-lg;
+    overflow: hidden;
+    box-shadow: $shadow-lg, $shadow-glow-card;
+    position: relative;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+
+    &::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: $radius-lg;
+      padding: 1px;
+      background: linear-gradient(135deg, rgba($primary, 0.4), transparent 40%, transparent 60%, rgba($primary, 0.25));
+      -webkit-mask:
+        linear-gradient(#fff 0 0) content-box,
+        linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      pointer-events: none;
+    }
+
+    .ys-capture-box-head {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.75rem 1rem;
+      background: var(--bg-elev);
+      border-bottom: 1px solid var(--border);
+
+      .ys-capture-dots {
+        display: inline-flex;
+        gap: 0.375rem;
+
+        .ys-dot {
+          width: 10px;
+          height: 10px;
+          border-radius: 50%;
+          &--red { background: #ff5f56; }
+          &--yellow { background: #ffbd2e; }
+          &--green { background: #27c93f; }
+        }
+      }
+
+      .ys-capture-box-title {
+        font-size: 0.75rem;
+        color: var(--text-muted);
+        margin-left: auto;
+        margin-right: auto;
+      }
     }
 
     .ys-capture-form {
+      padding: 2rem;
       display: flex;
       flex-direction: column;
-      gap: 1.5rem;
+      gap: 1.25rem;
 
-      .p-inputgroup {
-        .p-inputtext {
-          width: 100%;
-          padding: 1rem;
-        }
-        .p-inputgroup-addon {
-          background-color: transparent;
-          border-color: rgba(0, 0, 0, 0.1);
-          color: $text-light;
-        }
+      @media (max-width: 480px) {
+        padding: 1.5rem;
+      }
+    }
+
+    .ys-field {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+
+      .ys-field-label {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 0.8125rem;
+        font-weight: 600;
+        color: var(--headings);
+        letter-spacing: -0.01em;
+
+        svg { color: $primary; }
       }
 
-      .p-button {
+      .p-inputtext {
         width: 100%;
-        padding: 1rem;
-        font-size: 1.125rem;
       }
+    }
+
+    .ys-capture-submit {
+      margin-top: 0.5rem;
+      width: 100%;
+      padding: 1rem 1.5rem !important;
+      font-size: 0.9375rem !important;
+      font-weight: 600 !important;
+      border-radius: $radius-full !important;
+      display: inline-flex !important;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+
+    .ys-capture-disclaimer {
+      text-align: center;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin: 0;
+      line-height: 1.5;
     }
   }
 }
 
-// Toast B2B Premium Overrides
+// ============== TOAST OVERRIDES =================
 .ys-toast-premium {
   .p-toast-message {
-    background: rgba($bg-light, 0.95);
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(0, 0, 0, 0.1);
-    color: $text-light;
-    box-shadow: 0 10px 40px rgba(0,0,0,0.5);
-    border-radius: 8px;
+    background: var(--cards);
+    backdrop-filter: blur(14px);
+    border: 1px solid var(--border-strong);
+    color: var(--text);
+    box-shadow: $shadow-lg;
+    border-radius: $radius-md;
 
-    .p-toast-message-content {
-      align-items: center;
-    }
+    .p-toast-message-content { align-items: center; }
+    .p-toast-summary { color: var(--headings); }
+    .p-toast-detail { color: var(--text); }
 
     .p-toast-icon-close {
-      color: $text-light;
-      &:hover {
-        background: rgba(255,255,255,0.05);
-      }
+      color: var(--text-muted);
+      &:hover { background: rgba(127, 127, 127, 0.08); }
     }
   }
 
   .p-toast-message-success {
-    border-left: 4px solid $primary;
-    .p-toast-message-icon { color: $primary; }
-    .p-toast-summary { color: $headings-light; }
+    border-left: 4px solid #10B981;
+    .p-toast-message-icon { color: #10B981; }
   }
 
   .p-toast-message-error {
     border-left: 4px solid #ff5f56;
     .p-toast-message-icon { color: #ff5f56; }
-    .p-toast-summary { color: $headings-light; }
   }
 
   .p-toast-message-info {
-    border-left: 4px solid $primary; // Elegantly mask the crash
+    border-left: 4px solid $primary;
     .p-toast-message-icon { color: $primary; }
-    .p-toast-summary { color: $headings-light; }
-  }
-}
-
-html.dark-theme .ys-capture {
-  .ys-capture-box {
-    background-color: $cards-dark;
-    border: 1px solid rgba(255, 255, 255, 0.05);
-
-    .p-inputgroup {
-      .p-inputtext {
-        background-color: $cards-dark !important;
-        border: 1px solid rgba(255,255,255,0.1) !important;
-        color: $text-dark !important;
-      }
-      .p-inputgroup-addon {
-        border-color: rgba(255, 255, 255, 0.1);
-        color: $text-dark;
-      }
-    }
   }
 }

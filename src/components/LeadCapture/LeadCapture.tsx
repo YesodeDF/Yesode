@@ -2,6 +2,7 @@ import React, { useState, useRef } from 'react';
 import { InputText } from 'primereact/inputtext';
 import { Button } from 'primereact/button';
 import { Toast } from 'primereact/toast';
+import { User, Mail, Building2, ArrowRight, ShieldCheck, Clock, Sparkles } from 'lucide-react';
 import './LeadCapture.scss';
 
 export const LeadCapture: React.FC = () => {
@@ -14,40 +15,37 @@ export const LeadCapture: React.FC = () => {
     setLoading(true);
 
     try {
-      // Direct call to our custom Express /api/leads Gateway
       const response = await fetch('/api/leads', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData)
+        body: JSON.stringify(formData),
       });
 
       const data = await response.json();
 
       if (response.ok && data.success) {
-        toast.current?.show({ 
-          severity: 'success', 
-          summary: 'Recebido', 
-          detail: 'Sua solicitação de consultoria foi encaminhada para a nossa diretoria. Verifique seu e-mail.', 
-          life: 5000 
+        toast.current?.show({
+          severity: 'success',
+          summary: 'Recebido',
+          detail: 'Sua solicitação foi encaminhada para a diretoria. Verifique seu e-mail.',
+          life: 5000,
         });
         setFormData({ name: '', email: '', company: '' });
       } else {
-        // Validation Error Catch (ex: e-mail livre ao invés de corporativo)
         const errorMsg = data.errors ? data.errors[0]?.message : data.message;
-        toast.current?.show({ 
-          severity: 'error', 
-          summary: 'Atenção', 
-          detail: errorMsg || 'Não foi possível enviar a solicitação. Tente novamente.', 
-          life: 5000 
+        toast.current?.show({
+          severity: 'error',
+          summary: 'Atenção',
+          detail: errorMsg || 'Não foi possível enviar a solicitação. Tente novamente.',
+          life: 5000,
         });
       }
     } catch (err) {
-      // 500 / Network Error Fallback
-      toast.current?.show({ 
-        severity: 'info', // Uses info styling to remain B2B elegant instead of breaking in RED
-        summary: 'Processando', 
-        detail: 'Nossa rede está roteando sua solicitação. Caso demore, nos chame no LinkedIn.', 
-        life: 5000 
+      toast.current?.show({
+        severity: 'info',
+        summary: 'Processando',
+        detail: 'Nossa rede está roteando sua solicitação. Caso demore, nos chame no LinkedIn.',
+        life: 5000,
       });
     } finally {
       setLoading(false);
@@ -55,51 +53,111 @@ export const LeadCapture: React.FC = () => {
   };
 
   return (
-    <section className="ys-capture">
+    <section className="ys-capture ys-section" id="contact">
+      <div className="ys-orb ys-orb--gold-soft" />
       <Toast ref={toast} position="bottom-right" className="ys-toast-premium" />
       <div className="container">
-        <div className="ys-capture-box">
-          <h2 className="ys-capture-title">Vamos mapear o seu próximo passo.</h2>
-          <form className="ys-capture-form" onSubmit={handleSubmit}>
-            <div className="p-inputgroup">
-              <span className="p-inputgroup-addon"><i className="pi prime-user"></i></span>
-              <InputText 
-                placeholder="Nome Completo" 
-                value={formData.name} 
-                onChange={(e) => setFormData({...formData, name: e.target.value})} 
-                disabled={loading}
-                required 
-              />
+        <div className="ys-capture-grid">
+          {/* Context Panel */}
+          <aside className="ys-capture-context">
+            <span className="ys-eyebrow">Próximo Passo</span>
+            <h2 className="ys-capture-headline">
+              Vamos mapear o seu <span className="gradient-text-gold">próximo passo</span>.
+            </h2>
+            <p className="ys-capture-pitch">
+              Uma sessão de 45 minutos com a engenharia. Sem comercial, sem proposta
+              padrão. Você sai com um diagnóstico técnico real do seu cenário.
+            </p>
+
+            <ul className="ys-capture-perks">
+              <li>
+                <span className="ys-capture-perk-icon"><Clock size={14} strokeWidth={2.5} /></span>
+                <span>Resposta em até <strong>24h úteis</strong></span>
+              </li>
+              <li>
+                <span className="ys-capture-perk-icon"><ShieldCheck size={14} strokeWidth={2.5} /></span>
+                <span>NDA mútuo desde a primeira mensagem</span>
+              </li>
+              <li>
+                <span className="ys-capture-perk-icon"><Sparkles size={14} strokeWidth={2.5} /></span>
+                <span>Diagnóstico técnico, não pitch comercial</span>
+              </li>
+            </ul>
+          </aside>
+
+          {/* Form Card */}
+          <div className="ys-capture-box">
+            <div className="ys-capture-box-head">
+              <span className="ys-capture-dots">
+                <span className="ys-dot ys-dot--red" />
+                <span className="ys-dot ys-dot--yellow" />
+                <span className="ys-dot ys-dot--green" />
+              </span>
+              <span className="ys-capture-box-title font-code">request.consultoria.ts</span>
             </div>
-            <div className="p-inputgroup">
-              <span className="p-inputgroup-addon"><i className="pi prime-envelope"></i></span>
-              <InputText 
-                type="email" 
-                placeholder="E-mail Corporativo" 
-                value={formData.email} 
-                onChange={(e) => setFormData({...formData, email: e.target.value})} 
+
+            <form className="ys-capture-form" onSubmit={handleSubmit}>
+              <div className="ys-field">
+                <label className="ys-field-label" htmlFor="lead-name">
+                  <User size={14} strokeWidth={2} />
+                  Nome Completo
+                </label>
+                <InputText
+                  id="lead-name"
+                  placeholder="Diretor, CTO, Lead..."
+                  value={formData.name}
+                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                  disabled={loading}
+                  required
+                />
+              </div>
+
+              <div className="ys-field">
+                <label className="ys-field-label" htmlFor="lead-email">
+                  <Mail size={14} strokeWidth={2} />
+                  E-mail Corporativo
+                </label>
+                <InputText
+                  id="lead-email"
+                  type="email"
+                  placeholder="voce@empresa.com.br"
+                  value={formData.email}
+                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                  disabled={loading}
+                  required
+                />
+              </div>
+
+              <div className="ys-field">
+                <label className="ys-field-label" htmlFor="lead-company">
+                  <Building2 size={14} strokeWidth={2} />
+                  Empresa
+                </label>
+                <InputText
+                  id="lead-company"
+                  placeholder="Razão social ou marca"
+                  value={formData.company}
+                  onChange={(e) => setFormData({ ...formData, company: e.target.value })}
+                  disabled={loading}
+                  required
+                />
+              </div>
+
+              <Button
+                type="submit"
+                className="p-button-primary ys-capture-submit"
                 disabled={loading}
-                required 
-              />
-            </div>
-            <div className="p-inputgroup">
-              <span className="p-inputgroup-addon"><i className="pi prime-building"></i></span>
-              <InputText 
-                placeholder="Empresa" 
-                value={formData.company} 
-                onChange={(e) => setFormData({...formData, company: e.target.value})} 
-                disabled={loading}
-                required 
-              />
-            </div>
-            <Button 
-              type="submit" 
-              label={loading ? "Roteando..." : "Solicitar Consultoria Estratégica"} 
-              icon={loading ? "pi pi-spin pi-spinner" : ""}
-              className="p-button-primary" 
-              disabled={loading}
-            />
-          </form>
+              >
+                <span>{loading ? 'Roteando...' : 'Solicitar Consultoria Estratégica'}</span>
+                {!loading && <ArrowRight size={16} strokeWidth={2.5} />}
+                {loading && <i className="pi pi-spin pi-spinner" />}
+              </Button>
+
+              <p className="ys-capture-disclaimer">
+                Ao enviar, você concorda com a nossa política de privacidade e contato.
+              </p>
+            </form>
+          </div>
         </div>
       </div>
     </section>

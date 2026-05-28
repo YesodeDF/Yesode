@@ -1,26 +1,57 @@
 @use 'tokens' as *;
 
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Fira+Code:wght@400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
 
 :root {
   color-scheme: light dark;
+  --bg: #{$bg-light};
+  --bg-elev: #{$bg-light-elev};
+  --headings: #{$headings-light};
+  --text: #{$text-light};
+  --text-muted: #{$text-light-muted};
+  --cards: #{$cards-light};
+  --border: #{$border-light};
+  --border-strong: #{$border-light-strong};
+  --glass: #{$glass-light};
+  --gradient-headline: #{$gradient-headline-light};
 }
 
-/* Force light theme by default as requested */
-body {
+html.dark-theme {
+  --bg: #{$bg-dark};
+  --bg-elev: #{$bg-dark-elev};
+  --headings: #{$headings-dark};
+  --text: #{$text-dark};
+  --text-muted: #{$text-dark-muted};
+  --cards: #{$cards-dark};
+  --border: #{$border-dark};
+  --border-strong: #{$border-dark-strong};
+  --glass: #{$glass-dark};
+  --gradient-headline: #{$gradient-headline-dark};
+}
+
+* { box-sizing: border-box; }
+
+html, body {
   margin: 0;
   padding: 0;
+  scroll-behavior: smooth;
+}
+
+body {
   font-family: $font-ui;
-  background-color: $bg-light;
-  color: $text-light;
+  background-color: var(--bg);
+  color: var(--text);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  font-feature-settings: 'ss01', 'cv11';
+  overflow-x: hidden;
 }
 
 h1, h2, h3, h4, h5, h6 {
-  color: $headings-light;
+  color: var(--headings);
   font-weight: 700;
   margin: 0;
+  letter-spacing: -0.02em;
 }
 
 a {
@@ -29,84 +60,220 @@ a {
   transition: $transition-smooth;
 }
 
-* {
-  box-sizing: border-box;
+::selection {
+  background: rgba($primary, 0.25);
+  color: var(--headings);
 }
 
-// Global PrimeReact Overrides for Yesode Theme
+// Custom scrollbar (subtle)
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb {
+  background: rgba(127, 127, 127, 0.25);
+  border-radius: 999px;
+  border: 2px solid transparent;
+  background-clip: content-box;
+}
+::-webkit-scrollbar-thumb:hover { background: rgba(127, 127, 127, 0.4); background-clip: content-box; }
+
+// ============================
+// PrimeReact overrides
+// ============================
 .p-button {
   background-color: transparent !important;
-  border: 1px solid $primary !important;
-  color: $primary !important;
+  border: 1px solid var(--border-strong) !important;
+  color: var(--headings) !important;
   transition: $transition-smooth !important;
   font-family: $font-ui !important;
-  font-weight: 500 !important;
-  border-radius: 4px !important;
-  
+  font-weight: 600 !important;
+  border-radius: $radius-sm !important;
+  letter-spacing: -0.01em;
+  cursor: pointer;
+
   &:hover {
-    background-color: rgba(196, 169, 98, 0.1) !important;
+    background-color: rgba($primary, 0.08) !important;
+    border-color: rgba($primary, 0.4) !important;
   }
 
   &.p-button-primary {
-    background-color: $primary !important;
-    color: $bg-light !important;
-    
+    background: $gradient-primary !important;
+    color: #0A0F1C !important;
+    border-color: transparent !important;
+    box-shadow: 0 8px 24px -8px rgba($primary, 0.5), inset 0 1px 0 rgba(255,255,255,0.25);
+
     &:hover {
-      background-color: darken(#C4A962, 5%) !important;
+      background: linear-gradient(135deg, $primary-bright 0%, $primary 100%) !important;
+      box-shadow: 0 12px 32px -8px rgba($primary, 0.7), inset 0 1px 0 rgba(255,255,255,0.3);
+      transform: translateY(-1px);
+    }
+
+    &:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+  }
+
+  &.p-button-outlined {
+    background: transparent !important;
+    border: 1px solid var(--border-strong) !important;
+    color: var(--headings) !important;
+    &:hover {
+      background-color: rgba(127,127,127,0.08) !important;
+      border-color: var(--headings) !important;
     }
   }
 }
 
 .p-inputtext {
-  background-color: $cards-light !important;
-  border: 1px solid rgba(0,0,0,0.1) !important;
-  color: $text-light !important;
+  background-color: transparent !important;
+  border: 1px solid var(--border-strong) !important;
+  color: var(--headings) !important;
   font-family: $font-ui !important;
-  border-radius: 4px !important;
-  
+  border-radius: $radius-sm !important;
+  padding: 0.875rem 1rem !important;
+  font-size: 0.95rem !important;
+  transition: $transition-smooth !important;
+
+  &::placeholder { color: var(--text-muted); }
+
   &:focus {
     border-color: $primary !important;
-    box-shadow: 0 0 0 1px rgba(196, 169, 98, 0.2) !important;
+    box-shadow: 0 0 0 3px rgba(196, 169, 98, 0.15) !important;
+    outline: none !important;
   }
 }
 
+.p-inputgroup-addon {
+  background: transparent !important;
+  border: 1px solid var(--border-strong) !important;
+  border-right: none !important;
+  color: var(--text-muted) !important;
+}
+
+// ============================
 // Utility classes
+// ============================
 .container {
-  max-width: 1200px;
+  max-width: 1240px;
   margin: 0 auto;
-  padding: 0 2rem;
+  padding: 0 1.5rem;
+
+  @media (min-width: 768px) {
+    padding: 0 2rem;
+  }
 }
 
-.text-primary {
-  color: $primary;
+.text-primary { color: $primary; }
+.font-code { font-family: $font-code; }
+
+.gradient-text {
+  background: var(--gradient-headline);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
 }
 
-.font-code {
+.gradient-text-gold {
+  background: $gradient-primary;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+}
+
+// Section helpers
+.ys-section {
+  position: relative;
+  padding: 6rem 0;
+
+  @media (max-width: 768px) {
+    padding: 4rem 0;
+  }
+}
+
+.ys-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
   font-family: $font-code;
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: $primary;
+  margin-bottom: 1rem;
+
+  &::before {
+    content: '';
+    display: inline-block;
+    width: 24px;
+    height: 1px;
+    background: currentColor;
+  }
 }
 
-/* Dark Theme Overrides triggered by .dark-theme class on html root */
-html.dark-theme {
-  body {
-    background-color: $bg-dark;
-    color: $text-dark;
-  }
-  h1, h2, h3, h4, h5, h6 {
-    color: $headings-dark;
-  }
-  .p-button-primary {
-    color: $bg-dark !important;
-  }
+.ys-section-title {
+  font-size: clamp(2rem, 4vw, 3rem);
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+  margin-bottom: 1rem;
+  color: var(--headings);
 }
 
-html:not(.dark-theme) {
-  --text-light: #4B5563;
-  --headings-light: #111827;
-  --bg-light: #FFFFFF;
+.ys-section-subtitle {
+  font-size: 1.0625rem;
+  color: var(--text);
+  max-width: 640px;
+  line-height: 1.6;
 }
 
-html.dark-theme {
-  --text-dark: #9CA3AF;
-  --headings-dark: #FFFFFF;
-  --bg-dark: #0F1115;
+// Animated grid background
+.ys-grid-bg {
+  position: absolute;
+  inset: 0;
+  background-size: 48px 48px;
+  background-image:
+    linear-gradient(to right, var(--border) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--border) 1px, transparent 1px);
+  mask-image: radial-gradient(ellipse at center, black 30%, transparent 80%);
+  -webkit-mask-image: radial-gradient(ellipse at center, black 30%, transparent 80%);
+  pointer-events: none;
+}
+
+// Animated blob/orb
+@keyframes ys-float {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(30px, -20px) scale(1.05); }
+  66% { transform: translate(-20px, 20px) scale(0.95); }
+}
+
+@keyframes ys-pulse-glow {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 0.7; }
+}
+
+@keyframes ys-blink {
+  0%, 49% { opacity: 1; }
+  50%, 100% { opacity: 0; }
+}
+
+@keyframes ys-shimmer {
+  0% { background-position: -1000px 0; }
+  100% { background-position: 1000px 0; }
+}
+
+.ys-orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  pointer-events: none;
+  z-index: 0;
+  animation: ys-float 18s ease-in-out infinite, ys-pulse-glow 8s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

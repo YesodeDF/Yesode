@@ -1,0 +1,1 @@
+[data-theme=light]{--bg-color:#f8fafc;--text-color:#0f172a;--accent-color:#f59e0b}body[data-theme=light]{background-color:var(--bg-color);color:var(--text-color)}

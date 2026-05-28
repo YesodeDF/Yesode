@@ -2,12 +2,14 @@ import React, { useEffect, useState } from 'react';
 import { Button } from 'primereact/button';
 import { ThemeToggle } from '../ThemeToggle/ThemeToggle';
 import { scrollToSection } from '../../utils/scrollToSection';
+import { trackEvent } from '../../utils/analytics';
 import './Header.scss';
 
 const NAV_LINKS = [
   { id: 'pillars', label: 'Capacidades' },
-  { id: 'approach', label: 'Abordagem' },
-  { id: 'proof', label: 'Arquitetura' },
+  { id: 'cases', label: 'Cases' },
+  { id: 'process', label: 'Processo' },
+  { id: 'faq', label: 'FAQ' },
   { id: 'contact', label: 'Contato' },
 ];
 
@@ -24,7 +26,14 @@ export const Header: React.FC = () => {
 
   const handleNav = (id: string) => {
     setMobileOpen(false);
+    trackEvent('nav_link_click', { target: id });
     scrollToSection(id);
+  };
+
+  const handleHeaderCta = () => {
+    trackEvent('cta_header_click');
+    setMobileOpen(false);
+    scrollToSection('contact');
   };
 
   return (
@@ -63,7 +72,7 @@ export const Header: React.FC = () => {
           <Button
             label="Agendar Consultoria"
             className="p-button-primary ys-cta-btn"
-            onClick={() => handleNav('contact')}
+            onClick={handleHeaderCta}
           />
           <button
             type="button"

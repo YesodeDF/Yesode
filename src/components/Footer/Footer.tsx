@@ -15,9 +15,10 @@ const COLUMNS = [
   {
     title: 'Empresa',
     links: [
-      { label: 'Abordagem', href: '#approach' },
+      { label: 'Cases', href: '#cases' },
+      { label: 'Processo', href: '#process' },
       { label: 'Arquitetura', href: '#proof' },
-      { label: 'Consultoria', href: '#contact' },
+      { label: 'FAQ', href: '#faq' },
     ],
   },
   {

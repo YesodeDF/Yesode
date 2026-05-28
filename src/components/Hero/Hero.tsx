@@ -2,9 +2,18 @@ import React from 'react';
 import { Button } from 'primereact/button';
 import { ArrowRight, Activity } from 'lucide-react';
 import { scrollToSection } from '../../utils/scrollToSection';
+import { trackEvent } from '../../utils/analytics';
 import './Hero.scss';
 
 export const Hero: React.FC = () => {
+  const handlePrimary = () => {
+    trackEvent('cta_hero_primary_click');
+    scrollToSection('contact');
+  };
+  const handleSecondary = () => {
+    trackEvent('cta_hero_secondary_click', { target: 'cases' });
+    scrollToSection('cases');
+  };
   return (
     <section className="ys-hero">
       <div className="ys-grid-bg" />
@@ -35,15 +44,15 @@ export const Hero: React.FC = () => {
         <div className="ys-hero-actions">
           <Button
             className="p-button-primary ys-btn-primary"
-            onClick={() => scrollToSection('contact')}
+            onClick={handlePrimary}
           >
             <span>Agendar Consultoria Gratuita</span>
             <ArrowRight size={16} strokeWidth={2.5} />
           </Button>
           <Button
-            label="Explorar Arquitetura"
+            label="Ver Cases →"
             className="p-button-outlined ys-btn-outline"
-            onClick={() => scrollToSection('proof')}
+            onClick={handleSecondary}
           />
         </div>
 

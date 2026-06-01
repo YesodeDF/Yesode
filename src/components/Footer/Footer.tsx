@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { Linkedin, Github, Mail, ArrowUpRight } from 'lucide-react';
 import './Footer.scss';
 
@@ -6,27 +7,27 @@ const COLUMNS = [
   {
     title: 'Capacidades',
     links: [
-      { label: 'Deep Search & KPIs', href: '#pillars' },
-      { label: 'Brand Intelligence', href: '#pillars' },
-      { label: 'Engineering by Design', href: '#pillars' },
-      { label: 'Infra como Produto', href: '#pillars' },
+      { label: 'Deep Search & KPIs', href: '/#pillars' },
+      { label: 'Brand Intelligence', href: '/#pillars' },
+      { label: 'Engineering by Design', href: '/#pillars' },
+      { label: 'Infra como Produto', href: '/#pillars' },
     ],
   },
   {
     title: 'Empresa',
     links: [
-      { label: 'Cases', href: '#cases' },
-      { label: 'Processo', href: '#process' },
-      { label: 'Arquitetura', href: '#proof' },
-      { label: 'FAQ', href: '#faq' },
+      { label: 'Cases', href: '/#cases' },
+      { label: 'Processo', href: '/#process' },
+      { label: 'Arquitetura', href: '/#proof' },
+      { label: 'FAQ', href: '/#faq' },
     ],
   },
   {
     title: 'Recursos',
     links: [
-      { label: 'Status', href: '#', external: true },
-      { label: 'Privacidade', href: '#' },
-      { label: 'Termos', href: '#' },
+      { label: 'Status', href: 'https://status.yesode.com.br', external: true },
+      { label: 'Privacidade', href: '/politica-de-privacidade' },
+      { label: 'Termos', href: '/termos-de-uso' },
     ],
   },
 ];
@@ -72,14 +73,20 @@ export const Footer: React.FC = () => {
               <ul>
                 {col.links.map((link) => (
                   <li key={link.label}>
-                    <a
-                      href={link.href}
-                      target={link.external ? '_blank' : undefined}
-                      rel={link.external ? 'noopener noreferrer' : undefined}
-                    >
-                      {link.label}
-                      {link.external && <ArrowUpRight size={12} strokeWidth={2.5} />}
-                    </a>
+                    {link.external ? (
+                      <a
+                        href={link.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        {link.label}
+                        <ArrowUpRight size={12} strokeWidth={2.5} />
+                      </a>
+                    ) : (
+                      <Link to={link.href}>
+                        {link.label}
+                      </Link>
+                    )}
                   </li>
                 ))}
               </ul>

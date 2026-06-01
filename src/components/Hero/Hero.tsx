@@ -71,23 +71,23 @@ export const Hero: React.FC = () => {
 
       <div className="ys-hero-metrics">
         <div className="ys-metric">
-          <span className="ys-metric-val">99.99<small>%</small></span>
-          <span className="ys-metric-label">Uptime SLA</span>
+          <span className="ys-metric-val">KPIs Auditados</span>
+          <span className="ys-metric-label">Métricas de negócio antes e depois</span>
         </div>
         <div className="ys-metric-divider" />
         <div className="ys-metric">
-          <span className="ys-metric-val">&lt; 20<small>ms</small></span>
-          <span className="ys-metric-label">Edge Latency</span>
+          <span className="ys-metric-val">Zero Lock-in</span>
+          <span className="ys-metric-label">Sem frameworks proprietários</span>
         </div>
         <div className="ys-metric-divider" />
         <div className="ys-metric">
-          <span className="ys-metric-val">Global</span>
-          <span className="ys-metric-label">Mesh Network</span>
+          <span className="ys-metric-val">Escopo Protegido</span>
+          <span className="ys-metric-label">Decidido no Discovery</span>
         </div>
         <div className="ys-metric-divider" />
         <div className="ys-metric">
-          <span className="ys-metric-val">Zero</span>
-          <span className="ys-metric-label">Vendor Lock-in</span>
+          <span className="ys-metric-val">Mão na Massa</span>
+          <span className="ys-metric-label">CTO e Leads no seu código</span>
         </div>
       </div>
     </section>

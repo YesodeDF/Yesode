@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { Button } from 'primereact/button';
 import { ThemeToggle } from '../ThemeToggle/ThemeToggle';
 import { scrollToSection } from '../../utils/scrollToSection';
@@ -16,6 +17,8 @@ const NAV_LINKS = [
 export const Header: React.FC = () => {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 16);
@@ -27,19 +30,27 @@ export const Header: React.FC = () => {
   const handleNav = (id: string) => {
     setMobileOpen(false);
     trackEvent('nav_link_click', { target: id });
-    scrollToSection(id);
+    if (location.pathname !== '/') {
+      navigate('/#' + id);
+    } else {
+      scrollToSection(id);
+    }
   };
 
   const handleHeaderCta = () => {
     trackEvent('cta_header_click');
     setMobileOpen(false);
-    scrollToSection('contact');
+    if (location.pathname !== '/') {
+      navigate('/#contact');
+    } else {
+      scrollToSection('contact');
+    }
   };
 
   return (
     <header className={`ys-header ${scrolled ? 'is-scrolled' : ''}`}>
       <div className="ys-header-shell">
-        <a className="ys-logo" href="#" aria-label="Yesode">
+        <Link className="ys-logo" to="/" aria-label="Yesode">
           <svg className="ys-logo-mark" width="28" height="28" viewBox="0 0 28 28" fill="none" aria-hidden="true">
             <defs>
               <linearGradient id="ys-logo-grad" x1="0" y1="0" x2="28" y2="28">
@@ -52,7 +63,7 @@ export const Header: React.FC = () => {
           </svg>
           <span className="ys-logo-text">Yesode</span>
           <span className="ys-logo-dot">.</span>
-        </a>
+        </Link>
 
         <nav className="ys-nav" aria-label="Primary">
           {NAV_LINKS.map((link) => (

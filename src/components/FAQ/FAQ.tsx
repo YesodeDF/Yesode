@@ -28,6 +28,14 @@ const ITEMS = [
     q: 'Como vocês medem sucesso de um projeto?',
     a: 'Cada engajamento começa com um KPI quantificado do P&L (lead time, conversão, custo de infra, NPS técnico). Auditamos esse KPI no final. Se não mexer, refazemos o escopo sem cobrar.',
   },
+  {
+    q: 'Como funciona a manutenção e evolução após a entrega?',
+    a: 'O "Run" (operação) pode ser absorvido pelo seu time interno após o nosso handoff progressivo, ou podemos atuar em formato de retainer/on-call para suporte contínuo e arquitetura evolutiva.',
+  },
+  {
+    q: 'Vocês vendem horas de desenvolvedores (Body Shop/Outsourcing)?',
+    a: 'Não. Nós assumimos a responsabilidade técnica pela entrega de um escopo ou solução arquitetural. Não vendemos "cabeças" para tapar buraco em squads, entregamos engenharia que resolve gargalos de P&L.',
+  },
 ];
 
 export const FAQ: React.FC = () => {

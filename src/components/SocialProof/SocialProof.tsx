@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import './SocialProof.scss';
 
 const LOGOS = [
@@ -11,11 +12,13 @@ const LOGOS = [
 ];
 
 export const SocialProof: React.FC = () => {
+  const { t } = useTranslation();
+
   return (
-    <section className="ys-social-proof" aria-label="Clientes e parceiros">
+    <section className="ys-social-proof" aria-label={t('social.aria_label')}>
       <div className="container">
         <p className="ys-social-proof-label">
-          Engenharia entregue a times de produto que já confiam em arquiteturas críticas
+          {t('social.label')}
         </p>
         <div className="ys-social-proof-strip">
           {LOGOS.map((name) => (

@@ -1,26 +1,28 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { Boxes, Server, Database, BarChart3, ShieldCheck } from 'lucide-react';
 import './ProofOfEngineering.scss';
 
 const NODES = [
-  { id: 'gateway', icon: ShieldCheck, label: 'API Gateway', tag: 'Edge', desc: 'mTLS · Rate limit · WAF' },
-  { id: 'core', icon: Boxes, label: 'Microservices Core', tag: 'Domain', desc: 'Event-driven · Hexagonal', highlight: true },
-  { id: 'data', icon: Database, label: 'Data Layer', tag: 'Persistence', desc: 'PostgreSQL · Redis · S3' },
-  { id: 'analytics', icon: BarChart3, label: 'Analytics & KPIs', tag: 'Insights', desc: 'Real-time OLAP · Dashboards' },
+  { id: 'gateway', icon: ShieldCheck },
+  { id: 'core', icon: Boxes, highlight: true },
+  { id: 'data', icon: Database },
+  { id: 'analytics', icon: BarChart3 }
 ];
 
 export const ProofOfEngineering: React.FC = () => {
+  const { t } = useTranslation();
+
   return (
     <section className="ys-proof ys-section" id="proof">
       <div className="container">
         <div className="ys-proof-head">
-          <span className="ys-eyebrow">Reference Architecture</span>
+          <span className="ys-eyebrow">{t('proof.eyebrow')}</span>
           <h2 className="ys-section-title">
-            Engenharia <span className="gradient-text-gold">composta</span>, não improvisada.
+            {t('proof.title')}<span className="gradient-text-gold">{t('proof.title_highlight')}</span>{t('proof.title_suffix')}
           </h2>
           <p className="ys-section-subtitle">
-            Cada camada é projetada com responsabilidade clara, observabilidade nativa e
-            zero acoplamento desnecessário. Resultado: previsibilidade em produção.
+            {t('proof.subtitle')}
           </p>
         </div>
 
@@ -33,7 +35,7 @@ export const ProofOfEngineering: React.FC = () => {
               <Server size={12} strokeWidth={2.5} />
               architecture.ts
             </div>
-            <div className="ys-arch-meta">main · prod · v1.0.0</div>
+            <div className="ys-arch-meta">{t('proof.arch_meta')}</div>
           </div>
 
           <div className="ys-arch-body">
@@ -47,9 +49,9 @@ export const ProofOfEngineering: React.FC = () => {
                         <Icon size={18} strokeWidth={2} />
                       </div>
                       <div className="ys-arch-node-body">
-                        <div className="ys-arch-node-tag">{node.tag}</div>
-                        <div className="ys-arch-node-label">{node.label}</div>
-                        <div className="ys-arch-node-desc">{node.desc}</div>
+                        <div className="ys-arch-node-tag">{t(`proof.nodes.${i}.tag`)}</div>
+                        <div className="ys-arch-node-label">{t(`proof.nodes.${i}.label`)}</div>
+                        <div className="ys-arch-node-desc">{t(`proof.nodes.${i}.desc`)}</div>
                       </div>
                       <span className="ys-arch-node-index">0{i + 1}</span>
                     </div>
@@ -67,7 +69,7 @@ export const ProofOfEngineering: React.FC = () => {
 
           <div className="ys-arch-footer">
             <span className="ys-arch-status">
-              <span className="ys-arch-status-dot" /> All systems operational
+              <span className="ys-arch-status-dot" /> {t('proof.status')}
             </span>
             <span className="ys-arch-build">build #20260528 · &lt; 18ms p95</span>
           </div>

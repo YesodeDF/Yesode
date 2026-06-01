@@ -1,19 +1,24 @@
 import React from 'react';
 import { Button } from 'primereact/button';
+import { useTranslation } from 'react-i18next';
 import { ArrowRight, Activity } from 'lucide-react';
 import { scrollToSection } from '../../utils/scrollToSection';
 import { trackEvent } from '../../utils/analytics';
 import './Hero.scss';
 
 export const Hero: React.FC = () => {
+  const { t } = useTranslation();
+
   const handlePrimary = () => {
     trackEvent('cta_hero_primary_click');
     scrollToSection('contact');
   };
+  
   const handleSecondary = () => {
     trackEvent('cta_hero_secondary_click', { target: 'cases' });
     scrollToSection('cases');
   };
+
   return (
     <section className="ys-hero">
       <div className="ys-grid-bg" />
@@ -27,18 +32,17 @@ export const Hero: React.FC = () => {
           </span>
           <span className="ys-status-text">
             <Activity size={12} strokeWidth={2.5} />
-            System Online — Yesode V1.0.0
+            {t('hero.status')}
           </span>
         </div>
 
         <h1 className="ys-hero-title">
-          <span className="gradient-text">Construímos arquitetura,</span><br />
-          não <span className="gradient-text-gold">templates.</span>
+          <span className="gradient-text">{t('hero.title_1')}</span><br />
+          {t('hero.title_2')}
         </h1>
 
         <p className="ys-hero-subtitle">
-          Projetamos software sob medida para operações corporativas críticas.
-          Trazemos a estabilidade da engenharia de ponta para o seu negócio.
+          {t('hero.subtitle')}
         </p>
 
         <div className="ys-hero-actions">
@@ -46,18 +50,18 @@ export const Hero: React.FC = () => {
             className="p-button-primary ys-btn-primary"
             onClick={handlePrimary}
           >
-            <span>Agendar Consultoria Gratuita</span>
+            <span>{t('hero.cta_primary')}</span>
             <ArrowRight size={16} strokeWidth={2.5} />
           </Button>
           <Button
-            label="Ver Cases →"
+            label={t('hero.cta_secondary')}
             className="p-button-outlined ys-btn-outline"
             onClick={handleSecondary}
           />
         </div>
 
         <div className="ys-hero-trustline">
-          <span className="ys-trustline-label">Stack</span>
+          <span className="ys-trustline-label">{t('hero.trustline_label')}</span>
           <span className="ys-trustline-items">
             <span>TypeScript</span><span>·</span>
             <span>Go</span><span>·</span>
@@ -71,23 +75,23 @@ export const Hero: React.FC = () => {
 
       <div className="ys-hero-metrics">
         <div className="ys-metric">
-          <span className="ys-metric-val">KPIs Auditados</span>
-          <span className="ys-metric-label">Métricas de negócio antes e depois</span>
+          <span className="ys-metric-val">{t('hero.metric_1_val')}</span>
+          <span className="ys-metric-label">{t('hero.metric_1_label')}</span>
         </div>
         <div className="ys-metric-divider" />
         <div className="ys-metric">
-          <span className="ys-metric-val">Zero Lock-in</span>
-          <span className="ys-metric-label">Sem frameworks proprietários</span>
+          <span className="ys-metric-val">{t('hero.metric_2_val')}</span>
+          <span className="ys-metric-label">{t('hero.metric_2_label')}</span>
         </div>
         <div className="ys-metric-divider" />
         <div className="ys-metric">
-          <span className="ys-metric-val">Escopo Protegido</span>
-          <span className="ys-metric-label">Decidido no Discovery</span>
+          <span className="ys-metric-val">{t('hero.metric_3_val')}</span>
+          <span className="ys-metric-label">{t('hero.metric_3_label')}</span>
         </div>
         <div className="ys-metric-divider" />
         <div className="ys-metric">
-          <span className="ys-metric-val">Mão na Massa</span>
-          <span className="ys-metric-label">CTO e Leads no seu código</span>
+          <span className="ys-metric-val">{t('hero.metric_4_val')}</span>
+          <span className="ys-metric-label">{t('hero.metric_4_label')}</span>
         </div>
       </div>
     </section>

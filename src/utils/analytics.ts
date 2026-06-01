@@ -8,7 +8,8 @@ type EventName =
   | 'form_submit_attempt'
   | 'form_submit_success'
   | 'form_submit_error'
-  | 'faq_open';
+  | 'faq_open'
+  | 'language_change';
 
 export function trackEvent(name: EventName, props?: Record<string, string | number | boolean | null>) {
   try {

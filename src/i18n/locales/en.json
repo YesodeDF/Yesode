@@ -1,0 +1,314 @@
+{
+  "header": {
+    "nav_capabilities": "Capabilities",
+    "nav_cases": "Cases",
+    "nav_process": "Process",
+    "nav_faq": "FAQ",
+    "nav_contact": "Contact",
+    "cta": "Schedule Consultation",
+    "toggle_theme": "Toggle Theme"
+  },
+  "hero": {
+    "status": "System Online — Yesode V1.0.0",
+    "title_1": "We build architecture,",
+    "title_2": "not templates.",
+    "subtitle": "We design bespoke software for mission-critical corporate operations. We bring cutting-edge engineering stability to your business.",
+    "cta_primary": "Schedule Free Consultation",
+    "cta_secondary": "View Cases →",
+    "trustline_label": "Stack",
+    "metric_1_val": "Audited KPIs",
+    "metric_1_label": "Business metrics before and after",
+    "metric_2_val": "Zero Lock-in",
+    "metric_2_label": "No proprietary frameworks",
+    "metric_3_val": "Protected Scope",
+    "metric_3_label": "Decided in Discovery",
+    "metric_4_val": "Hands-On",
+    "metric_4_label": "CTO and Leads in your code"
+  },
+  "social": {
+    "aria_label": "Clients and partners",
+    "label": "Engineering delivered to product teams that already rely on critical architectures"
+  },
+  "pillars": {
+    "eyebrow": "Capabilities",
+    "title": "Six pillars. ",
+    "title_highlight": "One single thesis",
+    "title_suffix": " of engineering.",
+    "subtitle": "Each capability solves a concrete operational problem. You compose your own stack without tying the roadmap to a single vendor.",
+    "items": [
+      { "title": "Deep Search & KPIs", "desc": "Data-driven decision making and deep operational indexing. Metrics connected to the P&L.", "tag": "Insight" },
+      { "title": "Brand Intelligence", "desc": "Solutions aligned with your brand identity and business voice.", "tag": "Voice" },
+      { "title": "Engineering by Design", "desc": "Bespoke architecture from the first token — no compromises.", "tag": "Core" },
+      { "title": "Infra as a Product", "desc": "Internal platforms that accelerate the team, not create maintenance overhead.", "tag": "Platform" },
+      { "title": "Continuous Delivery", "desc": "Deterministic pipelines, blue/green, end-to-end observability.", "tag": "Ops" },
+      { "title": "Security by Default", "desc": "Zero-trust, encryption in transit and at rest, continuous auditing.", "tag": "Trust" }
+    ]
+  },
+  "cases": {
+    "eyebrow": "Results",
+    "title": "KPIs moved. ",
+    "title_highlight": "Not just code delivered.",
+    "subtitle": "Anonymized cases. Real metrics. Every engagement starts with a baseline number and ends with a target number — audited.",
+    "before": "Before",
+    "after": "After",
+    "items": [
+      {
+        "industry": "Fintech LATAM",
+        "title": "Legacy monolith migration to service mesh",
+        "before": "Deploy 1× per week · 14-day lead time",
+        "after": "Deploy 32× per day · 3h lead time",
+        "kpiLabel": "production lead time",
+        "badge": "Platform"
+      },
+      {
+        "industry": "Healthtech BR",
+        "title": "National-scale medical records orchestration",
+        "before": "p95 of 1.2s · 4 incidents/month",
+        "after": "p95 of 180ms · 0 incidents in 6 months",
+        "kpiLabel": "faster in production",
+        "badge": "Performance"
+      },
+      {
+        "industry": "Retail Omnichannel",
+        "title": "Unified OMS with real-time ERP integration",
+        "before": "Misaligned inventory · 3% canceled orders",
+        "after": "Sub-second sync · 0.2% cancellations",
+        "kpiLabel": "cancellations from misalignment",
+        "badge": "Integration"
+      }
+    ]
+  },
+  "approach": {
+    "eyebrow": "Approach",
+    "title": "Your company at the ",
+    "title_highlight": "center",
+    "title_suffix": " of engineering.",
+    "text_1": "The middleman is the enemy of execution. At Yesode, you talk directly to the nerve center of engineering. No project managers blocking the code, no telephone game.",
+    "text_2": "This guarantees surgical decisions, precise architecture, and deliveries aligned with your operation's financial objectives.",
+    "quote_tag": "/* Principle */",
+    "quote_text": "\"Every line of code delivered has an economic justification. Every architectural decision has an owner.\"",
+    "stats": [
+      { "value": "0", "label": "Layers of Intermediation", "desc": "Direct with engineering." },
+      { "value": "1", "label": "Single Point of Contact", "desc": "CTO or Lead Engineer." },
+      { "value": "100%", "label": "Results-Focused", "desc": "P&L KPIs, not PM KPIs." }
+    ]
+  },
+  "process": {
+    "eyebrow": "Process",
+    "title": "Four phases. ",
+    "title_highlight": "Zero surprises",
+    "title_suffix": ".",
+    "subtitle": "You know exactly what to expect in each time window, which deliverable arrives at the end, and how we measure success.",
+    "phases": [
+      {
+        "title": "Discovery",
+        "duration": "1—2 weeks",
+        "desc": "Immersion in the real problem. We map P&L KPIs, technical bottlenecks, and constraints.",
+        "deliverables": ["Technical diagnosis", "Risk map", "Attack plan"]
+      },
+      {
+        "title": "Architecture",
+        "duration": "2—3 weeks",
+        "desc": "Solution design with documented decisions. Tradeoffs on paper before code.",
+        "deliverables": ["ADRs", "Architecture diagram", "SLO budget"]
+      },
+      {
+        "title": "Build",
+        "duration": "6—16 weeks",
+        "desc": "Execution in lean squads. Weekly deliveries with demos and live metrics.",
+        "deliverables": ["Incremental releases", "CI/CD pipeline", "Observability"]
+      },
+      {
+        "title": "Run",
+        "duration": "Continuous",
+        "desc": "Assisted operations with on-call, fine-tuning, and progressive handoff to your internal team.",
+        "deliverables": ["Runbooks", "Team training", "Post-mortem culture"]
+      }
+    ]
+  },
+  "proof": {
+    "eyebrow": "Reference Architecture",
+    "title": "Engineering ",
+    "title_highlight": "composed",
+    "title_suffix": ", not improvised.",
+    "subtitle": "Each layer is designed with clear responsibility, native observability, and zero unnecessary coupling. Result: predictability in production.",
+    "arch_meta": "main · prod · v1.0.0",
+    "status": "All systems operational",
+    "nodes": [
+      { "label": "API Gateway", "tag": "Edge", "desc": "mTLS · Rate limit · WAF" },
+      { "label": "Microservices Core", "tag": "Domain", "desc": "Event-driven · Hexagonal" },
+      { "label": "Data Layer", "tag": "Persistence", "desc": "PostgreSQL · Redis · S3" },
+      { "label": "Analytics & KPIs", "tag": "Insights", "desc": "Real-time OLAP · Dashboards" }
+    ]
+  },
+  "faq": {
+    "eyebrow": "FAQ",
+    "title": "Honest ",
+    "title_highlight": "questions",
+    "title_suffix": ".\nHonest answers.",
+    "subtitle": "If your question isn't here, write us in the form below. We respond within 24 business hours, no sales runaround.",
+    "items": [
+      {
+        "q": "How much does an engagement with Yesode cost?",
+        "a": "We work with Discovery packages (fixed) and execution contracts (monthly or per delivery). After Discovery — between 1 and 2 weeks — we present a closed estimate with explicit tradeoffs. No hourly billing, no end-of-month surprises."
+      },
+      {
+        "q": "What is the average project timeline?",
+        "a": "Critical platforms typically range between 8 and 24 weeks in execution windows. The Run is continuous. You always have a working version in production from week 6, in the worst case."
+      },
+      {
+        "q": "Do you sign an NDA?",
+        "a": "Yes. Mutual NDA at the very first meeting. Lean model, no abusive clauses — ready for legal review. Everything we hear in Discovery is confidential by default."
+      },
+      {
+        "q": "Do you work with our internal team or replace it?",
+        "a": "We reinforce your internal team. We work as a coupled squad: code review, pair programming, ADRs, planning rituals. The contract's goal is to elevate your internal team's level — not create dependency."
+      },
+      {
+        "q": "What tech stack do you specialize in?",
+        "a": "TypeScript, Go, Rust, and Python for services. PostgreSQL, Redis, Kafka, S3 for data. Kubernetes, Terraform, and AWS for infra. Frontend in React/Next. Stack is a Discovery decision — we choose by the problem, not the trend."
+      },
+      {
+        "q": "How do you measure a project's success?",
+        "a": "Every engagement starts with a quantified P&L KPI (lead time, conversion, infra cost, technical NPS). We audit that KPI at the end. If it doesn't move, we redo the scope at no charge."
+      },
+      {
+        "q": "How does maintenance and evolution work after delivery?",
+        "a": "The \"Run\" (operations) can be absorbed by your internal team after our progressive handoff, or we can act in a retainer/on-call format for continuous support and evolutionary architecture."
+      },
+      {
+        "q": "Do you sell developer hours (Body Shop/Outsourcing)?",
+        "a": "No. We assume technical responsibility for delivering a scope or architectural solution. We don't sell \"headcount\" to fill gaps in squads — we deliver engineering that solves P&L bottlenecks."
+      }
+    ]
+  },
+  "capture": {
+    "eyebrow": "Next Step",
+    "headline": "Let's map your ",
+    "headline_highlight": "next step",
+    "headline_suffix": ".",
+    "pitch": "A 45-minute session with engineering. No sales reps, no boilerplate proposals. You leave with a real technical diagnosis of your scenario.",
+    "perk_response": "Response within ",
+    "perk_response_bold": "24 business hours",
+    "perk_nda": "Mutual NDA from the first message",
+    "perk_diag": "Technical diagnosis, not a sales pitch",
+    "label_name": "Full Name",
+    "label_email": "Corporate Email",
+    "label_company": "Company",
+    "placeholder_name": "Director, CTO, Lead...",
+    "placeholder_email": "you@company.com",
+    "placeholder_company": "Legal name or brand",
+    "validation_name_required": "Please enter your name.",
+    "validation_name_short": "Name is too short.",
+    "validation_email_required": "Please enter your corporate email.",
+    "validation_email_invalid": "Invalid email format.",
+    "validation_email_personal": "Use a corporate email (not personal).",
+    "validation_company_required": "Please enter your company.",
+    "submit": "Request Strategic Consultation",
+    "submit_loading": "Routing...",
+    "toast_success_summary": "Received",
+    "toast_success_detail": "Your request has been forwarded to the leadership team. Check your email.",
+    "toast_error_summary": "Attention",
+    "toast_error_detail": "Could not send the request. Please try again.",
+    "toast_network_summary": "Processing",
+    "toast_network_detail": "Our network is routing your request. If it takes too long, reach out to us on LinkedIn.",
+    "disclaimer": "By submitting, you agree to our privacy policy and contact terms.",
+    "box_title": "request.consultation.ts"
+  },
+  "footer": {
+    "tagline": "Bespoke architecture. Direct engineering. Verifiable results.",
+    "col_capabilities": "Capabilities",
+    "col_company": "Company",
+    "col_resources": "Resources",
+    "link_infra": "Infra as a Product",
+    "link_cases": "Cases",
+    "link_process": "Process",
+    "link_architecture": "Architecture",
+    "link_faq": "FAQ",
+    "link_status": "Status",
+    "link_privacy": "Privacy",
+    "link_terms": "Terms",
+    "copyright": "© {{year}} Yesode. All rights reserved.",
+    "status": "All systems operational"
+  },
+  "privacy": {
+    "back": "Back to Home",
+    "title": "Privacy ",
+    "title_highlight": "Policy",
+    "meta_updated": "Last updated: June 1, 2026",
+    "meta_compliance": "In compliance with LGPD (Law No. 13,709/18)",
+    "intro": "YESODE CONSULTORIA E SERVIÇOS DE TECNOLOGIA LTDA (\"Yesode\"), registered under CNPJ/MF No. 53.649.336/0001-38, takes privacy and information security extremely seriously. This Privacy Policy clearly and transparently describes how we process personal data collected through our official website and service channels, in full compliance with Brazil's General Data Protection Law (LGPD) — Federal Law No. 13,709/2018.",
+    "s1_title": "1. B2B Scope and Principles",
+    "s1_p1": "Yesode operates exclusively in the B2B (Business-to-Business) model. Our services are designed for mission-critical corporate organizations, and all our communication aims to establish strictly professional relationships. For this reason, all data collected has the strict purpose of commercial qualification of companies and their respective technological demands.",
+    "s1_p2": "As a result, we proactively block personal/generic email domains (such as @gmail.com, @hotmail.com, @outlook.com, @yahoo.com, and @icloud.com) in our lead capture form, requiring corporate email addresses.",
+    "s2_title": "2. What data do we collect and why?",
+    "s2_intro": "We only collect the strictly necessary information voluntarily submitted by you when requesting a free strategic consultation. The data collected is:",
+    "s2_item_name": "Full Name: To identify your contact in a personalized and professional manner.",
+    "s2_item_email": "Corporate Email: To enable direct communication between our founding engineers and your company.",
+    "s2_item_company": "Company Name: So that we can preliminarily analyze the corporate context, systems architecture, and possible technical needs before the first meeting.",
+    "s2_highlight": "DATA SALE PROHIBITION: Yesode does not sell, rent, share, assign, or distribute under any circumstances your registration information to commercial partners or any third parties. Your data is used solely for Yesode's own internal commercial prospecting purposes.",
+    "s3_title": "3. Legal Basis for Data Processing",
+    "s3_intro": "The processing of personal data by Yesode is supported by the following legal bases established by the LGPD:",
+    "s3_item_1": "Contract Execution or Preliminary Procedures (Art. 7, V, LGPD): Necessary to enable the strategic meetings actively requested by you through the form.",
+    "s3_item_2": "Legitimate Interest (Art. 7, IX, LGPD): For internal improvement of our commercial intelligence and prevention against fraud and spam.",
+    "s4_title": "4. Information Storage and Security",
+    "s4_p1": "The data collected through our form is transmitted using state-of-the-art security protocols (SSL/TLS encryption in transit) and processed through the secure cloud infrastructure of Vercel and the corporate email gateway of Resend.",
+    "s4_p2": "We keep your data stored only for the time strictly necessary to fulfill the purposes described in this policy or until you exercise your right to deletion.",
+    "s5_title": "5. Your Rights Guaranteed by LGPD (Art. 18)",
+    "s5_intro": "As a data subject, you can exercise the following rights at any time and at no additional cost:",
+    "s5_item_1": "Confirmation and Access: Confirm the existence of processing and access the data we maintain about you.",
+    "s5_item_2": "Rectification: Request the correction of incomplete, inaccurate, or outdated data.",
+    "s5_item_3": "Deletion (Erasure): Request the complete deletion of your personal data from our database.",
+    "s5_item_4": "Consent Revocation: Revoke your permission for future commercial communications.",
+    "s6_title": "6. Cookies and Anonymized Traffic Analysis",
+    "s6_p1": "To ensure a premium browsing experience and optimize our site's infrastructure, we use static traffic analysis tools (such as Vercel Analytics and Vercel Speed Insights).",
+    "s6_p2": "These tools collect completely anonymized data (such as network latency, browser used, and page load times). No personal data capable of identifying the user is stored or analyzed by these technical telemetry services.",
+    "s7_title": "7. Changes to this Policy",
+    "s7_p1": "We reserve the right to update this Privacy Policy periodically to reflect regulatory, jurisprudential changes, or technological advances in our architecture. The date of the last update will always be visible at the top of this document.",
+    "contact_title": "Contact our Data Protection Officer (DPO)",
+    "contact_text": "If you wish to exercise any of your rights established by the LGPD or clarify doubts about our data protection architecture, contact our DPO (Data Protection Officer) directly:"
+  },
+  "terms": {
+    "back": "Back to Home",
+    "title": "Terms of ",
+    "title_highlight": "Use",
+    "meta_updated": "Last updated: June 1, 2026",
+    "meta_compliance": "Confidentiality and Intellectual Property Assured",
+    "intro_1": "Welcome to the portal of YESODE CONSULTORIA E SERVIÇOS DE TECNOLOGIA LTDA (\"Yesode\"). These Terms of Use govern the conditions of navigation and use of our official website and interaction with our commercial channel and prospecting gateway.",
+    "intro_2": "By using our site or submitting data through the consultation form, you declare that you fully understand and agree with the conditions described in this document. If you disagree, we ask that you do not proceed with navigation or data submission.",
+    "s1_title": "1. Purpose and Nature of the Site",
+    "s1_p1": "This site aims to present the corporate portfolio, the software engineering manifesto, the process FAQ, and serve as an initial prospecting and engagement channel for Yesode with potential B2B clients. The published information is strategic and seeks to honestly reflect our operational principles and conceptual architecture.",
+    "s2_title": "2. Preliminary Confidentiality (Implicit NDA)",
+    "s2_p1": "We understand that when filling out the form to request an architecture consultation, you may share with us strategic P&L pain points, infrastructure bottlenecks, and confidential information about your technical ecosystem.",
+    "s2_highlight": "PRELIMINARY NDA GUARANTEE: All information provided by you through our contact form is treated under absolute secrecy. Yesode guarantees, under pre-contractual responsibility terms, full confidentiality over any data, technical bottleneck, or architectural pain shared with us at this initial stage, operating under the premises of a Preliminary and Implicit Non-Disclosure Agreement (NDA), even before the signing of the formal bilateral NDA at the first meeting.",
+    "s3_title": "3. Intellectual Property (IP) and Absence of Rights Assignment",
+    "s3_intro": "The protection of intellectual property is one of Yesode's non-negotiable manifesto pillars:",
+    "s3_item_1_title": "Site Content:",
+    "s3_item_1_text": "All logos, trademarks, design layouts, texts, demonstrative source codes, animations, and images present in this portal are the exclusive intellectual property of Yesode and protected by copyright and industrial property laws.",
+    "s3_item_2_title": "Initial Architecture Proposals:",
+    "s3_item_2_text": "Simplified case studies or architecture visions designed during the free initial phase serve to demonstrate our seniority and competence. No intellectual rights are transferred to the client at this time.",
+    "s3_item_3_title": "Project Intellectual Property Assignment:",
+    "s3_item_3_text": "In line with our \"Zero Vendor Lock-in\" thesis, the intellectual property of source code, microservices, and architecture built specifically for your company is 100% transferred to you. However, this transfer only takes effect upon signing a formal service agreement (Master Services Agreement / MSA) and full payment of the respective financial milestones. No property is assigned preliminarily by mere commercial interaction.",
+    "s4_title": "4. Proper Use of the Lead Gateway and Prohibitions",
+    "s4_intro": "By using the Yesode portal and forms, you commit to:",
+    "s4_item_1": "Provide only truthful, accurate information associated with a legitimate legal entity.",
+    "s4_item_2": "Not use fictitious or disposable emails with the intent to circumvent the engineering qualification process.",
+    "s4_item_3": "Not practice reverse engineering on site API calls, inject malicious scripts, send automated spam, or perform denial-of-service attacks (DoS/DDoS) against our infrastructure.",
+    "s4_p2": "Yesode reserves the right to proactively track and block suspicious access, as well as adopt criminal and civil legal measures against incidents that violate the integrity of our systems.",
+    "s5_title": "5. Limitation of Liability",
+    "s5_p1": "The content provided on the site is offered \"as is.\" Although we strive to ensure the accuracy of all conceptual and architectural information presented, articles, publications, and conceptual posts do not constitute formal engineering consulting until a detailed scope is specifically designed for your scenario in Discovery.",
+    "s6_title": "6. Applicable Law and Jurisdiction",
+    "s6_p1": "These Terms of Use are governed by the laws of the Federative Republic of Brazil. To resolve any dispute arising from the use of this portal, the parties expressly elect the Courts of São Paulo, State of São Paulo, to the exclusion of any other, however privileged.",
+    "contact_title": "Questions about the Confidentiality Agreement or IP?",
+    "contact_text": "Our technical and legal team is available to accelerate the mutual NDA review or align specific intellectual property terms for your corporate segment."
+  },
+  "lang": {
+    "en": "English",
+    "pt": "Português",
+    "es": "Español"
+  },
+  "seo": {
+    "title": "Yesode — Bespoke Software Engineering Consultancy for Critical Operations",
+    "description": "Bespoke architecture, direct engineering with the technical team, deliveries aligned with the P&L. Software consultancy for companies that treat technology as a competitive advantage."
+  }
+}

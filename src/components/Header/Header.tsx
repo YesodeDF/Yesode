@@ -1,24 +1,30 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate, useLocation, Link } from 'react-router-dom';
+import { useNavigate, useLocation, Link, useParams } from 'react-router-dom';
 import { Button } from 'primereact/button';
+import { useTranslation } from 'react-i18next';
 import { ThemeToggle } from '../ThemeToggle/ThemeToggle';
+import { LanguageSwitcher } from '../LanguageSwitcher/LanguageSwitcher';
 import { scrollToSection } from '../../utils/scrollToSection';
 import { trackEvent } from '../../utils/analytics';
 import './Header.scss';
 
-const NAV_LINKS = [
-  { id: 'pillars', label: 'Capacidades' },
-  { id: 'cases', label: 'Cases' },
-  { id: 'process', label: 'Processo' },
-  { id: 'faq', label: 'FAQ' },
-  { id: 'contact', label: 'Contato' },
-];
-
 export const Header: React.FC = () => {
+  const { t } = useTranslation();
+  const { lang = 'en' } = useParams<{ lang: string }>();
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
+
+  const isHome = location.pathname === `/${lang}` || location.pathname === `/${lang}/`;
+
+  const navLinks = [
+    { id: 'pillars', label: t('header.nav_capabilities') },
+    { id: 'cases', label: t('header.nav_cases') },
+    { id: 'process', label: t('header.nav_process') },
+    { id: 'faq', label: t('header.nav_faq') },
+    { id: 'contact', label: t('header.nav_contact') },
+  ];
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 16);
@@ -30,8 +36,8 @@ export const Header: React.FC = () => {
   const handleNav = (id: string) => {
     setMobileOpen(false);
     trackEvent('nav_link_click', { target: id });
-    if (location.pathname !== '/') {
-      navigate('/#' + id);
+    if (!isHome) {
+      navigate(`/${lang}#` + id);
     } else {
       scrollToSection(id);
     }
@@ -40,8 +46,8 @@ export const Header: React.FC = () => {
   const handleHeaderCta = () => {
     trackEvent('cta_header_click');
     setMobileOpen(false);
-    if (location.pathname !== '/') {
-      navigate('/#contact');
+    if (!isHome) {
+      navigate(`/${lang}#contact`);
     } else {
       scrollToSection('contact');
     }
@@ -50,7 +56,7 @@ export const Header: React.FC = () => {
   return (
     <header className={`ys-header ${scrolled ? 'is-scrolled' : ''}`}>
       <div className="ys-header-shell">
-        <Link className="ys-logo" to="/" aria-label="Yesode">
+        <Link className="ys-logo" to={`/${lang}`} aria-label="Yesode">
           <svg className="ys-logo-mark" width="28" height="28" viewBox="0 0 28 28" fill="none" aria-hidden="true">
             <defs>
               <linearGradient id="ys-logo-grad" x1="0" y1="0" x2="28" y2="28">
@@ -65,8 +71,8 @@ export const Header: React.FC = () => {
           <span className="ys-logo-dot">.</span>
         </Link>
 
-        <nav className="ys-nav" aria-label="Primary">
-          {NAV_LINKS.map((link) => (
+        <nav className="ys-nav" aria-label={t('social.aria_label')}>
+          {navLinks.map((link) => (
             <button
               key={link.id}
               type="button"
@@ -79,16 +85,17 @@ export const Header: React.FC = () => {
         </nav>
 
         <div className="ys-operations">
+          <LanguageSwitcher />
           <ThemeToggle />
           <Button
-            label="Agendar Consultoria"
+            label={t('header.cta')}
             className="p-button-primary ys-cta-btn"
             onClick={handleHeaderCta}
           />
           <button
             type="button"
             className={`ys-burger ${mobileOpen ? 'is-open' : ''}`}
-            aria-label="Toggle menu"
+            aria-label={t('header.toggle_theme')}
             aria-expanded={mobileOpen}
             onClick={() => setMobileOpen((v) => !v)}
           >
@@ -100,7 +107,7 @@ export const Header: React.FC = () => {
       </div>
 
       <div className={`ys-mobile-panel ${mobileOpen ? 'is-open' : ''}`}>
-        {NAV_LINKS.map((link) => (
+        {navLinks.map((link) => (
           <button
             key={link.id}
             type="button"

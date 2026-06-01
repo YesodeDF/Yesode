@@ -1,38 +1,42 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { Linkedin, Github, Mail, ArrowUpRight } from 'lucide-react';
 import './Footer.scss';
 
-const COLUMNS = [
-  {
-    title: 'Capacidades',
-    links: [
-      { label: 'Deep Search & KPIs', href: '/#pillars' },
-      { label: 'Brand Intelligence', href: '/#pillars' },
-      { label: 'Engineering by Design', href: '/#pillars' },
-      { label: 'Infra como Produto', href: '/#pillars' },
-    ],
-  },
-  {
-    title: 'Empresa',
-    links: [
-      { label: 'Cases', href: '/#cases' },
-      { label: 'Processo', href: '/#process' },
-      { label: 'Arquitetura', href: '/#proof' },
-      { label: 'FAQ', href: '/#faq' },
-    ],
-  },
-  {
-    title: 'Recursos',
-    links: [
-      { label: 'Status', href: 'https://status.yesode.com.br', external: true },
-      { label: 'Privacidade', href: '/politica-de-privacidade' },
-      { label: 'Termos', href: '/termos-de-uso' },
-    ],
-  },
-];
-
 export const Footer: React.FC = () => {
+  const { t } = useTranslation();
+  const { lang = 'en' } = useParams<{ lang: string }>();
+
+  const columns = [
+    {
+      title: t('footer.col_capabilities'),
+      links: [
+        { label: t('pillars.items.0.title'), href: `/${lang}#pillars` },
+        { label: t('pillars.items.1.title'), href: `/${lang}#pillars` },
+        { label: t('pillars.items.2.title'), href: `/${lang}#pillars` },
+        { label: t('pillars.items.3.title'), href: `/${lang}#pillars` },
+      ],
+    },
+    {
+      title: t('footer.col_company'),
+      links: [
+        { label: t('footer.link_cases'), href: `/${lang}#cases` },
+        { label: t('footer.link_process'), href: `/${lang}#process` },
+        { label: t('footer.link_architecture'), href: `/${lang}#proof` },
+        { label: t('footer.link_faq'), href: `/${lang}#faq` },
+      ],
+    },
+    {
+      title: t('footer.col_resources'),
+      links: [
+        { label: t('footer.link_status'), href: 'https://status.yesode.com.br', external: true },
+        { label: t('footer.link_privacy'), href: `/${lang}/politica-de-privacidade` },
+        { label: t('footer.link_terms'), href: `/${lang}/termos-de-uso` },
+      ],
+    },
+  ];
+
   return (
     <footer className="ys-footer">
       <div className="container">
@@ -52,7 +56,7 @@ export const Footer: React.FC = () => {
               <span className="ys-footer-name">Yesode<span className="ys-footer-dot">.</span></span>
             </div>
             <p className="ys-footer-tagline">
-              Arquitetura sob medida. Engenharia direta. Resultados verificáveis.
+              {t('footer.tagline')}
             </p>
             <div className="ys-footer-social">
               <a href="https://www.linkedin.com" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
@@ -67,7 +71,7 @@ export const Footer: React.FC = () => {
             </div>
           </div>
 
-          {COLUMNS.map((col) => (
+          {columns.map((col) => (
             <div key={col.title} className="ys-footer-col">
               <h4 className="ys-footer-col-title">{col.title}</h4>
               <ul>
@@ -96,11 +100,11 @@ export const Footer: React.FC = () => {
 
         <div className="ys-footer-bottom">
           <span className="ys-footer-copyright">
-            © {new Date().getFullYear()} Yesode. Todos os direitos reservados.
+            {t('footer.copyright', { year: new Date().getFullYear() })}
           </span>
           <span className="ys-footer-status">
             <span className="ys-footer-status-dot" />
-            <span className="font-code">All systems operational</span>
+            <span className="font-code">{t('footer.status')}</span>
           </span>
         </div>
       </div>

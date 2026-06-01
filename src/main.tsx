@@ -4,6 +4,7 @@ import { BrowserRouter } from 'react-router-dom'
 import { Analytics } from '@vercel/analytics/react'
 import { SpeedInsights } from '@vercel/speed-insights/react'
 
+import './i18n'
 import App from './App.tsx'
 
 import { ThemeProvider } from './context/ThemeContext'

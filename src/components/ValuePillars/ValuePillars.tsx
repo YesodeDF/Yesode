@@ -1,79 +1,45 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { Search, Sparkles, Code2, Cpu, GitBranch, ShieldCheck } from 'lucide-react';
 import './ValuePillars.scss';
 
 const PILLARS = [
-  {
-    icon: Search,
-    title: 'Deep Search & KPIs',
-    desc: 'Tomada de decisão baseada em dados reais e indexação profunda da operação. Métricas conectadas ao P&L.',
-    tag: 'Insight',
-    size: 'lg',
-  },
-  {
-    icon: Sparkles,
-    title: 'Brand Intelligence',
-    desc: 'Soluções alinhadas à identidade e tom de voz do negócio.',
-    tag: 'Voice',
-    size: 'sm',
-  },
-  {
-    icon: Code2,
-    title: 'Engineering by Design',
-    desc: 'Arquitetura sob medida desde o primeiro token — sem concessões.',
-    tag: 'Core',
-    size: 'sm',
-  },
-  {
-    icon: Cpu,
-    title: 'Infra como Produto',
-    desc: 'Plataformas internas que aceleram o time, não que pedem manutenção.',
-    tag: 'Platform',
-    size: 'md',
-  },
-  {
-    icon: GitBranch,
-    title: 'Continuous Delivery',
-    desc: 'Pipelines determinísticos, blue/green, observabilidade end-to-end.',
-    tag: 'Ops',
-    size: 'md',
-  },
-  {
-    icon: ShieldCheck,
-    title: 'Security by Default',
-    desc: 'Zero-trust, criptografia em trânsito e repouso, auditoria contínua.',
-    tag: 'Trust',
-    size: 'md',
-  },
+  { icon: Search, size: 'lg' },
+  { icon: Sparkles, size: 'sm' },
+  { icon: Code2, size: 'sm' },
+  { icon: Cpu, size: 'md' },
+  { icon: GitBranch, size: 'md' },
+  { icon: ShieldCheck, size: 'md' }
 ];
 
 export const ValuePillars: React.FC = () => {
+  const { t } = useTranslation();
+
   return (
     <section className="ys-pillars ys-section" id="pillars">
       <div className="ys-grid-bg" />
       <div className="container">
         <div className="ys-pillars-head">
-          <span className="ys-eyebrow">Capacidades</span>
+          <span className="ys-eyebrow">{t('pillars.eyebrow')}</span>
           <h2 className="ys-section-title">
-            Seis pilares. <span className="gradient-text-gold">Uma única tese</span> de engenharia.
+            {t('pillars.title')}<span className="gradient-text-gold">{t('pillars.title_highlight')}</span>{t('pillars.title_suffix')}
           </h2>
           <p className="ys-section-subtitle">
-            Cada capacidade resolve um problema operacional concreto. Você compõe o
-            seu próprio stack, sem amarrar o roadmap a um único fornecedor.
+            {t('pillars.subtitle')}
           </p>
         </div>
 
         <div className="ys-pillars-grid">
-          {PILLARS.map((p) => {
+          {PILLARS.map((p, index) => {
             const Icon = p.icon;
             return (
-              <article key={p.title} className={`ys-pillar ys-pillar--${p.size}`}>
+              <article key={index} className={`ys-pillar ys-pillar--${p.size}`}>
                 <div className="ys-pillar-icon">
                   <Icon size={22} strokeWidth={1.75} />
                 </div>
-                <div className="ys-pillar-tag">{p.tag}</div>
-                <h3 className="ys-pillar-title">{p.title}</h3>
-                <p className="ys-pillar-desc">{p.desc}</p>
+                <div className="ys-pillar-tag">{t(`pillars.items.${index}.tag`)}</div>
+                <h3 className="ys-pillar-title">{t(`pillars.items.${index}.title`)}</h3>
+                <p className="ys-pillar-desc">{t(`pillars.items.${index}.desc`)}</p>
                 <div className="ys-pillar-glow" aria-hidden="true" />
               </article>
             );

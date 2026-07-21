@@ -30,11 +30,17 @@ export const App: React.FC = () => {
       {/* Standalone Login Route */}
       <Route path="/login" element={<LoginPage />} />
 
-      {/* Public Proposal Routes (Accessible directly without login) */}
+      {/* Public Proposal Routes (Direct access without login) */}
       <Route path="/proposta/global-developer" element={<GlobalDeveloperProposal />} />
       <Route path="/proposta/mi-abuela" element={<MiAbuelaProposal />} />
       <Route path="/proposta/:slug" element={<PublicProposal />} />
       <Route path="/proposal/:slug" element={<PublicProposal />} />
+
+      {/* Localized Public Proposal Routes (Direct access with lang prefix) */}
+      <Route path="/:lang/proposta/global-developer" element={<GlobalDeveloperProposal />} />
+      <Route path="/:lang/proposta/mi-abuela" element={<MiAbuelaProposal />} />
+      <Route path="/:lang/proposta/:slug" element={<PublicProposal />} />
+      <Route path="/:lang/proposal/:slug" element={<PublicProposal />} />
 
       {/* Internal Admin Routes (gated by auth) */}
       <Route

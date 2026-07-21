@@ -48,8 +48,8 @@ export default async function handler(
 
     await Promise.all([
       resend.emails.send({
-        from: 'Gateway Yesode <leads@yesode.com.br>',
-        to: ['filipe@yesode.com.br', 'davi@yesode.com.br'],
+        from: 'Gateway Yesode <leads@yesode.com>',
+        to: ['filipe@yesode.com', 'davi@yesode.com'],
         subject: `[YESODE B2B] Novo Lead High-Ticket: ${company}`,
         html: `
           <div style="font-family: monospace; font-size: 14px; max-width: 600px;">
@@ -63,10 +63,10 @@ export default async function handler(
         `
       }),
       resend.emails.send({
-        from: 'Yesode Engineering <hello@yesode.com.br>',
+        from: 'Yesode Engineering <hello@yesode.com>',
         to: email,
         subject: 'Mapeando sua arquitetura corporativa',
-        text: `Olá ${name},\n\nRecebemos sua solicitação de consultoria estratégica para a ${company}.\n\nUm de nossos engenheiros fundadores está analisando seu contexto atual. Em breve, entraremos em contato direto para propormos a arquitetura do seu próximo passo.\n\nAtenciosamente,\n\nEquipe Yesode\nyesode.com.br`
+        text: `Olá ${name},\n\nRecebemos sua solicitação de consultoria estratégica para a ${company}.\n\nUm de nossos engenheiros fundadores está analisando seu contexto atual. Em breve, entraremos em contato direto para propormos a arquitetura do seu próximo passo.\n\nAtenciosamente,\n\nEquipe Yesode\nyesode.com`
       })
     ]);
 

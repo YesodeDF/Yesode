@@ -1,4 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+import { LanguageSwitcher } from '@page/components/LanguageSwitcher/LanguageSwitcher';
 import '../../styles/proposal-global-developer.scss';
 import {
   ChevronRight,
@@ -21,10 +24,138 @@ import {
   CalendarCheck
 } from 'lucide-react';
 
+const TRANSLATIONS: Record<string, Record<string, string>> = {
+  pt: {
+    nav_diag: 'Diagnóstico',
+    nav_op_a: 'Proposta A (All-in-One)',
+    nav_op_b: 'Proposta B (Google)',
+    nav_comp: 'Comparativo',
+    nav_arch: 'Arquitetura',
+    nav_next: 'Próximos Passos',
+    hero_tag: 'Proposta de Arquitetura Comercial Exclusiva',
+    hero_title_prefix: 'Transformação Digital para a ',
+    hero_desc: 'Duas abordagens estratégicas para eliminar o atrito operacional das professoras, elevar a retenção de alunos e consolidar a plataforma de ensino com máxima escalabilidade.',
+    btn_arch: 'Ver Opções de Arquitetura',
+    btn_diag: 'Explorar Diagnóstico',
+    diag_title: 'O Desafio Atual da Operação',
+    diag_desc: 'Atualmente, a gestão educacional e os professores operam divididos em três ferramentas desconectadas, criando atrito pedagógico e diluição de marca.',
+    gc_desc: 'Interface genérica que não reforça a identidade da Global Developer. Professores encontram dificuldades em organizar turmas e sincronizar presenças.',
+    gm_desc: 'Necessidade de criar e disparar links manualmente. As Breakout Rooms exigem múltiplos cliques manuais, pausando o ritmo pedagógico da aula.',
+    hub_desc: 'Plataforma de terceiros com taxas recorrentes. O aluno é obrigado a trocar de aba e login para assistir o acervo de aulas gravadas.',
+    op_a_tag: 'Opção A — Solução Proprietária',
+    op_a_title: 'Plataforma Educacional Premium (All-in-One)',
+    op_a_desc: 'Ecossistema proprietário de ponta a ponta. Substitui o Google Meet, o Google Classroom e a Hubla por um único ambiente unificado sob a marca da Global Developer.',
+    op_a_val: 'Valor Agregado: Experiência 100% White-Label',
+    op_a_val_sub: 'O aluno não entra no Google; ele interage diretamente com a plataforma da instituição, elevando o valor percebido e a retenção.',
+    op_b_tag: 'Opção B — Automação & Eficiência',
+    op_b_title: 'O Orquestrador Inteligente (Interface Google Workspace)',
+    op_b_desc: 'Uma camada de interface sob medida que oculta a complexidade do Google Workspace. A instituição aproveita os servidores do Google com usabilidade fluida para professores.',
+    op_b_val: 'Valor Agregado: Curva de Aprendizado Imediata',
+    op_b_val_sub: 'Resolve a dor exata das professoras sem exigir migração abrupta do acervo existente, com prazo de entrega reduzido.',
+    comp_title: 'Matriz Comparativa das Arquiteturas',
+    comp_desc: 'Analise lado a lado os diferenciais de cada abordagem para alinhar com os objetivos estratégicos da Global Developer.',
+    arch_title: 'Stack Tecnológico Recomendado',
+    arch_desc: 'Tecnologias modernas de alta confiabilidade corporativa selecionadas para garantir baixa latência e segurança.',
+    next_title: 'Próximos Passos — Convite para Alinhamento',
+    next_desc: 'Esta apresentação apresenta os caminhos arquiteturais possíveis. Selecione a opção que melhor se alinha à visão da gerência para agendarmos uma sessão de demonstração e detalhamento de escopo.',
+    btn_req_a: 'Solicitar Apresentação Técnica (Opção A)',
+    btn_req_b: 'Solicitar Apresentação Técnica (Opção B)',
+    req_sent: 'Solicitação Registrada',
+    req_sending: 'Enviando Convite...'
+  },
+  en: {
+    nav_diag: 'Diagnosis',
+    nav_op_a: 'Proposal A (All-in-One)',
+    nav_op_b: 'Proposal B (Google)',
+    nav_comp: 'Comparison',
+    nav_arch: 'Architecture',
+    nav_next: 'Next Steps',
+    hero_tag: 'Exclusive Commercial Architecture Proposal',
+    hero_title_prefix: 'Digital Transformation for ',
+    hero_desc: 'Two strategic approaches to eliminate teachers\' operational friction, boost student retention, and consolidate the learning platform with maximum scalability.',
+    btn_arch: 'View Architecture Options',
+    btn_diag: 'Explore Diagnosis',
+    diag_title: 'The Current Operational Challenge',
+    diag_desc: 'Currently, educational management and teachers operate split across three disconnected tools, creating pedagogical friction and brand dilution.',
+    gc_desc: 'Generic interface that does not reinforce Global Developer brand. Teachers face difficulties organizing classes and syncing attendance.',
+    gm_desc: 'Need to manually create and send links. Breakout Rooms require multiple manual clicks, pausing class rhythm.',
+    hub_desc: 'Third-party platform with recurring fees. Students must switch tabs and logins to watch recorded classes.',
+    op_a_tag: 'Option A — Proprietary Solution',
+    op_a_title: 'Premium Educational Platform (All-in-One)',
+    op_a_desc: 'End-to-end proprietary ecosystem. Replaces Google Meet, Google Classroom, and Hubla with a single unified environment branded for Global Developer.',
+    op_a_val: 'Added Value: 100% White-Label Experience',
+    op_a_val_sub: 'Students don\'t enter Google; they interact directly with the institution\'s platform, boosting perceived value and retention.',
+    op_b_tag: 'Option B — Automation & Efficiency',
+    op_b_title: 'The Smart Orchestrator (Google Workspace Interface)',
+    op_b_desc: 'A tailored interface layer that hides Google Workspace complexity. The institution leverages Google servers with seamless teacher usability.',
+    op_b_val: 'Added Value: Immediate Learning Curve',
+    op_b_val_sub: 'Solves teachers\' exact pain point without requiring abrupt content migration, with a faster delivery timeline.',
+    comp_title: 'Architectural Comparison Matrix',
+    comp_desc: 'Analyze side-by-side the key differentiators of each approach to align with Global Developer\'s strategic goals.',
+    arch_title: 'Recommended Technology Stack',
+    arch_desc: 'Modern, high-reliability enterprise technologies selected to ensure low latency and security.',
+    next_title: 'Next Steps — Alignment Invitation',
+    next_desc: 'This presentation outlines the architectural paths available. Select the option that best fits management\'s vision to schedule a technical demo session.',
+    btn_req_a: 'Request Technical Demo (Option A)',
+    btn_req_b: 'Request Technical Demo (Option B)',
+    req_sent: 'Request Registered',
+    req_sending: 'Sending Invitation...'
+  },
+  es: {
+    nav_diag: 'Diagnóstico',
+    nav_op_a: 'Propuesta A (All-in-One)',
+    nav_op_b: 'Propuesta B (Google)',
+    nav_comp: 'Comparativa',
+    nav_arch: 'Arquitectura',
+    nav_next: 'Próximos Pasos',
+    hero_tag: 'Propuesta de Arquitectura Comercial Exclusiva',
+    hero_title_prefix: 'Transformación Digital para ',
+    hero_desc: 'Dos enfoques estratégicos para eliminar la fricción operativa de los profesores, aumentar la retención de estudiantes y consolidar la plataforma con máxima escalabilidad.',
+    btn_arch: 'Ver Opciones de Arquitectura',
+    btn_diag: 'Explorar Diagnóstico',
+    diag_title: 'El Desafío Operativo Actual',
+    diag_desc: 'Actualmente, la gestión educativa y los profesores operan divididos en tres herramientas desconectadas, creando fricción pedagógica y dilución de marca.',
+    gc_desc: 'Interfaz genérica que no refuerza la identidad de Global Developer. Los profesores tienen dificultades para organizar clases y sincronizar asistencia.',
+    gm_desc: 'Necesidad de crear y enviar enlaces manualmente. Las Breakout Rooms requieren múltiples clics manuales, pausando el ritmo pedagógico.',
+    hub_desc: 'Plataforma de terceros con tarifas recurrentes. El estudiante se ve obligado a cambiar de pestaña e inicio de sesión para ver las clases grabadas.',
+    op_a_tag: 'Opción A — Solución Propietaria',
+    op_a_title: 'Plataforma Educativa Premium (All-in-One)',
+    op_a_desc: 'Ecosistema propietario de extremo a extremo. Reemplaza Google Meet, Google Classroom y Hubla con un único entorno unificado con la marca de Global Developer.',
+    op_a_val: 'Valor Agregado: Experiencia 100% Marca Blanca (White-Label)',
+    op_a_val_sub: 'El estudiante no entra a Google; interactúa directamente con la plataforma de la institución, elevando el valor percibido y la retención.',
+    op_b_tag: 'Opción B — Automatización y Eficiencia',
+    op_b_title: 'El Orquestador Inteligente (Interfaz Google Workspace)',
+    op_b_desc: 'Una capa de interfaz a medida que oculta la complejidad de Google Workspace. La institución aprovecha los servidores de Google con una usabilidad fluida para los profesores.',
+    op_b_val: 'Valor Agregado: Curva de Aprendizaje Inmediata',
+    op_b_val_sub: 'Resuelve el problema exacto de las profesoras sin exigir una migración abrupta del contenido existente, con un tiempo de entrega más rápido.',
+    comp_title: 'Matriz Comparativa de Arquitecturas',
+    comp_desc: 'Analice lado a lado los diferenciadores clave de cada enfoque para alinearse con los objetivos estratégicos de Global Developer.',
+    arch_title: 'Stack Tecnológico Recomendado',
+    arch_desc: 'Tecnologías modernas de alta confiabilidad corporativa seleccionadas para garantizar baja latencia y seguridad.',
+    next_title: 'Próximos Pasos — Invitación a Alineación',
+    next_desc: 'Esta presentación resume los caminos de arquitectura disponibles. Seleccione la opción que mejor se adapte a la visión de la gerencia para agendar una sesión técnica de demostración.',
+    btn_req_a: 'Solicitar Presentación Técnica (Opción A)',
+    btn_req_b: 'Solicitar Presentación Técnica (Opción B)',
+    req_sent: 'Solicitud Registrada',
+    req_sending: 'Enviando Invitación...'
+  }
+};
+
 export const GlobalDeveloperProposal: React.FC = () => {
+  const { lang = 'pt' } = useParams<{ lang: string }>();
+  const { i18n } = useTranslation();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [sendingOption, setSendingOption] = useState<'A' | 'B' | null>(null);
   const [approvedOption, setApprovedOption] = useState<'A' | 'B' | null>(null);
+
+  const currentLang = ['en', 'pt', 'es'].includes(lang) ? lang : (i18n.language || 'pt');
+  const t = TRANSLATIONS[currentLang] || TRANSLATIONS.pt;
+
+  useEffect(() => {
+    if (['en', 'pt', 'es'].includes(lang) && i18n.language !== lang) {
+      i18n.changeLanguage(lang);
+    }
+  }, [lang, i18n]);
 
   const scrollToSection = (id: string) => {
     const element = document.getElementById(id);
@@ -56,6 +187,7 @@ export const GlobalDeveloperProposal: React.FC = () => {
               <p><strong>Detalhes da Solicitação:</strong></p>
               <ul>
                 <li><strong>Arquitetura Escolhida:</strong> ${option === 'A' ? 'Proposta A — Plataforma Educacional Premium (All-in-One)' : 'Proposta B — O Orquestrador Inteligente (Google Workspace)'}</li>
+                <li><strong>Idioma Utilizado:</strong> ${currentLang.toUpperCase()}</li>
                 <li><strong>Data da Solicitação:</strong> ${new Date().toLocaleDateString('pt-BR')} às ${new Date().toLocaleTimeString('pt-BR')}</li>
               </ul>
               <p>Agendar reunião de alinhamento de escopo e demonstração técnica.</p>
@@ -88,22 +220,26 @@ export const GlobalDeveloperProposal: React.FC = () => {
             <div className="gd-nav-logo">Y</div>
             <div className="gd-nav-titles">
               <span className="gd-nav-title-main">Yesode</span>
-              <span className="gd-nav-title-sub">Apresentação Conceitual B2B</span>
+              <span className="gd-nav-title-sub">Global Developer</span>
             </div>
           </div>
 
           <div className="gd-nav-desktop">
-            <button onClick={() => scrollToSection('diagnostico')}>Diagnóstico</button>
-            <button onClick={() => scrollToSection('opcao-a')}>Proposta A (All-in-One)</button>
-            <button onClick={() => scrollToSection('opcao-b')}>Proposta B (Google)</button>
-            <button onClick={() => scrollToSection('comparativo')}>Comparativo</button>
-            <button onClick={() => scrollToSection('tecnologia')}>Arquitetura</button>
-            <button onClick={() => scrollToSection('proximos-passos')}>Próximos Passos</button>
+            <button onClick={() => scrollToSection('diagnostico')}>{t.nav_diag}</button>
+            <button onClick={() => scrollToSection('opcao-a')}>{t.nav_op_a}</button>
+            <button onClick={() => scrollToSection('opcao-b')}>{t.nav_op_b}</button>
+            <button onClick={() => scrollToSection('comparativo')}>{t.nav_comp}</button>
+            <button onClick={() => scrollToSection('tecnologia')}>{t.nav_arch}</button>
+            <button onClick={() => scrollToSection('proximos-passos')}>{t.nav_next}</button>
           </div>
 
-          <button className="md:hidden text-white" onClick={() => setIsMenuOpen(!isMenuOpen)}>
-            {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
-          </button>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+            <LanguageSwitcher />
+
+            <button className="md:hidden text-white" onClick={() => setIsMenuOpen(!isMenuOpen)}>
+              {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
+            </button>
+          </div>
         </div>
       </nav>
 
@@ -111,13 +247,13 @@ export const GlobalDeveloperProposal: React.FC = () => {
       <section className="gd-hero">
         <div className="gd-container">
           <span className="gd-hero-tag">
-            <Sparkles size={14} /> Proposta de Arquitetura Comercial Exclusiva
+            <Sparkles size={14} /> {t.hero_tag}
           </span>
           <h1 className="gd-hero-title">
-            Transformação Digital para a <span>Global Developer</span>
+            {t.hero_title_prefix}<span>Global Developer</span>
           </h1>
           <p className="gd-hero-desc">
-            Duas abordagens estratégicas para eliminar o atrito operacional das professoras, elevar a retenção de alunos e consolidar a plataforma de ensino com máxima escalabilidade.
+            {t.hero_desc}
           </p>
 
           <div className="gd-hero-buttons">
@@ -132,7 +268,7 @@ export const GlobalDeveloperProposal: React.FC = () => {
               fontWeight: 700,
               boxShadow: '0 4px 20px rgba(99, 102, 241, 0.35)'
             }}>
-              Ver Opções de Arquitetura <ChevronRight size={18} />
+              {t.btn_arch} <ChevronRight size={18} />
             </button>
             
             <button onClick={() => scrollToSection('diagnostico')} style={{
@@ -146,7 +282,7 @@ export const GlobalDeveloperProposal: React.FC = () => {
               color: 'white',
               fontWeight: 600
             }}>
-              Explorar Diagnóstico
+              {t.btn_diag}
             </button>
           </div>
         </div>
@@ -156,8 +292,8 @@ export const GlobalDeveloperProposal: React.FC = () => {
       <section id="diagnostico" className="gd-section">
         <div className="gd-container">
           <div className="gd-section-header">
-            <h2>O Desafio Atual da Operação</h2>
-            <p>Atualmente, a gestão educacional e os professores operam divididos em três ferramentas desconectadas, criando atrito pedagógico e diluição de marca.</p>
+            <h2>{t.diag_title}</h2>
+            <p>{t.diag_desc}</p>
           </div>
 
           <div className="gd-problems-grid">
@@ -166,7 +302,7 @@ export const GlobalDeveloperProposal: React.FC = () => {
                 <BookOpen size={24} />
               </div>
               <h3>Google Classroom</h3>
-              <p>Interface genérica que não reforça a identidade da Global Developer. Professores encontram dificuldades em organizar turmas e sincronizar presenças.</p>
+              <p>{t.gc_desc}</p>
             </div>
 
             <div className="gd-problem-card">
@@ -174,7 +310,7 @@ export const GlobalDeveloperProposal: React.FC = () => {
                 <Video size={24} />
               </div>
               <h3>Google Meet (Aulas ao Vivo)</h3>
-              <p>Necessidade de criar e disparar links manualmente. As Breakout Rooms exigem múltiplos cliques manuais, pausando o ritmo pedagógico da aula.</p>
+              <p>{t.gm_desc}</p>
             </div>
 
             <div className="gd-problem-card">
@@ -182,7 +318,7 @@ export const GlobalDeveloperProposal: React.FC = () => {
                 <PlayCircle size={24} />
               </div>
               <h3>Hubla (Vídeos Gravados)</h3>
-              <p>Plataforma de terceiros com taxas recorrentes. O aluno é obrigado a trocar de aba e login para assistir o acervo de aulas gravadas.</p>
+              <p>{t.hub_desc}</p>
             </div>
           </div>
         </div>
@@ -194,9 +330,9 @@ export const GlobalDeveloperProposal: React.FC = () => {
           <div className="gd-proposal-box option-a">
             <div className="gd-proposal-header">
               <div>
-                <span className="badge gold">Opção A — Solução Proprietária</span>
-                <h3>Plataforma Educacional Premium (All-in-One)</h3>
-                <p>Ecossistema proprietário de ponta a ponta. Substitui o Google Meet, o Google Classroom e a Hubla por um único ambiente unificado sob a marca da Global Developer.</p>
+                <span className="badge gold">{t.op_a_tag}</span>
+                <h3>{t.op_a_title}</h3>
+                <p>{t.op_a_desc}</p>
               </div>
             </div>
 
@@ -233,8 +369,8 @@ export const GlobalDeveloperProposal: React.FC = () => {
             }}>
               <ShieldCheck size={32} style={{ color: '#C4A962', flexShrink: 0 }} />
               <div>
-                <strong style={{ color: 'white', fontSize: '0.95rem', display: 'block' }}>Valor Agregado: Experiência 100% White-Label</strong>
-                <span style={{ color: '#a5b4fc', fontSize: '0.875rem' }}>O aluno não entra no Google; ele interage diretamente com a plataforma da instituição, elevando o valor percebido e a retenção.</span>
+                <strong style={{ color: 'white', fontSize: '0.95rem', display: 'block' }}>{t.op_a_val}</strong>
+                <span style={{ color: '#a5b4fc', fontSize: '0.875rem' }}>{t.op_a_val_sub}</span>
               </div>
             </div>
           </div>
@@ -247,9 +383,9 @@ export const GlobalDeveloperProposal: React.FC = () => {
           <div className="gd-proposal-box option-b">
             <div className="gd-proposal-header">
               <div>
-                <span className="badge emerald">Opção B — Automação & Eficiência</span>
-                <h3>O Orquestrador Inteligente (Interface Google Workspace)</h3>
-                <p>Uma camada de interface sob medida que oculta a complexidade do Google Workspace. A instituição aproveita os servidores do Google com usabilidade fluida para professores.</p>
+                <span className="badge emerald">{t.op_b_tag}</span>
+                <h3>{t.op_b_title}</h3>
+                <p>{t.op_b_desc}</p>
               </div>
             </div>
 
@@ -286,8 +422,8 @@ export const GlobalDeveloperProposal: React.FC = () => {
             }}>
               <CheckCircle2 size={32} style={{ color: '#34d399', flexShrink: 0 }} />
               <div>
-                <strong style={{ color: 'white', fontSize: '0.95rem', display: 'block' }}>Valor Agregado: Curva de Aprendizado Imediata</strong>
-                <span style={{ color: '#6ee7b7', fontSize: '0.875rem' }}>Resolve a dor exata das professoras sem exigir migração abrupta do acervo existente, com prazo de entrega reduzido.</span>
+                <strong style={{ color: 'white', fontSize: '0.95rem', display: 'block' }}>{t.op_b_val}</strong>
+                <span style={{ color: '#6ee7b7', fontSize: '0.875rem' }}>{t.op_b_val_sub}</span>
               </div>
             </div>
           </div>
@@ -298,8 +434,8 @@ export const GlobalDeveloperProposal: React.FC = () => {
       <section id="comparativo" className="gd-section">
         <div className="gd-container">
           <div className="gd-section-header">
-            <h2>Matriz Comparativa das Arquiteturas</h2>
-            <p>Analise lado a lado os diferenciais de cada abordagem para alinhar com os objetivos estratégicos da Global Developer.</p>
+            <h2>{t.comp_title}</h2>
+            <p>{t.comp_desc}</p>
           </div>
 
           <div className="gd-table-wrapper">
@@ -352,8 +488,8 @@ export const GlobalDeveloperProposal: React.FC = () => {
       <section id="tecnologia" className="gd-section">
         <div className="gd-container">
           <div className="gd-section-header">
-            <h2>Stack Tecnológico Recomendado</h2>
-            <p>Tecnologias modernas de alta confiabilidade corporativa selecionadas para garantir baixa latência e segurança.</p>
+            <h2>{t.arch_title}</h2>
+            <p>{t.arch_desc}</p>
           </div>
 
           <div className="gd-tech-grid">
@@ -404,8 +540,8 @@ export const GlobalDeveloperProposal: React.FC = () => {
       <section id="proximos-passos" className="gd-section">
         <div className="gd-container">
           <div className="gd-section-header">
-            <h2>Próximos Passos — Convite para Alinhamento</h2>
-            <p>Esta apresentação apresenta os caminhos arquiteturais possíveis. Selecione a opção que melhor se alinha à visão da gerência para agendarmos uma sessão de demonstração e detalhamento de escopo.</p>
+            <h2>{t.next_title}</h2>
+            <p>{t.next_desc}</p>
           </div>
 
           <div className="gd-pricing-grid">
@@ -439,11 +575,11 @@ export const GlobalDeveloperProposal: React.FC = () => {
                 disabled={sendingOption !== null || approvedOption !== null}
               >
                 {sendingOption === 'A' ? (
-                  'Enviando Convite...'
+                  t.req_sending
                 ) : approvedOption === 'A' ? (
-                  <>Solicitação Registrada <CheckCircle2 size={18} /></>
+                  <>{t.req_sent} <CheckCircle2 size={18} /></>
                 ) : (
-                  <>Solicitar Apresentação Técnica (Opção A) <CalendarCheck size={18} /></>
+                  <>{t.btn_req_a} <CalendarCheck size={18} /></>
                 )}
               </button>
             </div>
@@ -478,11 +614,11 @@ export const GlobalDeveloperProposal: React.FC = () => {
                 disabled={sendingOption !== null || approvedOption !== null}
               >
                 {sendingOption === 'B' ? (
-                  'Enviando Convite...'
+                  t.req_sending
                 ) : approvedOption === 'B' ? (
-                  <>Solicitação Registrada <CheckCircle2 size={18} /></>
+                  <>{t.req_sent} <CheckCircle2 size={18} /></>
                 ) : (
-                  <>Solicitar Apresentação Técnica (Opção B) <CalendarCheck size={18} /></>
+                  <>{t.btn_req_b} <CalendarCheck size={18} /></>
                 )}
               </button>
             </div>

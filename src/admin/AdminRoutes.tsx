@@ -3,6 +3,7 @@ import { Routes, Route, useParams } from 'react-router-dom';
 import { DashboardPage } from './pages/DashboardPage';
 import MiAbuelaProposal from './pages/proposals/MiAbuelaProposal';
 import GlobalDeveloperProposal from './pages/proposals/GlobalDeveloperProposal';
+import { ProposalPdfPage } from './pages/ProposalPdfPage';
 import { AdminLayout } from './components/AdminLayout';
 import InviteRoutes from '@invite/InviteRoutes';
 
@@ -26,6 +27,8 @@ export const AdminRoutes: React.FC = () => {
         <Route path="/proposals/:slug" element={<DynamicProposal />} />
         <Route path="/proposals/mi-abuela" element={<MiAbuelaProposal />} />
         <Route path="/proposals/global-developer" element={<GlobalDeveloperProposal />} />
+        <Route path="/pdf" element={<ProposalPdfPage />} />
+        <Route path="/pdf/:slug" element={<ProposalPdfPage />} />
       </Routes>
     </AdminLayout>
   );

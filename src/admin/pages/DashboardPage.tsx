@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Mail, FileText, Globe, ArrowRight, Sparkles, Zap, GraduationCap } from 'lucide-react';
+import { Mail, FileText, Globe, ArrowRight, Sparkles, Zap, GraduationCap, FileDown } from 'lucide-react';
 
 export const DashboardPage: React.FC = () => {
   const modules = [
@@ -33,6 +33,16 @@ export const DashboardPage: React.FC = () => {
       link: '/admin/proposals/mi-abuela',
       buttonText: 'Ver Proposta Mi Abuela',
       accentColor: '#8B5CF6'
+    },
+    {
+      id: 'pdf',
+      title: 'Gerador de PDFs Comerciais',
+      description: 'Gere versões PDF das propostas comerciais seguindo o template corporativo padrão Yesode.',
+      icon: <FileDown size={32} style={{ color: '#F59E0B' }} />,
+      tag: 'Documentos B2B',
+      link: '/admin/pdf',
+      buttonText: 'Gerar PDFs das Propostas',
+      accentColor: '#F59E0B'
     },
     {
       id: 'page',

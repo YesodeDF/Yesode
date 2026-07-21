@@ -6,7 +6,8 @@ import {
   Mail, 
   FileText, 
   LogOut, 
-  Globe 
+  Globe,
+  GraduationCap
 } from 'lucide-react';
 
 export const AdminLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -22,6 +23,7 @@ export const AdminLayout: React.FC<{ children: React.ReactNode }> = ({ children 
   const navItems = [
     { label: 'Dashboard', path: '/admin', icon: <LayoutDashboard size={18} /> },
     { label: 'Gerador de Convites', path: '/admin/invite', icon: <Mail size={18} /> },
+    { label: 'Global Developer', path: '/admin/proposals/global-developer', icon: <GraduationCap size={18} /> },
     { label: 'Proposta Mi Abuela', path: '/admin/proposals/mi-abuela', icon: <FileText size={18} /> },
   ];
 

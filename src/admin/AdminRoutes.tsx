@@ -2,6 +2,7 @@ import React from 'react';
 import { Routes, Route, useParams } from 'react-router-dom';
 import { DashboardPage } from './pages/DashboardPage';
 import MiAbuelaProposal from './pages/proposals/MiAbuelaProposal';
+import GlobalDeveloperProposal from './pages/proposals/GlobalDeveloperProposal';
 import { AdminLayout } from './components/AdminLayout';
 import InviteRoutes from '@invite/InviteRoutes';
 
@@ -10,7 +11,10 @@ const DynamicProposal: React.FC = () => {
   if (slug === 'mi-abuela') {
     return <MiAbuelaProposal />;
   }
-  return <MiAbuelaProposal />; // Fallback to MiAbuela proposal or generic proposal
+  if (slug === 'global-developer') {
+    return <GlobalDeveloperProposal />;
+  }
+  return <MiAbuelaProposal />;
 };
 
 export const AdminRoutes: React.FC = () => {
@@ -21,6 +25,7 @@ export const AdminRoutes: React.FC = () => {
         <Route path="/invite/*" element={<InviteRoutes />} />
         <Route path="/proposals/:slug" element={<DynamicProposal />} />
         <Route path="/proposals/mi-abuela" element={<MiAbuelaProposal />} />
+        <Route path="/proposals/global-developer" element={<GlobalDeveloperProposal />} />
       </Routes>
     </AdminLayout>
   );

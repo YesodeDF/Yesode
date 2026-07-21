@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Mail, FileText, Globe, ArrowRight, Sparkles, Zap } from 'lucide-react';
+import { Mail, FileText, Globe, ArrowRight, Sparkles, Zap, GraduationCap } from 'lucide-react';
 
 export const DashboardPage: React.FC = () => {
   const modules = [
@@ -15,11 +15,21 @@ export const DashboardPage: React.FC = () => {
       accentColor: '#C4A962'
     },
     {
-      id: 'proposals',
-      title: 'Propostas Comerciais B2B',
-      description: 'Central de propostas comerciais de alta conversão. Visualize e gerencie apresentações interativas de projetos e transformação digital.',
+      id: 'global-developer',
+      title: 'Proposta Global Developer (Novo)',
+      description: 'Plataforma de ensino digital. Duas abordagens estratégicas: Plataforma All-in-One (WebRTC + VoD) vs Orquestrador Inteligente Google.',
+      icon: <GraduationCap size={32} style={{ color: '#818cf8' }} />,
+      tag: 'Educação B2B',
+      link: '/admin/proposals/global-developer',
+      buttonText: 'Ver Proposta Global Dev',
+      accentColor: '#818cf8'
+    },
+    {
+      id: 'mi-abuela',
+      title: 'Proposta Mi Abuela',
+      description: 'Transformação digital para marca de alimentação premium acessível, franquias e e-commerce.',
       icon: <FileText size={32} style={{ color: '#8B5CF6' }} />,
-      tag: 'Comercial & Vendas',
+      tag: 'Varejo & Franquias',
       link: '/admin/proposals/mi-abuela',
       buttonText: 'Ver Proposta Mi Abuela',
       accentColor: '#8B5CF6'
@@ -69,7 +79,7 @@ export const DashboardPage: React.FC = () => {
           Painel de Controle Unificado
         </h1>
         <p style={{ fontSize: '1.05rem', color: '#9CA3AF', maxWidth: '680px', margin: 0, lineHeight: '1.6' }}>
-          Selecione o módulo operacional que deseja utilizar. Todas as ferramentas da Yesode integradas e modularizadas em um único ambiente.
+          Selecione o módulo operacional que deseja utilizar. Todas as ferramentas e propostas da Yesode integradas e modularizadas.
         </p>
       </div>
 
@@ -78,7 +88,7 @@ export const DashboardPage: React.FC = () => {
         <Zap size={20} style={{ color: '#C4A962' }} /> Módulos Operacionais
       </h2>
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(340px, 1fr))', gap: '1.5rem' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1.5rem' }}>
         {modules.map((mod) => (
           <div
             key={mod.id}
@@ -121,10 +131,10 @@ export const DashboardPage: React.FC = () => {
                 </span>
               </div>
 
-              <h3 style={{ fontSize: '1.25rem', fontWeight: 700, color: '#FFFFFF', margin: '0 0 0.65rem 0' }}>
+              <h3 style={{ fontSize: '1.2rem', fontWeight: 700, color: '#FFFFFF', margin: '0 0 0.65rem 0' }}>
                 {mod.title}
               </h3>
-              <p style={{ fontSize: '0.9rem', color: '#9CA3AF', lineHeight: '1.55', margin: '0 0 1.5rem 0' }}>
+              <p style={{ fontSize: '0.875rem', color: '#9CA3AF', lineHeight: '1.55', margin: '0 0 1.5rem 0' }}>
                 {mod.description}
               </p>
             </div>
@@ -142,7 +152,7 @@ export const DashboardPage: React.FC = () => {
                 border: '1px solid rgba(255, 255, 255, 0.12)',
                 color: '#FFFFFF',
                 fontWeight: 600,
-                fontSize: '0.925rem',
+                fontSize: '0.9rem',
                 textDecoration: 'none',
                 transition: 'all 0.2s'
               }}

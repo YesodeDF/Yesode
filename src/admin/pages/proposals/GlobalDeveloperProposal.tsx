@@ -18,7 +18,7 @@ import {
   PlayCircle,
   Link as LinkIcon,
   BookOpen,
-  ArrowUpRight
+  CalendarCheck
 } from 'lucide-react';
 
 export const GlobalDeveloperProposal: React.FC = () => {
@@ -48,17 +48,17 @@ export const GlobalDeveloperProposal: React.FC = () => {
         body: JSON.stringify({
           to: 'filipe.nogueira@yesode.com',
           cc: 'davi.ribeiro@yesode.com',
-          subject: `Interesse em Proposta Global Developer (Opção ${option}) 🚀`,
+          subject: `Interesse em Apresentação Técnica — Global Developer (Opção ${option}) 🚀`,
           html: `
             <div style="font-family: sans-serif; padding: 20px; color: #333; max-width: 600px;">
-              <h2 style="color: #4f46e5;">Interesse Registrado — Global Developer! 🎉</h2>
-              <p>A instituição <strong>Global Developer</strong> selecionou a <strong>Proposta ${option}</strong> para avanço de negociação.</p>
-              <p><strong>Detalhes da Escolha:</strong></p>
+              <h2 style="color: #4f46e5;">Solicitação de Apresentação Técnica! 🎉</h2>
+              <p>A equipe da <strong>Global Developer</strong> demonstrou interesse em aprofundar a <strong>Proposta ${option}</strong>.</p>
+              <p><strong>Detalhes da Solicitação:</strong></p>
               <ul>
-                <li><strong>Opção Selecionada:</strong> ${option === 'A' ? 'Proposta A — Plataforma Premium (All-in-One)' : 'Proposta B — Orquestrador Inteligente (Google Workspace)'}</li>
-                <li><strong>Data do Registro:</strong> ${new Date().toLocaleDateString('pt-BR')} às ${new Date().toLocaleTimeString('pt-BR')}</li>
+                <li><strong>Arquitetura Escolhida:</strong> ${option === 'A' ? 'Proposta A — Plataforma Educacional Premium (All-in-One)' : 'Proposta B — O Orquestrador Inteligente (Google Workspace)'}</li>
+                <li><strong>Data da Solicitação:</strong> ${new Date().toLocaleDateString('pt-BR')} às ${new Date().toLocaleTimeString('pt-BR')}</li>
               </ul>
-              <p>Iniciando contato para detalhamento técnico e escopo final.</p>
+              <p>Agendar reunião de alinhamento de escopo e demonstração técnica.</p>
               <hr style="border: none; border-top: 1px solid #eee; margin: 20px 0;" />
               <p style="font-size: 12px; color: #666;">Enviado via Yesode Proposal Platform</p>
             </div>
@@ -88,7 +88,7 @@ export const GlobalDeveloperProposal: React.FC = () => {
             <div className="gd-nav-logo">Y</div>
             <div className="gd-nav-titles">
               <span className="gd-nav-title-main">Yesode</span>
-              <span className="gd-nav-title-sub">Proposta Técnica B2B</span>
+              <span className="gd-nav-title-sub">Apresentação Conceitual B2B</span>
             </div>
           </div>
 
@@ -98,7 +98,7 @@ export const GlobalDeveloperProposal: React.FC = () => {
             <button onClick={() => scrollToSection('opcao-b')}>Proposta B (Google)</button>
             <button onClick={() => scrollToSection('comparativo')}>Comparativo</button>
             <button onClick={() => scrollToSection('tecnologia')}>Arquitetura</button>
-            <button onClick={() => scrollToSection('investimento')}>Investimento</button>
+            <button onClick={() => scrollToSection('proximos-passos')}>Próximos Passos</button>
           </div>
 
           <button className="md:hidden text-white" onClick={() => setIsMenuOpen(!isMenuOpen)}>
@@ -121,7 +121,7 @@ export const GlobalDeveloperProposal: React.FC = () => {
           </p>
 
           <div className="gd-hero-buttons">
-            <button onClick={() => scrollToSection('investimento')} style={{
+            <button onClick={() => scrollToSection('proximos-passos')} style={{
               display: 'inline-flex',
               alignItems: 'center',
               gap: '0.5rem',
@@ -132,7 +132,7 @@ export const GlobalDeveloperProposal: React.FC = () => {
               fontWeight: 700,
               boxShadow: '0 4px 20px rgba(99, 102, 241, 0.35)'
             }}>
-              Ver Modelos de Investimento <ChevronRight size={18} />
+              Ver Opções de Arquitetura <ChevronRight size={18} />
             </button>
             
             <button onClick={() => scrollToSection('diagnostico')} style={{
@@ -333,14 +333,14 @@ export const GlobalDeveloperProposal: React.FC = () => {
                   <td className="col-op-b">Interface customizada com infra Google</td>
                 </tr>
                 <tr>
-                  <td className="col-feature">Tempo de Desenvolvimento</td>
-                  <td className="col-op-a">10 a 14 semanas (Faseado)</td>
-                  <td className="col-op-b">4 a 6 semanas (Implementação ágil)</td>
+                  <td className="col-feature">Complexidade de Deploy</td>
+                  <td className="col-op-a">Desenvolvimento Full-Stack proprietário</td>
+                  <td className="col-op-b">Desenvolvimento Frontend + APIs Google</td>
                 </tr>
                 <tr>
-                  <td className="col-feature">Custo Recorrente de Servidores</td>
-                  <td className="col-op-a">Cloud + Tráfego de Vídeo (WebRTC/VoD)</td>
-                  <td className="col-op-b">Mínimo (Infra mantida no Google)</td>
+                  <td className="col-feature">Infraestrutura de Nuvem</td>
+                  <td className="col-op-a">Servidores próprios de streaming WebRTC/VoD</td>
+                  <td className="col-op-b">Servidores mantidos pelo Google Workspace</td>
                 </tr>
               </tbody>
             </table>
@@ -400,12 +400,12 @@ export const GlobalDeveloperProposal: React.FC = () => {
         </div>
       </section>
 
-      {/* Investimento & Próximos Passos */}
-      <section id="investimento" className="gd-section">
+      {/* Próximos Passos & Convite */}
+      <section id="proximos-passos" className="gd-section">
         <div className="gd-container">
           <div className="gd-section-header">
-            <h2>Opções de Investimento & Avanço</h2>
-            <p>Estruturas de desenvolvimento customizadas para a necessidade e momento da instituição.</p>
+            <h2>Próximos Passos — Convite para Alinhamento</h2>
+            <p>Esta apresentação apresenta os caminhos arquiteturais possíveis. Selecione a opção que melhor se alinha à visão da gerência para agendarmos uma sessão de demonstração e detalhamento de escopo.</p>
           </div>
 
           <div className="gd-pricing-grid">
@@ -414,17 +414,22 @@ export const GlobalDeveloperProposal: React.FC = () => {
               <div>
                 <span className="badge gold mb-3" style={{ display: 'inline-block' }}>Alta Valorização</span>
                 <h3 className="title">Proposta A: All-in-One</h3>
-                <p className="desc">Plataforma própria completa com WebRTC, VoD estilo Netflix e LMS White-Label.</p>
+                <p className="desc">Plataforma própria completa com WebRTC, VoD estilo Netflix e LMS White-Label sem intermediários.</p>
 
-                <div className="price-box">
-                  <span className="label">Investimento de Desenvolvimento</span>
-                  <div className="val">R$ 54.000</div>
-                  <span className="sub">Parcelado em 3x (Contratação / Dev / Entrega)</span>
-                </div>
-
-                <div style={{ fontSize: '0.85rem', color: '#9CA3AF', marginBottom: '1.5rem' }}>
-                  ⏱️ Cronograma estimado: <strong>10 a 14 semanas</strong><br/>
-                  🛠️ Suporte e evolução: <strong>R$ 2.400 /mês</strong>
+                <div style={{
+                  backgroundColor: 'rgba(2, 6, 23, 0.6)',
+                  borderRadius: '12px',
+                  padding: '1.25rem',
+                  border: '1px solid rgba(255, 255, 255, 0.06)',
+                  marginBottom: '1.5rem',
+                  fontSize: '0.875rem',
+                  color: '#9CA3AF',
+                  lineHeight: '1.6'
+                }}>
+                  <strong style={{ color: 'white', display: 'block', marginBottom: '0.35rem' }}>🎯 Ideal se o objetivo for:</strong>
+                  • Eliminar licenças de terceiros (Hubla)<br/>
+                  • Construir um ativo proprietário da marca<br/>
+                  • Controle 100% nativo de salas e alunos
                 </div>
               </div>
 
@@ -434,11 +439,11 @@ export const GlobalDeveloperProposal: React.FC = () => {
                 disabled={sendingOption !== null || approvedOption !== null}
               >
                 {sendingOption === 'A' ? (
-                  'Registrando...'
+                  'Enviando Convite...'
                 ) : approvedOption === 'A' ? (
-                  <>Interesse Registrado <CheckCircle2 size={18} /></>
+                  <>Solicitação Registrada <CheckCircle2 size={18} /></>
                 ) : (
-                  <>Avançar com Proposta A <ArrowUpRight size={18} /></>
+                  <>Solicitar Apresentação Técnica (Opção A) <CalendarCheck size={18} /></>
                 )}
               </button>
             </div>
@@ -448,17 +453,22 @@ export const GlobalDeveloperProposal: React.FC = () => {
               <div>
                 <span className="badge emerald mb-3" style={{ display: 'inline-block' }}>Implementação Ágil</span>
                 <h3 className="title">Proposta B: Orquestrador Google</h3>
-                <p className="desc">Camada de interface otimizada sobre APIs do Google Workspace (Meet & Classroom).</p>
+                <p className="desc">Camada de interface otimizada sobre as APIs do Google Workspace (Meet & Classroom).</p>
 
-                <div className="price-box">
-                  <span className="label">Investimento de Desenvolvimento</span>
-                  <div className="val">R$ 26.000</div>
-                  <span className="sub">Parcelado em 3x (Contratação / Dev / Entrega)</span>
-                </div>
-
-                <div style={{ fontSize: '0.85rem', color: '#9CA3AF', marginBottom: '1.5rem' }}>
-                  ⏱️ Cronograma estimado: <strong>4 a 6 semanas</strong><br/>
-                  🛠️ Suporte e evolução: <strong>R$ 1.500 /mês</strong>
+                <div style={{
+                  backgroundColor: 'rgba(2, 6, 23, 0.6)',
+                  borderRadius: '12px',
+                  padding: '1.25rem',
+                  border: '1px solid rgba(255, 255, 255, 0.06)',
+                  marginBottom: '1.5rem',
+                  fontSize: '0.875rem',
+                  color: '#9CA3AF',
+                  lineHeight: '1.6'
+                }}>
+                  <strong style={{ color: 'white', display: 'block', marginBottom: '0.35rem' }}>🎯 Ideal se o objetivo for:</strong>
+                  • Resolver rapidamente a usabilidade dos professores<br/>
+                  • Aproveitar a infraestrutura já contratada no Google<br/>
+                  • Menor tempo de desenvolvimento e deploy
                 </div>
               </div>
 
@@ -468,11 +478,11 @@ export const GlobalDeveloperProposal: React.FC = () => {
                 disabled={sendingOption !== null || approvedOption !== null}
               >
                 {sendingOption === 'B' ? (
-                  'Registrando...'
+                  'Enviando Convite...'
                 ) : approvedOption === 'B' ? (
-                  <>Interesse Registrado <CheckCircle2 size={18} /></>
+                  <>Solicitação Registrada <CheckCircle2 size={18} /></>
                 ) : (
-                  <>Avançar com Proposta B <ArrowUpRight size={18} /></>
+                  <>Solicitar Apresentação Técnica (Opção B) <CalendarCheck size={18} /></>
                 )}
               </button>
             </div>

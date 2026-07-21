@@ -3,6 +3,9 @@ import { Routes, Route, useLocation } from 'react-router-dom';
 import { PageRoutes } from '@page/PageRoutes';
 import AdminRoutes from '@admin/AdminRoutes';
 import { LoginPage } from '@admin/pages/LoginPage';
+import PublicProposal from '@admin/pages/proposals/PublicProposal';
+import GlobalDeveloperProposal from '@admin/pages/proposals/GlobalDeveloperProposal';
+import MiAbuelaProposal from '@admin/pages/proposals/MiAbuelaProposal';
 import { ProtectedRoute } from '@shared/components/ProtectedRoute';
 
 export const App: React.FC = () => {
@@ -26,6 +29,12 @@ export const App: React.FC = () => {
     <Routes>
       {/* Standalone Login Route */}
       <Route path="/login" element={<LoginPage />} />
+
+      {/* Public Proposal Routes (Accessible directly without login) */}
+      <Route path="/proposta/global-developer" element={<GlobalDeveloperProposal />} />
+      <Route path="/proposta/mi-abuela" element={<MiAbuelaProposal />} />
+      <Route path="/proposta/:slug" element={<PublicProposal />} />
+      <Route path="/proposal/:slug" element={<PublicProposal />} />
 
       {/* Internal Admin Routes (gated by auth) */}
       <Route

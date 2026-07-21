@@ -27,7 +27,11 @@
     /* Paths alias */
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "@shared/*": ["./src/shared/*"],
+      "@page/*": ["./src/page/*"],
+      "@invite/*": ["./src/invite/*"],
+      "@admin/*": ["./src/admin/*"]
     }
   },
   "include": ["src"]

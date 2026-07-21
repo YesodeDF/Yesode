@@ -1,27 +1,12 @@
-import express from 'express';
-import cors from 'cors';
+import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { z } from 'zod';
 import { Resend } from 'resend';
-import nodemailer from 'nodemailer';
 import dotenv from 'dotenv';
-import path from 'path';
-import { fileURLToPath } from 'url';
 
 dotenv.config();
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
-const app = express();
-const port = process.env.PORT || 3001;
-
-app.use(cors());
-app.use(express.json());
-
-// Resend instance
 const resend = new Resend(process.env.RESEND_API_KEY || 're_mock_key');
 
-// Estrito de validação de Leads
 const leadSchema = z.object({
   name: z.string().min(3),
   email: z.string().email().refine((email) => {
@@ -32,8 +17,26 @@ const leadSchema = z.object({
   company: z.string().min(2)
 });
 
-// Endpoint /api/leads
-app.post('/api/leads', async (req, res) => {
+export default async function handler(
+  req: VercelRequest,
+  res: VercelResponse
+) {
+  res.setHeader('Access-Control-Allow-Credentials', 'true');
+  res.setHeader('Access-Control-Allow-Origin', '*'); 
+  res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT');
+  res.setHeader(
+    'Access-Control-Allow-Headers',
+    'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version'
+  );
+
+  if (req.method === 'OPTIONS') {
+    return res.status(200).end();
+  }
+
+  if (req.method !== 'POST') {
+    return res.status(405).json({ error: 'Method Not Allowed. Use POST.' });
+  }
+
   try {
     const result = leadSchema.safeParse(req.body);
     if (!result.success) {
@@ -68,63 +71,8 @@ app.post('/api/leads', async (req, res) => {
     ]);
 
     return res.status(200).json({ success: true, message: 'Lead routing completed.' });
-
   } catch (error: any) {
     console.error('API /leads Gateway Exception:', error.message);
     return res.status(500).json({ success: false, message: 'Serviço temporariamente indisponível.' });
   }
-});
-
-// Endpoint /api/send-invite
-app.post('/api/send-invite', async (req, res) => {
-  try {
-    const { to, cc, subject, html } = req.body;
-
-    if (!to || !subject || !html) {
-      return res.status(400).json({ error: 'Missing required fields' });
-    }
-
-    const transporter = nodemailer.createTransport({
-      service: 'gmail',
-      auth: {
-        user: process.env.GMAIL_USER,
-        pass: process.env.GMAIL_APP_PASSWORD,
-      },
-      logger: true,
-      debug: true
-    });
-
-    const mailOptions = {
-      from: `"Yesod" <${process.env.GMAIL_USER}>`,
-      to,
-      cc,
-      subject,
-      html,
-    };
-
-    transporter.sendMail(mailOptions, (error, info) => {
-      if (error) {
-        console.error('Nodemailer Error:', error);
-        return res.status(500).json({ error: error.message });
-      }
-      console.log('Message sent: %s', info.messageId);
-      return res.status(200).json({ success: true, message: 'Email sent successfully' });
-    });
-  } catch (error: any) {
-    console.error('Error sending email:', error);
-    return res.status(500).json({ error: error.message || 'Failed to send email' });
-  }
-});
-
-app.use(express.static(path.join(__dirname, 'dist')));
-app.use((req, res, next) => {
-    if (req.method === 'GET' && req.accepts('html')) {
-        res.sendFile(path.join(__dirname, 'dist', 'index.html'));
-    } else {
-        next();
-    }
-});
-
-app.listen(port, () => {
-  console.log(`Gateway & UI running at http://localhost:${port}`);
-});
+}

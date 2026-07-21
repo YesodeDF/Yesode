@@ -4,19 +4,23 @@ import { BrowserRouter } from 'react-router-dom'
 import { Analytics } from '@vercel/analytics/react'
 import { SpeedInsights } from '@vercel/speed-insights/react'
 
-import './i18n'
-import App from './App.tsx'
-
-import { ThemeProvider } from './context/ThemeContext'
+import '@shared/i18n'
+import App from './App'
+import { ThemeProvider } from '@shared/context/ThemeContext'
+import { AuthProvider } from '@shared/context/AuthContext'
+import { SecretLoginModal } from '@shared/components/SecretLoginModal'
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <ThemeProvider>
-      <BrowserRouter>
-        <App />
-        <Analytics />
-        <SpeedInsights />
-      </BrowserRouter>
-    </ThemeProvider>
+    <AuthProvider>
+      <ThemeProvider>
+        <BrowserRouter>
+          <App />
+          <SecretLoginModal />
+          <Analytics />
+          <SpeedInsights />
+        </BrowserRouter>
+      </ThemeProvider>
+    </AuthProvider>
   </React.StrictMode>
 )

@@ -1,0 +1,156 @@
+@use '@shared/styles/tokens' as *;
+
+.ys-process {
+  position: relative;
+  background:
+    radial-gradient(ellipse at top, rgba($primary, 0.04), transparent 50%),
+    transparent;
+
+  .ys-process-head {
+    text-align: center;
+    max-width: 760px;
+    margin: 0 auto 3.5rem;
+
+    .ys-section-subtitle { margin: 0 auto; }
+  }
+
+  .ys-process-track {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .ys-process-step {
+    display: grid;
+    grid-template-columns: 56px 1fr;
+    gap: 1.5rem;
+    align-items: stretch;
+    min-height: 140px;
+
+    @media (max-width: 560px) {
+      grid-template-columns: 40px 1fr;
+      gap: 1rem;
+    }
+  }
+
+  .ys-process-step-rail {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 4px;
+  }
+
+  .ys-process-step-dot {
+    width: 40px;
+    height: 40px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: $gradient-primary;
+    color: #0A0F1C;
+    border-radius: 50%;
+    flex-shrink: 0;
+    box-shadow: 0 0 0 4px var(--bg), 0 0 0 5px rgba($primary, 0.2), 0 8px 20px -4px rgba($primary, 0.35);
+    position: relative;
+    z-index: 1;
+
+    @media (max-width: 560px) {
+      width: 32px;
+      height: 32px;
+    }
+  }
+
+  .ys-process-step-line {
+    flex: 1;
+    width: 2px;
+    background: linear-gradient(to bottom, rgba($primary, 0.4), var(--border-strong));
+    margin-top: 4px;
+    margin-bottom: -4px;
+  }
+
+  .ys-process-step-card {
+    padding: 1.5rem 1.75rem;
+    background: var(--cards);
+    border: 1px solid var(--border-strong);
+    border-radius: $radius-lg;
+    margin-bottom: 1.25rem;
+    transition: $transition-smooth;
+
+    &:hover {
+      border-color: rgba($primary, 0.35);
+      transform: translateX(4px);
+    }
+
+    @media (max-width: 560px) {
+      padding: 1.25rem;
+    }
+  }
+
+  .ys-process-step-head {
+    display: flex;
+    align-items: baseline;
+    gap: 0.875rem;
+    flex-wrap: wrap;
+    margin-bottom: 0.625rem;
+
+    .ys-process-step-phase {
+      font-size: 0.75rem;
+      color: $primary;
+      letter-spacing: 0.12em;
+    }
+
+    .ys-process-step-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--headings);
+      margin: 0;
+      letter-spacing: -0.02em;
+    }
+
+    .ys-process-step-duration {
+      margin-left: auto;
+      font-family: $font-code;
+      font-size: 0.6875rem;
+      color: var(--text-muted);
+      padding: 0.25rem 0.625rem;
+      border: 1px dashed var(--border-strong);
+      border-radius: $radius-sm;
+      letter-spacing: 0.04em;
+    }
+  }
+
+  .ys-process-step-desc {
+    font-size: 0.9375rem;
+    line-height: 1.55;
+    color: var(--text);
+    margin: 0 0 1rem 0;
+  }
+
+  .ys-process-step-deliverables {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+
+    li {
+      font-family: $font-code;
+      font-size: 0.75rem;
+      color: var(--headings);
+      padding: 0.3125rem 0.625rem;
+      background: var(--bg-elev);
+      border: 1px solid var(--border);
+      border-radius: $radius-sm;
+      letter-spacing: 0.02em;
+
+      &::before {
+        content: '✓';
+        color: $primary;
+        margin-right: 0.375rem;
+        font-weight: 700;
+      }
+    }
+  }
+}

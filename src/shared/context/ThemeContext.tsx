@@ -22,10 +22,14 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   useEffect(() => {
     localStorage.setItem('yesod-theme', theme);
     document.documentElement.setAttribute('data-theme', theme);
+    if (document.body) document.body.setAttribute('data-theme', theme);
+
     if (theme === 'dark') {
       document.documentElement.classList.add('dark-theme');
+      if (document.body) document.body.classList.add('dark-theme');
     } else {
       document.documentElement.classList.remove('dark-theme');
+      if (document.body) document.body.classList.remove('dark-theme');
     }
   }, [theme]);
 

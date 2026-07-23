@@ -1,7 +1,7 @@
 @use '@shared/styles/tokens' as *;
 
 .ys-proof {
-  background-color: transparent;
+  background-color: var(--bg-elev);
   position: relative;
   isolation: isolate;
 

@@ -2,9 +2,8 @@
 
 .ys-approach {
   position: relative;
-  background:
-    radial-gradient(ellipse at top, rgba($primary, 0.05) 0%, transparent 50%),
-    transparent;
+  background-color: var(--bg-elev);
+  background-image: radial-gradient(ellipse at top, rgba($primary, 0.05) 0%, transparent 50%);
 
   .ys-approach-grid {
     display: grid;

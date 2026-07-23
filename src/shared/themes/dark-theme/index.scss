@@ -2,7 +2,9 @@
 
 /* Dark Theme */
 html.dark-theme,
+body.dark-theme,
 [data-theme="dark"],
+html[data-theme="dark"],
 body[data-theme="dark"] {
   color-scheme: dark;
   --bg: #{$bg-dark};
@@ -20,4 +22,7 @@ body[data-theme="dark"] {
   --bg-color: #{$bg-dark};
   --text-color: #{$headings-dark};
   --accent-color: #{$primary};
+
+  background-color: var(--bg) !important;
+  color: var(--text);
 }

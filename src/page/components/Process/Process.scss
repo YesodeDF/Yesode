@@ -2,9 +2,8 @@
 
 .ys-process {
   position: relative;
-  background:
-    radial-gradient(ellipse at top, rgba($primary, 0.04), transparent 50%),
-    transparent;
+  background-color: var(--bg);
+  background-image: radial-gradient(ellipse at top, rgba($primary, 0.04), transparent 50%);
 
   .ys-process-head {
     text-align: center;

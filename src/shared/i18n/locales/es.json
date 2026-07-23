@@ -1,5 +1,6 @@
 {
   "header": {
+    "nav_products": "Productos",
     "nav_capabilities": "Capacidades",
     "nav_cases": "Casos",
     "nav_process": "Proceso",
@@ -301,6 +302,33 @@
     "s6_p1": "Estos Términos de Uso se rigen por las leyes vigentes en la República Federativa de Brasil. Para dirimir cualquier controversia derivada de la utilización de este portal, las partes eligen expresamente el Fuero de la Comarca de São Paulo, Estado de São Paulo, con exclusión de cualquier otro, por más privilegiado que sea.",
     "contact_title": "¿Dudas sobre el Acuerdo de Confidencialidad o IP?",
     "contact_text": "Nuestro equipo técnico y jurídico está a su disposición para acelerar la revisión del NDA mutuo o alinear términos de propiedad intelectual específicos para su segmento corporativo."
+  },
+  "products": {
+    "eyebrow": "SaaS y Soluciones",
+    "title": "Nuestros Productos ",
+    "title_highlight": "y Plataformas",
+    "title_suffix": " Propias.",
+    "subtitle": "Desarrollamos software SaaS listo para usar y plataformas propietarias para acelerar las operaciones corporativas con la misma arquitectura de alto rendimiento.",
+    "badge_live": "Disponible",
+    "badge_coming_soon": "Roadmap / Próximamente",
+    "item_1": {
+      "title": "Yesode Hub y Analytics",
+      "tagline": "Plataforma de Observabilidad y Gestión de Métricas de Ingeniería",
+      "desc": "Solución SaaS completa para el monitoreo continuo de KPIs de software, lead time de despliegues, seguridad y cumplimiento arquitectónico en tiempo real.",
+      "features": [
+        "Panel unificado de observabilidad",
+        "Métricas DORA y P&L en tiempo real",
+        "Alertas inteligentes y auditoría continua"
+      ],
+      "stack": "Go · React · PostgreSQL · Kubernetes",
+      "cta": "Acceder a la Plataforma"
+    },
+    "coming_soon": {
+      "title": "Nuevas Soluciones en Desarrollo",
+      "desc": "Nuestro equipo de ingeniería está construyendo activamente nuevas plataformas SaaS para atender demandas de automatización e inteligencia corporativa.",
+      "tag": "Yesode Labs",
+      "cta": "Saber más"
+    }
   },
   "lang": {
     "en": "English",

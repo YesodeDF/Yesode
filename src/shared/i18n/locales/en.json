@@ -1,5 +1,6 @@
 {
   "header": {
+    "nav_products": "Products",
     "nav_capabilities": "Capabilities",
     "nav_cases": "Cases",
     "nav_process": "Process",
@@ -301,6 +302,33 @@
     "s6_p1": "These Terms of Use are governed by the laws of the Federative Republic of Brazil. To resolve any dispute arising from the use of this portal, the parties expressly elect the Courts of São Paulo, State of São Paulo, to the exclusion of any other, however privileged.",
     "contact_title": "Questions about the Confidentiality Agreement or IP?",
     "contact_text": "Our technical and legal team is available to accelerate the mutual NDA review or align specific intellectual property terms for your corporate segment."
+  },
+  "products": {
+    "eyebrow": "SaaS and Solutions",
+    "title": "Our Products ",
+    "title_highlight": "and Platforms",
+    "title_suffix": ".",
+    "subtitle": "We build ready-to-use SaaS software and proprietary platforms to accelerate business operations with the same high-performance architecture.",
+    "badge_live": "Available",
+    "badge_coming_soon": "Roadmap / Coming Soon",
+    "item_1": {
+      "title": "Yesode Hub and Analytics",
+      "tagline": "Observability and Engineering Metrics Management Platform",
+      "desc": "Complete SaaS solution for continuous monitoring of software KPIs, deploy lead times, security, and architectural compliance in real time.",
+      "features": [
+        "Unified observability dashboard",
+        "Real-time DORA & P&L metrics",
+        "Intelligent alerts & continuous auditing"
+      ],
+      "stack": "Go · React · PostgreSQL · Kubernetes",
+      "cta": "Access Platform"
+    },
+    "coming_soon": {
+      "title": "New Solutions in Pipeline",
+      "desc": "Our engineering team is actively building new SaaS platforms to meet corporate automation and intelligence demands.",
+      "tag": "Yesode Labs",
+      "cta": "Learn more"
+    }
   },
   "lang": {
     "en": "English",

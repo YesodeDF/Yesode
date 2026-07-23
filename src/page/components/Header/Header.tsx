@@ -22,6 +22,7 @@ export const Header: React.FC = () => {
   const isHome = location.pathname === `/${lang}` || location.pathname === `/${lang}/`;
 
   const navLinks = [
+    { id: 'products', label: t('header.nav_products') },
     { id: 'pillars', label: t('header.nav_capabilities') },
     { id: 'cases', label: t('header.nav_cases') },
     { id: 'process', label: t('header.nav_process') },

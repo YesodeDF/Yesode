@@ -1,5 +1,6 @@
 {
   "header": {
+    "nav_products": "Produtos",
     "nav_capabilities": "Capacidades",
     "nav_cases": "Cases",
     "nav_process": "Processo",
@@ -301,6 +302,33 @@
     "s6_p1": "Estes Termos de Uso são regidos pelas leis vigentes na República Federativa do Brasil. Para dirimir qualquer controvérsia decorrente da utilização deste portal, as partes elegem expressamente o Foro da Comarca de São Paulo, Estado de São Paulo, com exclusão de qualquer outro, por mais privilegiado que seja.",
     "contact_title": "Dúvidas sobre o Acordo de Confidencialidade ou IP?",
     "contact_text": "Nossa equipe técnica e jurídica está à disposição para acelerar a revisão do NDA mútuo ou alinhar termos de propriedade intelectual específicos para o seu segmento corporativo."
+  },
+  "products": {
+    "eyebrow": "SaaS e Soluções",
+    "title": "Nossos Produtos ",
+    "title_highlight": "e Plataformas",
+    "title_suffix": " Próprias.",
+    "subtitle": "Desenvolvemos softwares SaaS prontos e plataformas proprietárias para acelerar operações corporativas com a mesma arquitetura de alta performance.",
+    "badge_live": "Disponível",
+    "badge_coming_soon": "Roadmap / Em Breve",
+    "item_1": {
+      "title": "Yesode Hub e Analytics",
+      "tagline": "Plataforma de Observabilidade e Gestão de Métricas de Engenharia",
+      "desc": "Solução SaaS completa para monitoramento contínuo de KPIs de software, lead time de deploys, segurança e conformidade arquitetural em tempo real.",
+      "features": [
+        "Dashboard unificado de observabilidade",
+        "Métricas DORA e P&L em tempo real",
+        "Alertas inteligentes e auditoria contínua"
+      ],
+      "stack": "Go · React · PostgreSQL · Kubernetes",
+      "cta": "Acessar Plataforma"
+    },
+    "coming_soon": {
+      "title": "Novas Soluções em Desenvolvimento",
+      "desc": "Nossa equipe de engenharia está construindo ativamente novas plataformas SaaS para atender demandas de automação e inteligência corporativa.",
+      "tag": "Yesode Labs",
+      "cta": "Saber mais"
+    }
   },
   "lang": {
     "en": "English",

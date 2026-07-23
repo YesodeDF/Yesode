@@ -3,6 +3,7 @@ import { Routes, Route, useLocation, useParams, useNavigate } from 'react-router
 import { useTranslation } from 'react-i18next';
 import { Header } from './components/Header/Header';
 import { Hero } from './components/Hero/Hero';
+import { ProductsShowcase } from './components/ProductsShowcase/ProductsShowcase';
 import { SocialProof } from './components/SocialProof/SocialProof';
 import { ValuePillars } from './components/ValuePillars/ValuePillars';
 import { Cases } from './components/Cases/Cases';
@@ -20,6 +21,7 @@ const Home: React.FC = () => {
   return (
     <>
       <Hero />
+      <ProductsShowcase />
       <SocialProof />
       <ValuePillars />
       <Cases />

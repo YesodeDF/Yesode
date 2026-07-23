@@ -1,11 +1,23 @@
-/* Dark Theme */
-[data-theme="dark"] {
-  --bg-color: #1a1a1a;
-  --text-color: #ffffff;
-  --accent-color: #F59E0B;
-}
+@use '@shared/styles/tokens' as *;
 
+/* Dark Theme */
+html.dark-theme,
+[data-theme="dark"],
 body[data-theme="dark"] {
-  background-color: var(--bg-color);
-  color: var(--text-color);
+  color-scheme: dark;
+  --bg: #{$bg-dark};
+  --bg-elev: #{$bg-dark-elev};
+  --headings: #{$headings-dark};
+  --text: #{$text-dark};
+  --text-muted: #{$text-dark-muted};
+  --cards: #{$cards-dark};
+  --border: #{$border-dark};
+  --border-strong: #{$border-dark-strong};
+  --glass: #{$glass-dark};
+  --gradient-headline: #{$gradient-headline-dark};
+
+  /* Legacy & utility alias variables */
+  --bg-color: #{$bg-dark};
+  --text-color: #{$headings-dark};
+  --accent-color: #{$primary};
 }

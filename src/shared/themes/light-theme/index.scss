@@ -1,11 +1,23 @@
-/* Light Theme */
-[data-theme="light"] {
-  --bg-color: #f8fafc;
-  --text-color: #0f172a;
-  --accent-color: #F59E0B;
-}
+@use '@shared/styles/tokens' as *;
 
+/* Light Theme */
+:root,
+[data-theme="light"],
 body[data-theme="light"] {
-  background-color: var(--bg-color);
-  color: var(--text-color);
+  color-scheme: light;
+  --bg: #{$bg-light};
+  --bg-elev: #{$bg-light-elev};
+  --headings: #{$headings-light};
+  --text: #{$text-light};
+  --text-muted: #{$text-light-muted};
+  --cards: #{$cards-light};
+  --border: #{$border-light};
+  --border-strong: #{$border-light-strong};
+  --glass: #{$glass-light};
+  --gradient-headline: #{$gradient-headline-light};
+
+  /* Legacy & utility alias variables */
+  --bg-color: #{$bg-light};
+  --text-color: #{$headings-light};
+  --accent-color: #{$primary};
 }

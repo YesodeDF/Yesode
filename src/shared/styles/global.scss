@@ -1,34 +1,11 @@
 @use 'tokens' as *;
+@use '../themes/light-theme' as light;
+@use '../themes/dark-theme' as dark;
 
 @import 'primeicons/primeicons.css';
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
 
-:root {
-  color-scheme: light dark;
-  --bg: #{$bg-light};
-  --bg-elev: #{$bg-light-elev};
-  --headings: #{$headings-light};
-  --text: #{$text-light};
-  --text-muted: #{$text-light-muted};
-  --cards: #{$cards-light};
-  --border: #{$border-light};
-  --border-strong: #{$border-light-strong};
-  --glass: #{$glass-light};
-  --gradient-headline: #{$gradient-headline-light};
-}
 
-html.dark-theme {
-  --bg: #{$bg-dark};
-  --bg-elev: #{$bg-dark-elev};
-  --headings: #{$headings-dark};
-  --text: #{$text-dark};
-  --text-muted: #{$text-dark-muted};
-  --cards: #{$cards-dark};
-  --border: #{$border-dark};
-  --border-strong: #{$border-dark-strong};
-  --glass: #{$glass-dark};
-  --gradient-headline: #{$gradient-headline-dark};
-}
 
 * { box-sizing: border-box; }
 

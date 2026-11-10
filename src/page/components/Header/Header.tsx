@@ -7,7 +7,7 @@ import { LanguageSwitcher } from '../LanguageSwitcher/LanguageSwitcher';
 import { scrollToSection } from '@shared/utils/scrollToSection';
 import { trackEvent } from '@shared/utils/analytics';
 import { useAuth } from '@shared/context/AuthContext';
-import { Mail, FileText, LayoutDashboard } from 'lucide-react';
+import { Mail, FileText, LayoutDashboard, ChevronDown, Wrench, QrCode, Video, Smile } from 'lucide-react';
 import './Header.scss';
 
 export const Header: React.FC = () => {
@@ -15,6 +15,7 @@ export const Header: React.FC = () => {
   const { lang = 'en' } = useParams<{ lang: string }>();
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [toolsDropdownOpen, setToolsDropdownOpen] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
   const { isAuthenticated, openLoginModal } = useAuth();
@@ -105,6 +106,64 @@ export const Header: React.FC = () => {
             </button>
           ))}
 
+          {/* Tools Collapsible Menu */}
+          <div
+            className="ys-tools-nav-menu"
+            onMouseEnter={() => setToolsDropdownOpen(true)}
+            onMouseLeave={() => setToolsDropdownOpen(false)}
+          >
+            <button
+              type="button"
+              className="ys-nav-link ys-tools-trigger"
+              onClick={() => {
+                navigate(`/${lang}/ferramentas`);
+                setToolsDropdownOpen(false);
+              }}
+            >
+              <Wrench size={14} />
+              <span>Ferramentas</span>
+              <ChevronDown size={13} className={`ys-chevron ${toolsDropdownOpen ? 'is-open' : ''}`} />
+            </button>
+
+            {toolsDropdownOpen && (
+              <div className="ys-tools-dropdown">
+                <Link
+                  to={`/${lang}/ferramentas/gerador-qr-code-pix`}
+                  className="ys-tools-dropdown-item"
+                  onClick={() => setToolsDropdownOpen(false)}
+                >
+                  <QrCode size={15} />
+                  <div>
+                    <strong>Gerador QR Code & Pix</strong>
+                    <small>Cobranças EMV®, CRC16 e Links</small>
+                  </div>
+                </Link>
+                <Link
+                  to={`/${lang}/ferramentas/baixar-videos-youtube-redes-sociais`}
+                  className="ys-tools-dropdown-item"
+                  onClick={() => setToolsDropdownOpen(false)}
+                >
+                  <Video size={15} />
+                  <div>
+                    <strong>Downloader de Mídia</strong>
+                    <small>YouTube, X, Insta e Facebook</small>
+                  </div>
+                </Link>
+                <Link
+                  to={`/${lang}/ferramentas/criar-figurinha-whatsapp`}
+                  className="ys-tools-dropdown-item"
+                  onClick={() => setToolsDropdownOpen(false)}
+                >
+                  <Smile size={15} />
+                  <div>
+                    <strong>Figurinhas WhatsApp</strong>
+                    <small>Vídeos e GIFs para WebP</small>
+                  </div>
+                </Link>
+              </div>
+            )}
+          </div>
+
           {/* Opções exibidas no menu QUANDO LOGADO */}
           {isAuthenticated && (
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginLeft: '1rem', paddingLeft: '1rem', borderLeft: '1px solid rgba(196, 169, 98, 0.3)' }}>
@@ -154,6 +213,15 @@ export const Header: React.FC = () => {
             {link.label}
           </button>
         ))}
+
+        <Link
+          to={`/${lang}/ferramentas`}
+          className="ys-mobile-link"
+          style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: '#C4A962', fontWeight: 600 }}
+          onClick={() => setMobileOpen(false)}
+        >
+          <Wrench size={16} /> Ferramentas Gratuitas
+        </Link>
 
         {isAuthenticated && (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', marginTop: '1rem', paddingTop: '1rem', borderTop: '1px solid rgba(196, 169, 98, 0.3)' }}>

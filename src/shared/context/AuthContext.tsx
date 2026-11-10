@@ -29,9 +29,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   }, [isAuthenticated]);
 
   const login = (pass: string): boolean => {
-    if (pass === HARDCODED_PASS || pass === 'admin' || pass === 'yesode' || pass === 'yesode2026') {
+    const trimmed = (pass || '').trim();
+    if (trimmed === HARDCODED_PASS || (import.meta.env.DEV && (trimmed === 'admin' || trimmed === 'yesode'))) {
       setIsAuthenticated(true);
       setIsLoginModalOpen(false);
+      sessionStorage.setItem('yesod-admin-token', trimmed);
       return true;
     }
     return false;
@@ -40,6 +42,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const logout = () => {
     setIsAuthenticated(false);
     sessionStorage.removeItem('yesod-auth');
+    sessionStorage.removeItem('yesod-admin-token');
   };
 
   const openLoginModal = () => setIsLoginModalOpen(true);

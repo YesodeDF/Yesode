@@ -7,9 +7,14 @@ import PublicProposal from '@admin/pages/proposals/PublicProposal';
 import GlobalDeveloperProposal from '@admin/pages/proposals/GlobalDeveloperProposal';
 import MiAbuelaProposal from '@admin/pages/proposals/MiAbuelaProposal';
 import { ProtectedRoute } from '@shared/components/ProtectedRoute';
+import { checkAndTrackAiReferral } from '@shared/utils/analytics';
 
 export const App: React.FC = () => {
   const location = useLocation();
+
+  React.useEffect(() => {
+    checkAndTrackAiReferral();
+  }, []);
 
   React.useEffect(() => {
     if (location.hash) {

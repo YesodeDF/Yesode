@@ -5,39 +5,33 @@ import { Button } from 'primereact/button';
 import { Toast } from 'primereact/toast';
 import { User, Mail, Building2, ArrowRight, ShieldCheck, Clock, Sparkles } from 'lucide-react';
 import { trackEvent } from '@shared/utils/analytics';
+import { Lead } from '@/modules/leads/domain/entities/Lead';
+import { DomainError } from '@/modules/leads/domain/exceptions/LeadErrors';
 import './LeadCapture.scss';
-
-const FREE_EMAIL_DOMAINS = new Set([
-  'gmail.com', 'hotmail.com', 'outlook.com', 'yahoo.com', 'yahoo.com.br',
-  'live.com', 'msn.com', 'icloud.com', 'me.com', 'proton.me', 'protonmail.com',
-  'bol.com.br', 'uol.com.br', 'terra.com.br', 'ig.com.br',
-]);
-
-const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
 type Errors = Partial<Record<'name' | 'email' | 'company', string>>;
 
-function validate(data: { name: string; email: string; company: string }, t: (key: string) => string): Errors {
+function validateWithDomain(data: { name: string; email: string; company: string }): Errors {
   const errors: Errors = {};
-  if (!data.name.trim()) errors.name = t('capture.validation_name_required');
-  else if (data.name.trim().length < 2) errors.name = t('capture.validation_name_short');
-
-  if (!data.email.trim()) errors.email = t('capture.validation_email_required');
-  else if (!EMAIL_RE.test(data.email)) errors.email = t('capture.validation_email_invalid');
-  else {
-    const domain = data.email.split('@')[1]?.toLowerCase();
-    if (domain && FREE_EMAIL_DOMAINS.has(domain)) {
-      errors.email = t('capture.validation_email_personal');
+  try {
+    Lead.create(data);
+  } catch (err: any) {
+    if (err instanceof DomainError) {
+      const msg = err.message.toLowerCase();
+      if (msg.includes('nome')) errors.name = err.message;
+      else if (msg.includes('e-mail') || msg.includes('email')) errors.email = err.message;
+      else if (msg.includes('empresa')) errors.company = err.message;
+      else errors.name = err.message;
     }
   }
-
-  if (!data.company.trim()) errors.company = t('capture.validation_company_required');
   return errors;
 }
 
 export const LeadCapture: React.FC = () => {
   const { t } = useTranslation();
   const [formData, setFormData] = useState({ name: '', email: '', company: '' });
+  const [honeypot, setHoneypot] = useState('');
+  const [mountedAt] = useState(() => Date.now());
   const [errors, setErrors] = useState<Errors>({});
   const [touched, setTouched] = useState<Record<string, boolean>>({});
   const [loading, setLoading] = useState(false);
@@ -49,18 +43,18 @@ export const LeadCapture: React.FC = () => {
   const onChange = (key: 'name' | 'email' | 'company', value: string) => {
     const next = { ...formData, [key]: value };
     setFormData(next);
-    if (touched[key]) setErrors(validate(next, t));
+    if (touched[key]) setErrors(validateWithDomain(next));
   };
 
   const onBlur = (key: 'name' | 'email' | 'company') => {
     setTouched((prev) => ({ ...prev, [key]: true }));
-    setErrors(validate(formData, t));
+    setErrors(validateWithDomain(formData));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const validation = validate(formData, t);
+    const validation = validateWithDomain(formData);
     setErrors(validation);
     setTouched({ name: true, email: true, company: true });
     if (Object.keys(validation).length > 0) {
@@ -74,8 +68,14 @@ export const LeadCapture: React.FC = () => {
     try {
       const response = await fetch('/api/leads', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Client-Timestamp': String(mountedAt),
+        },
+        body: JSON.stringify({
+          ...formData,
+          website_url: honeypot, // Campo invisível anti-bot
+        }),
       });
 
       const data = await response.json();
@@ -158,6 +158,20 @@ export const LeadCapture: React.FC = () => {
             </div>
 
             <form className="ys-capture-form" onSubmit={handleSubmit}>
+              {/* Anti-Bot Honeypot (Invisível para humanos, preenchido por scrapers) */}
+              <div style={{ position: 'absolute', opacity: 0, pointerEvents: 'none', height: 0, width: 0, overflow: 'hidden' }} aria-hidden="true">
+                <label htmlFor="website_url">Website</label>
+                <input
+                  type="text"
+                  id="website_url"
+                  name="website_url"
+                  tabIndex={-1}
+                  autoComplete="off"
+                  value={honeypot}
+                  onChange={(e) => setHoneypot(e.target.value)}
+                />
+              </div>
+
               <div className={`ys-field ${fieldError('name') ? 'has-error' : ''}`}>
                 <label className="ys-field-label" htmlFor="lead-name">
                   <User size={14} strokeWidth={2} />

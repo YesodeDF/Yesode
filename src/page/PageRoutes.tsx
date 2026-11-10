@@ -15,6 +15,7 @@ import { LeadCapture } from './components/LeadCapture/LeadCapture';
 import { Footer } from './components/Footer/Footer';
 import { PrivacyPolicy } from './pages/Legal/PrivacyPolicy';
 import { TermsOfUse } from './pages/Legal/TermsOfUse';
+import { FreeToolsPage } from '@/modules/landing/presentation/pages/FreeToolsPage';
 import '@shared/styles/global.scss';
 
 const Home: React.FC = () => {
@@ -86,6 +87,14 @@ const LanguageLayout: React.FC = () => {
       <main id="main">
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/ferramentas" element={<FreeToolsPage />} />
+          <Route path="/ferramentas/gerador-qr-code-pix" element={<FreeToolsPage />} />
+          <Route path="/ferramentas/baixar-videos-youtube-redes-sociais" element={<FreeToolsPage />} />
+          <Route path="/ferramentas/criar-figurinha-whatsapp" element={<FreeToolsPage />} />
+          <Route path="/tools" element={<FreeToolsPage />} />
+          <Route path="/tools/qr-code-pix-generator" element={<FreeToolsPage />} />
+          <Route path="/tools/media-downloader" element={<FreeToolsPage />} />
+          <Route path="/tools/whatsapp-sticker-maker" element={<FreeToolsPage />} />
           <Route path="/politica-de-privacidade" element={<PrivacyPolicy />} />
           <Route path="/termos-de-uso" element={<TermsOfUse />} />
         </Routes>

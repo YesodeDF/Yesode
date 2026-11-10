@@ -29,6 +29,7 @@
     "paths": {
       "@/*": ["./src/*"],
       "@shared/*": ["./src/shared/*"],
+      "@modules/*": ["./src/modules/*"],
       "@page/*": ["./src/page/*"],
       "@invite/*": ["./src/invite/*"],
       "@admin/*": ["./src/admin/*"]

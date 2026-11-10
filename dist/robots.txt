@@ -1,0 +1,41 @@
+User-agent: *
+Allow: /
+Allow: /pt/
+Allow: /en/
+Allow: /es/
+Allow: /pt/ferramentas/
+Allow: /en/tools/
+Allow: /llms.txt
+
+# Bloqueio de painéis e rotas administrativas
+Disallow: /admin
+Disallow: /admin/*
+Disallow: /login
+Disallow: /api/*
+
+# LLM & AI Crawlers (Acesso total liberado para indexação semântica e citações)
+User-agent: GPTBot
+Allow: /
+Allow: /llms.txt
+
+User-agent: ChatGPT-User
+Allow: /
+Allow: /llms.txt
+
+User-agent: OAI-SearchBot
+Allow: /
+Allow: /llms.txt
+
+User-agent: ClaudeBot
+Allow: /
+Allow: /llms.txt
+
+User-agent: PerplexityBot
+Allow: /
+Allow: /llms.txt
+
+User-agent: Google-Extended
+Allow: /
+Allow: /llms.txt
+
+Sitemap: https://yesode.com/sitemap.xml

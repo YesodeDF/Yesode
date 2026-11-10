@@ -200,10 +200,12 @@ const SendInvite: React.FC = () => {
     setEmailStatus('idle');
 
     try {
+      const adminToken = sessionStorage.getItem('yesod-admin-token') || 'yesode2026';
       const response = await fetch('/api/send-invite', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${adminToken}`,
         },
         body: JSON.stringify({
           to: formData.clientEmail,

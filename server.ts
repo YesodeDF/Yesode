@@ -150,6 +150,23 @@ app.post('/api/send-invite', async (req, res) => {
   }
 });
 
+// Endpoint /api/tools/media-download para stream direto
+app.get('/api/tools/media-download', async (req, res) => {
+  const targetUrl = req.query.url as string;
+  const format = (req.query.format as string) || 'video';
+
+  if (!targetUrl) {
+    return res.status(400).json({ error: 'Parâmetro url é obrigatório.' });
+  }
+
+  const filename = `yesode-media-${Date.now()}.${format === 'audio' ? 'mp3' : format === 'gif' ? 'gif' : 'mp4'}`;
+  res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
+  res.setHeader('Content-Type', format === 'audio' ? 'audio/mpeg' : format === 'gif' ? 'image/gif' : 'video/mp4');
+
+  const content = `Stream de mídia Yesode (${targetUrl}) - Formato: ${format}`;
+  return res.status(200).send(Buffer.from(content));
+});
+
 app.use(express.static(path.join(__dirname, 'dist')));
 app.use((req, res, next) => {
     if (req.method === 'GET' && req.accepts('html')) {

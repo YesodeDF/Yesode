@@ -37,7 +37,7 @@
     "title_suffix": " de engenharia.",
     "subtitle": "Cada capacidade resolve um problema operacional concreto. Você compõe o seu próprio stack, sem amarrar o roadmap a um único fornecedor.",
     "items": [
-      { "title": "Deep Search & KPIs", "desc": "Tomada de decisão baseada em dados reais e indexação profunda da operação. Métricas conectadas ao P&L.", "tag": "Insight" },
+      { "title": "Deep Search e KPIs", "desc": "Tomada de decisão baseada em dados reais e indexação profunda da operação. Métricas conectadas ao P&L.", "tag": "Insight" },
       { "title": "Brand Intelligence", "desc": "Soluções alinhadas à identidade e tom de voz do negócio.", "tag": "Voice" },
       { "title": "Engineering by Design", "desc": "Arquitetura sob medida desde o primeiro token — sem concessões.", "tag": "Core" },
       { "title": "Infra como Produto", "desc": "Plataformas internas que aceleram o time, não que pedem manutenção.", "tag": "Platform" },
@@ -139,7 +139,7 @@
       { "label": "API Gateway", "tag": "Edge", "desc": "mTLS · Rate limit · WAF" },
       { "label": "Microservices Core", "tag": "Domain", "desc": "Event-driven · Hexagonal" },
       { "label": "Data Layer", "tag": "Persistence", "desc": "PostgreSQL · Redis · S3" },
-      { "label": "Analytics & KPIs", "tag": "Insights", "desc": "Real-time OLAP · Dashboards" }
+      { "label": "Analytics e KPIs", "tag": "Insights", "desc": "Real-time OLAP · Dashboards" }
     ]
   },
   "faq": {

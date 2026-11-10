@@ -6,7 +6,8 @@ import {
   Sparkles,
   Scissors,
   Download,
-  Smile
+  Smile,
+  Loader2
 } from 'lucide-react';
 import { StickerSpec } from '../../domain/value-objects/StickerSpec.ts';
 import './WhatsAppStickerWorkspace.scss';
@@ -30,9 +31,11 @@ export const WhatsAppStickerWorkspace: React.FC<WhatsAppStickerWorkspaceProps> =
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
+  // Auto-carrega vídeo quando enviado da aba de download
   useEffect(() => {
     if (initialVideoUrl) {
       setVideoSrc(initialVideoUrl);
+      setGeneratedStickerUrl('');
     }
   }, [initialVideoUrl]);
 
@@ -71,7 +74,6 @@ export const WhatsAppStickerWorkspace: React.FC<WhatsAppStickerWorkspaceProps> =
       const ctx = canvas.getContext('2d');
       if (!ctx) throw new Error('Não foi possível obter contexto 2D do Canvas.');
 
-      // Renderiza frame centralizado 512x512
       ctx.clearRect(0, 0, 512, 512);
 
       let sx = 0, sy = 0, sWidth = video.videoWidth || 512, sHeight = video.videoHeight || 512;
@@ -93,15 +95,15 @@ export const WhatsAppStickerWorkspace: React.FC<WhatsAppStickerWorkspaceProps> =
 
       ctx.drawImage(video, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight);
 
-      // Converte para WebP
+      // Renderiza WebP
       const webpDataUrl = canvas.toDataURL('image/webp', 0.85);
       setGeneratedStickerUrl(webpDataUrl);
       setProcessing(false);
 
       toast.current?.show({
         severity: 'success',
-        summary: 'Figurinha Gerada!',
-        detail: 'Formato WebP 512x512 otimizado para WhatsApp criado com sucesso.',
+        summary: 'Figurinha Criada!',
+        detail: 'Formato WebP 512x512 otimizado para o WhatsApp.',
         life: 3500,
       });
     } catch (err: any) {
@@ -109,7 +111,7 @@ export const WhatsAppStickerWorkspace: React.FC<WhatsAppStickerWorkspaceProps> =
       toast.current?.show({
         severity: 'error',
         summary: 'Erro na Criação',
-        detail: err.message || 'Falha ao processar o vídeo.',
+        detail: err.message || 'Falha ao processar vídeo.',
         life: 4000,
       });
     }
@@ -120,7 +122,9 @@ export const WhatsAppStickerWorkspace: React.FC<WhatsAppStickerWorkspaceProps> =
     const a = document.createElement('a');
     a.href = generatedStickerUrl;
     a.download = 'figurinha-whatsapp-yesode.webp';
+    document.body.appendChild(a);
     a.click();
+    document.body.removeChild(a);
   };
 
   return (
@@ -146,7 +150,7 @@ export const WhatsAppStickerWorkspace: React.FC<WhatsAppStickerWorkspaceProps> =
             <label htmlFor="sticker-file-input" className="ys-upload-label">
               <Upload size={24} className="ys-upload-icon" />
               <span className="ys-upload-text">
-                {videoFile ? videoFile.name : 'Clique para selecionar um vídeo (MP4) ou GIF'}
+                {videoFile ? videoFile.name : videoSrc ? 'Vídeo Carregado via Downloader' : 'Clique para selecionar um vídeo (MP4) ou GIF'}
               </span>
               <span className="ys-upload-subtext">Ou arraste seu arquivo aqui</span>
             </label>
@@ -233,8 +237,17 @@ export const WhatsAppStickerWorkspace: React.FC<WhatsAppStickerWorkspaceProps> =
                 disabled={processing}
                 onClick={handleCreateSticker}
               >
-                <Sparkles size={16} />
-                <span>{processing ? 'Processando WebP...' : 'Criar Figurinha WhatsApp'}</span>
+                {processing ? (
+                  <>
+                    <Loader2 size={16} className="ys-spin" />
+                    <span>Processando WebP...</span>
+                  </>
+                ) : (
+                  <>
+                    <Sparkles size={16} />
+                    <span>Criar Figurinha WhatsApp</span>
+                  </>
+                )}
               </Button>
             </div>
           )}
@@ -272,10 +285,10 @@ export const WhatsAppStickerWorkspace: React.FC<WhatsAppStickerWorkspaceProps> =
                 onClick={downloadSticker}
               >
                 <Download size={16} />
-                <span>Baixar Figurinha (.webp)</span>
+                <span>Salvar Figurinha (.webp) no Computador</span>
               </Button>
               <p className="ys-sticker-tip">
-                Dica: Envie o arquivo <code>.webp</code> diretamente para qualquer conversa no WhatsApp Web ou Mobile para salvá-la nos seus favoritos!
+                Dica: O arquivo <code>.webp</code> será salvo na sua pasta de Downloads. Arraste-o para o WhatsApp Web ou envie no celular para favoritar!
               </p>
             </div>
           )}

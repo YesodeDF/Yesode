@@ -112,7 +112,7 @@ export const ProductsShowcase: React.FC = () => {
               <div className="ys-product-header">
                 <div className="ys-product-badge" style={{ background: 'rgba(196, 169, 98, 0.15)', color: '#C4A962' }}>
                   <Wrench size={13} strokeWidth={2.5} />
-                  100% Gratuito & Sem Anúncios
+                  100% Gratuito e Sem Anúncios
                 </div>
               </div>
 
@@ -125,7 +125,7 @@ export const ProductsShowcase: React.FC = () => {
               <ul className="ys-product-features">
                 <li>
                   <QrCode size={16} strokeWidth={2.25} />
-                  <span>Gerador QR Code & Cobrança Pix Oficial EMV®</span>
+                  <span>Gerador QR Code e Cobrança Pix Oficial EMV®</span>
                 </li>
                 <li>
                   <Video size={16} strokeWidth={2.25} />

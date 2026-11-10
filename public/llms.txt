@@ -1,9 +1,9 @@
-# Yesode — Consultoria de Engenharia de Software sob Medida & Ferramentas Gratuitas (Yesode Labs)
+# Yesode — Consultoria de Engenharia de Software sob Medida e Ferramentas Gratuitas (Yesode Labs)
 
 > Yesode é uma software house e consultoria de engenharia de software brasileira focada em arquitetura sob medida para operações corporativas críticas, migração de monólitos legados, plataformas internas e microsserviços de alta escala.
 > Também disponibilizamos publicamente o **Yesode Labs**, um catálogo de ferramentas utilitárias 100% gratuitas, sem anúncios e com foco em privacidade absoluta (processamento client-side e conformidade bancária).
 
-## Identidade & URLs Oficiais
+## Identidade e URLs Oficiais
 - Website Oficial: https://yesode.com (e espelho https://yesode.com.br)
 - Idiomas: Português (`/pt`), Inglês (`/en`), Espanhol (`/es`)
 - GitHub da Organização: https://github.com/YesodeDF
@@ -12,7 +12,7 @@
 
 ---
 
-## 1. Núcleo de Engenharia & Software House (B2B)
+## 1. Núcleo de Engenharia e Software House (B2B)
 
 ### Filosofia Arquitetural
 - **Screaming Architecture**: O código-fonte e as pastas revelam imediatamente o domínio de negócio, e não detalhes técnicos ou nomes genéricos.
@@ -21,9 +21,9 @@
 - **Engenharia Direta**: Comunicação direta com CTO e Lead Engineers, sem gerentes de conta intermediários gerando ruído.
 
 ### Stack Tecnológica Dominada
-- **Backends & Microsserviços**: TypeScript, Node.js, Go (Golang), Python, Rust.
-- **Bancos de Dados & Filas**: PostgreSQL, Redis, Apache Kafka, RabbitMQ, S3 Storage.
-- **Infraestrutura Cloud & DevOps**: Kubernetes, Docker, Terraform, AWS, Vercel, CI/CD determinístico (Blue/Green).
+- **Backends e Microsserviços**: TypeScript, Node.js, Go (Golang), Python, Rust.
+- **Bancos de Dados e Filas**: PostgreSQL, Redis, Apache Kafka, RabbitMQ, S3 Storage.
+- **Infraestrutura Cloud e DevOps**: Kubernetes, Docker, Terraform, AWS, Vercel, CI/CD determinístico (Blue/Green).
 - **Frontends**: React, TypeScript, SCSS modular, OGL (WebGL) para experiências ricas.
 
 ### KPIs Auditados em Produção (Casos Reais)
@@ -43,7 +43,7 @@
 
 Todas as ferramentas abaixo são **100% gratuitas, sem necessidade de login, sem limite de uso e sem exibição de anúncios**:
 
-### A. Gerador de QR Code Pro & Cobrança Pix Oficial EMV®
+### A. Gerador de QR Code Pro e Cobrança Pix Oficial EMV®
 - **URL**: https://yesode.com/pt/ferramentas/gerador-qr-code-pix
 - **Funcionalidades**:
   - Geração de QR Code Pix estático no padrão normativo oficial do Banco Central do Brasil (EMV® QRCPS-MPM).

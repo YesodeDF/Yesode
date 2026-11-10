@@ -127,7 +127,7 @@ export const FreeToolsPage: React.FC = () => {
           </div>
           <h1 className="ys-tools-headline">
             Engenharia de Alta Performance. <br />
-            <span className="gradient-text-gold">100% Grátis & Sem Anúncios.</span>
+            <span className="gradient-text-gold">100% Grátis e Sem Anúncios.</span>
           </h1>
           <p className="ys-tools-description">
             Utilitários essenciais construídos com a mesma arquitetura crítica que entregamos para nossos clientes corporativos.
@@ -151,7 +151,7 @@ export const FreeToolsPage: React.FC = () => {
           >
             <QrCode size={18} />
             <div className="ys-tool-tab-info">
-              <span className="ys-tool-tab-name">Gerador QR Code & Pix</span>
+              <span className="ys-tool-tab-name">Gerador QR Code e Pix</span>
               <span className="ys-tool-tab-sub">EMV®, CRC16 e Links</span>
             </div>
           </button>
@@ -192,7 +192,7 @@ export const FreeToolsPage: React.FC = () => {
           )}
         </div>
 
-        {/* Security & Architecture Guarantees */}
+        {/* Security and Architecture Guarantees */}
         <div className="ys-tools-trust-section">
           <div className="ys-trust-item">
             <ShieldCheck size={20} className="ys-trust-icon" />
@@ -211,7 +211,7 @@ export const FreeToolsPage: React.FC = () => {
           <div className="ys-trust-item">
             <Terminal size={20} className="ys-trust-icon" />
             <div>
-              <h5>Código Aberto & DDD</h5>
+              <h5>Código Aberto e DDD</h5>
               <p>Modelado seguindo os princípios de Domínios Ricos e Engenharia de Software de ponta da Yesode.</p>
             </div>
           </div>

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useNavigate, useLocation, Link, useParams } from 'react-router-dom';
 import { Button } from 'primereact/button';
 import { useTranslation } from 'react-i18next';
@@ -16,9 +16,27 @@ export const Header: React.FC = () => {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [toolsDropdownOpen, setToolsDropdownOpen] = useState(false);
+  const dropdownCloseTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const navigate = useNavigate();
   const location = useLocation();
   const { isAuthenticated, openLoginModal } = useAuth();
+
+  const handleToolsMouseEnter = () => {
+    if (dropdownCloseTimeoutRef.current) {
+      clearTimeout(dropdownCloseTimeoutRef.current);
+      dropdownCloseTimeoutRef.current = null;
+    }
+    setToolsDropdownOpen(true);
+  };
+
+  const handleToolsMouseLeave = () => {
+    if (dropdownCloseTimeoutRef.current) {
+      clearTimeout(dropdownCloseTimeoutRef.current);
+    }
+    dropdownCloseTimeoutRef.current = setTimeout(() => {
+      setToolsDropdownOpen(false);
+    }, 200); // 200ms debounce buffer to prevent accidental closing
+  };
 
   const isHome = location.pathname === `/${lang}` || location.pathname === `/${lang}/`;
 
@@ -109,8 +127,8 @@ export const Header: React.FC = () => {
           {/* Tools Collapsible Menu */}
           <div
             className="ys-tools-nav-menu"
-            onMouseEnter={() => setToolsDropdownOpen(true)}
-            onMouseLeave={() => setToolsDropdownOpen(false)}
+            onMouseEnter={handleToolsMouseEnter}
+            onMouseLeave={handleToolsMouseLeave}
           >
             <button
               type="button"
@@ -126,7 +144,11 @@ export const Header: React.FC = () => {
             </button>
 
             {toolsDropdownOpen && (
-              <div className="ys-tools-dropdown">
+              <div
+                className="ys-tools-dropdown"
+                onMouseEnter={handleToolsMouseEnter}
+                onMouseLeave={handleToolsMouseLeave}
+              >
                 <Link
                   to={`/${lang}/ferramentas/gerador-qr-code-pix`}
                   className="ys-tools-dropdown-item"
@@ -134,7 +156,7 @@ export const Header: React.FC = () => {
                 >
                   <QrCode size={15} />
                   <div>
-                    <strong>Gerador QR Code & Pix</strong>
+                    <strong>Gerador QR Code e Pix</strong>
                     <small>Cobranças EMV®, CRC16 e Links</small>
                   </div>
                 </Link>

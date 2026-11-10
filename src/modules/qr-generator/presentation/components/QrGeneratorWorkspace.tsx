@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Button } from 'primereact/button';
 import { InputText } from 'primereact/inputtext';
 import { Toast } from 'primereact/toast';
-import { QrCode, Link2, DollarSign, Download, Copy, Check, Sparkles, FileText } from 'lucide-react';
+import { QrCode, Link2, DollarSign, Download, Copy, Check, Sparkles, FileText, CheckCircle2 } from 'lucide-react';
 import { PixCharge } from '../../domain/entities/PixCharge.ts';
 import { QrCanvasService } from '../../infrastructure/QrCanvasService.ts';
 import './QrGeneratorWorkspace.scss';
@@ -17,7 +17,8 @@ export const QrGeneratorWorkspace: React.FC = () => {
   const [url, setUrl] = useState('https://yesode.com.br');
   const [linkQrDataUrl, setLinkQrDataUrl] = useState<string>('');
 
-  // Pix State
+  // Pix Direct State (Cole ou Monte o seu)
+  const [copyPasteInput, setCopyPasteInput] = useState('');
   const [pixKey, setPixKey] = useState('');
   const [merchantName, setMerchantName] = useState('');
   const [merchantCity, setMerchantCity] = useState('SAO PAULO');
@@ -26,10 +27,7 @@ export const QrGeneratorWorkspace: React.FC = () => {
   const [pixPayload, setPixPayload] = useState('');
   const [pixQrDataUrl, setPixQrDataUrl] = useState<string>('');
   const [copied, setCopied] = useState(false);
-
-  // Import Copy Paste Modal / State
-  const [importText, setImportText] = useState('');
-  const [showImport, setShowImport] = useState(false);
+  const [autoDecodedSuccess, setAutoDecodedSuccess] = useState(false);
 
   // Generate URL QR on change
   useEffect(() => {
@@ -40,7 +38,47 @@ export const QrGeneratorWorkspace: React.FC = () => {
     }
   }, [activeTab, url]);
 
-  // Generate Pix QR on change
+  // Decodifica automaticamente ao colar o código Pix
+  const handleCopyPasteChange = (val: string) => {
+    setCopyPasteInput(val);
+    const clean = (val || '').trim().replace(/\s+/g, '');
+
+    if (clean.startsWith('000201') && clean.length > 25) {
+      try {
+        const parsed = PixCharge.parseFromCopyPaste(clean);
+        setPixKey(parsed.key);
+        setMerchantName(parsed.merchantName);
+        setMerchantCity(parsed.merchantCity);
+        if (parsed.amount) setAmount(parsed.amount);
+        if (parsed.txId) setTxId(parsed.txId);
+
+        const charge = PixCharge.create({
+          key: parsed.key,
+          merchantName: parsed.merchantName,
+          merchantCity: parsed.merchantCity,
+          amount: parsed.amount,
+          txId: parsed.txId,
+        });
+        const emv = charge.toEmvPayload();
+        setPixPayload(emv);
+        QrCanvasService.toDataUrl(emv, { width: 360 }).then(setPixQrDataUrl);
+
+        setAutoDecodedSuccess(true);
+        toast.current?.show({
+          severity: 'success',
+          summary: 'Pix Reconhecido',
+          detail: 'Código oficial EMV decodificado e QR Code gerado na hora!',
+          life: 3000,
+        });
+      } catch (err: any) {
+        setAutoDecodedSuccess(false);
+      }
+    } else {
+      setAutoDecodedSuccess(false);
+    }
+  };
+
+  // Generate Pix QR manual
   const handleGeneratePix = () => {
     try {
       const charge = PixCharge.create({
@@ -52,54 +90,23 @@ export const QrGeneratorWorkspace: React.FC = () => {
       });
       const emv = charge.toEmvPayload();
       setPixPayload(emv);
+      setCopyPasteInput(emv);
       QrCanvasService.toDataUrl(emv, { width: 360 })
         .then(setPixQrDataUrl)
         .catch((err: unknown) => console.error('Erro renderizando Pix QR:', err));
+
+      toast.current?.show({
+        severity: 'success',
+        summary: 'QR Code Gerado',
+        detail: 'Cobrança Pix oficial pronta para pagamento.',
+        life: 3000,
+      });
     } catch (err: any) {
       toast.current?.show({
         severity: 'warn',
         summary: 'Atenção na Validação',
         detail: err.message || 'Verifique os dados informados.',
         life: 4000,
-      });
-    }
-  };
-
-  const handleImportPix = () => {
-    try {
-      const parsed = PixCharge.parseFromCopyPaste(importText);
-      setPixKey(parsed.key);
-      setMerchantName(parsed.merchantName);
-      setMerchantCity(parsed.merchantCity);
-      if (parsed.amount) setAmount(parsed.amount);
-      if (parsed.txId) setTxId(parsed.txId);
-      setShowImport(false);
-      setImportText('');
-
-      // Auto-trigger generation
-      const charge = PixCharge.create({
-        key: parsed.key,
-        merchantName: parsed.merchantName,
-        merchantCity: parsed.merchantCity,
-        amount: parsed.amount,
-        txId: parsed.txId,
-      });
-      const emv = charge.toEmvPayload();
-      setPixPayload(emv);
-      QrCanvasService.toDataUrl(emv, { width: 360 }).then(setPixQrDataUrl);
-
-      toast.current?.show({
-        severity: 'success',
-        summary: 'Pix Importado',
-        detail: 'Dados e assinatura CRC16 verificados com sucesso!',
-        life: 3000,
-      });
-    } catch (err: any) {
-      toast.current?.show({
-        severity: 'error',
-        summary: 'Código Inválido',
-        detail: err.message,
-        life: 5000,
       });
     }
   };
@@ -152,46 +159,41 @@ export const QrGeneratorWorkspace: React.FC = () => {
             <>
               <div className="ys-qr-card-header">
                 <div>
-                  <h3 className="ys-qr-card-title">Cobrança Pix com QR Code</h3>
+                  <h3 className="ys-qr-card-title">Cole o Código Pix ou Monte o Seu</h3>
                   <p className="ys-qr-card-subtitle">
-                    Gera o código oficial EMV® padrão Banco Central, com checksum CRC16. 100% privado no seu navegador.
+                    Gere ou decodifique o código oficial EMV® padrão Banco Central com checksum CRC16. 100% privado no seu navegador.
                   </p>
                 </div>
-                <Button
-                  className="p-button-outlined p-button-sm ys-btn-import"
-                  onClick={() => setShowImport(!showImport)}
-                  tooltip="Importar código Pix Copia e Cola existente"
-                >
-                  <FileText size={15} />
-                  <span>Importar Pix</span>
-                </Button>
               </div>
 
-              {showImport && (
-                <div className="ys-qr-import-box">
-                  <label className="ys-field-label">Cole o código Pix Copia e Cola (000201...):</label>
-                  <textarea
-                    className="ys-qr-textarea"
-                    rows={3}
-                    placeholder="Cole aqui a string completa do Pix..."
-                    value={importText}
-                    onChange={(e) => setImportText(e.target.value)}
-                  />
-                  <div className="ys-qr-import-actions">
-                    <Button
-                      label="Cancelar"
-                      className="p-button-text p-button-sm"
-                      onClick={() => setShowImport(false)}
-                    />
-                    <Button
-                      label="Decodificar e Carregar"
-                      className="p-button-primary p-button-sm"
-                      onClick={handleImportPix}
-                    />
-                  </div>
+              {/* Opção A: Colar Código Direto */}
+              <div className="ys-qr-direct-paste-box">
+                <div className="ys-direct-paste-header">
+                  <label className="ys-field-label" htmlFor="pix-copia-cola-input">
+                    <FileText size={15} />
+                    <span>Cole seu Pix Copia e Cola aqui (000201...):</span>
+                  </label>
+                  {autoDecodedSuccess && (
+                    <span className="ys-decoded-badge">
+                      <CheckCircle2 size={13} color="#10B981" /> Decodificado com sucesso
+                    </span>
+                  )}
                 </div>
-              )}
+                <textarea
+                  id="pix-copia-cola-input"
+                  className="ys-qr-textarea"
+                  rows={2}
+                  placeholder="Cole aqui o código Pix para decodificar e gerar o QR Code automaticamente..."
+                  value={copyPasteInput}
+                  onChange={(e) => handleCopyPasteChange(e.target.value)}
+                />
+              </div>
 
+              <div className="ys-qr-divider">
+                <span>OU MONTE O SEU PIX MANUALMENTE</span>
+              </div>
+
+              {/* Opção B: Montar o seu */}
               <div className="ys-qr-fields">
                 <div className="ys-field">
                   <label className="ys-field-label">Chave Pix (CPF, E-mail, Telefone ou Aleatória) *</label>
@@ -288,7 +290,7 @@ export const QrGeneratorWorkspace: React.FC = () => {
             ) : (
               <div className="ys-qr-placeholder">
                 <QrCode size={64} opacity={0.3} />
-                <span>Preencha os campos ao lado para gerar seu QR Code</span>
+                <span>Preencha os campos ao lado ou cole o código Pix para gerar</span>
               </div>
             )}
           </div>

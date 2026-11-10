@@ -208,13 +208,6 @@ export const FreeToolsPage: React.FC = () => {
               <p>Sem banners do Google Ads, sem rastreadores abusivos e sem tempo de espera artificial.</p>
             </div>
           </div>
-          <div className="ys-trust-item">
-            <Terminal size={20} className="ys-trust-icon" />
-            <div>
-              <h5>Código Aberto e DDD</h5>
-              <p>Modelado seguindo os princípios de Domínios Ricos e Engenharia de Software de ponta da Yesode.</p>
-            </div>
-          </div>
         </div>
       </div>
     </div>

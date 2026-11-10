@@ -16,6 +16,10 @@
       "destination": "/api/media-download"
     },
     {
+      "source": "/api/tools/media-info",
+      "destination": "/api/media-info"
+    },
+    {
       "source": "/api/(.*)",
       "destination": "/api/$1"
     },

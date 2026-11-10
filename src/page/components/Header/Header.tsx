@@ -35,7 +35,11 @@ export const Header: React.FC = () => {
     }
     dropdownCloseTimeoutRef.current = setTimeout(() => {
       setToolsDropdownOpen(false);
-    }, 200); // 200ms debounce buffer to prevent accidental closing
+    }, 450); // Generous debounce so diagonal movement down to items never closes
+  };
+
+  const handleToolsClick = () => {
+    setToolsDropdownOpen((prev) => !prev);
   };
 
   const isHome = location.pathname === `/${lang}` || location.pathname === `/${lang}/`;
@@ -133,10 +137,7 @@ export const Header: React.FC = () => {
             <button
               type="button"
               className="ys-nav-link ys-tools-trigger"
-              onClick={() => {
-                navigate(`/${lang}/ferramentas`);
-                setToolsDropdownOpen(false);
-              }}
+              onClick={handleToolsClick}
             >
               <Wrench size={14} />
               <span>Ferramentas</span>

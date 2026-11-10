@@ -47,21 +47,14 @@ export const QrGeneratorWorkspace: React.FC = () => {
       try {
         const parsed = PixCharge.parseFromCopyPaste(clean);
         setPixKey(parsed.key);
-        setMerchantName(parsed.merchantName);
-        setMerchantCity(parsed.merchantCity);
+        if (parsed.merchantName) setMerchantName(parsed.merchantName);
+        if (parsed.merchantCity) setMerchantCity(parsed.merchantCity);
         if (parsed.amount) setAmount(parsed.amount);
         if (parsed.txId) setTxId(parsed.txId);
 
-        const charge = PixCharge.create({
-          key: parsed.key,
-          merchantName: parsed.merchantName,
-          merchantCity: parsed.merchantCity,
-          amount: parsed.amount,
-          txId: parsed.txId,
-        });
-        const emv = charge.toEmvPayload();
-        setPixPayload(emv);
-        QrCanvasService.toDataUrl(emv, { width: 360 }).then(setPixQrDataUrl);
+        // O payload original já é 100% válido pelo Banco Central e possui CRC16 verificado
+        setPixPayload(clean);
+        QrCanvasService.toDataUrl(clean, { width: 360 }).then(setPixQrDataUrl);
 
         setAutoDecodedSuccess(true);
         toast.current?.show({

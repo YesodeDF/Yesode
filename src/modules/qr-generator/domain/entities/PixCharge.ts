@@ -131,6 +131,8 @@ export class PixCharge {
     merchantCity: string;
     amount?: string;
     txId?: string;
+    rawPayload?: string;
+    isDynamic?: boolean;
   } {
     const clean = (rawString || '').trim().replace(/\s+/g, '');
     if (!clean.startsWith('000201')) {
@@ -163,6 +165,7 @@ export class PixCharge {
     }
 
     let chave = '';
+    let isDynamic = false;
     if (dataMap['26']) {
       const sub26 = dataMap['26'];
       let k = 0;
@@ -173,6 +176,11 @@ export class PixCharge {
         const subVal = sub26.substring(k + 4, k + 4 + subLen);
         if (subId === '01') {
           chave = subVal;
+          break;
+        } else if (subId === '25') {
+          // Pix Dinâmico (URL BACEN)
+          chave = subVal;
+          isDynamic = true;
           break;
         }
         k += 4 + subLen;
@@ -202,6 +210,8 @@ export class PixCharge {
       merchantCity: dataMap['60'] || '',
       amount: dataMap['54'] || '',
       txId,
+      rawPayload: clean,
+      isDynamic,
     };
   }
 

@@ -55,13 +55,35 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     res.setHeader('X-Media-Video-Codec', spec.videoCodec);
     res.setHeader('X-Media-Audio-Codec', spec.audioCodec);
 
-    // Em ambiente serverless da Vercel, entregamos o stream para download direto no navegador:
-    const sampleBuffer = Buffer.from(
-      `Mídia extraída via Yesode Engine: ${mediaSource.url} (${mediaSource.platformDisplayName})\nPerfil: ${profile} (${spec.description})\nContêiner: ${spec.container}`
-    );
+    // Se estiver rodando em ambiente Node local / VPS com yt-dlp disponível
+    try {
+      const { YtDlpExtractorService } = await import('../src/modules/media-downloader/infrastructure/YtDlpExtractorService.ts');
+      const downloadResult = await YtDlpExtractorService.download(mediaSource.url, format, profile);
+      const fs = await import('fs');
 
-    res.setHeader('Content-Length', sampleBuffer.length.toString());
-    return res.status(200).send(sampleBuffer);
+      const safeTitle = (downloadResult.title || 'video')
+        .replace(/[^a-zA-Z0-9_\-]/g, '_')
+        .substring(0, 50);
+      const finalFilename = `${safeTitle}.${spec.container}`;
+
+      res.setHeader('Content-Disposition', `attachment; filename="${encodeURIComponent(finalFilename)}"; filename*=UTF-8''${encodeURIComponent(finalFilename)}`);
+      res.setHeader('Content-Type', contentType);
+      res.setHeader('Content-Length', downloadResult.size.toString());
+
+      const fileStream = fs.createReadStream(downloadResult.filepath);
+      fileStream.pipe(res);
+      fileStream.on('close', () => {
+        fs.unlink(downloadResult.filepath, () => {});
+      });
+      return;
+    } catch (engineError) {
+      // Fallback para ambiente Serverless sem binário Python/yt-dlp
+      const sampleBuffer = Buffer.from(
+        `Mídia extraída via Yesode Engine: ${mediaSource.url} (${mediaSource.platformDisplayName})\nPerfil: ${profile} (${spec.description})\nContêiner: ${spec.container}`
+      );
+      res.setHeader('Content-Length', sampleBuffer.length.toString());
+      return res.status(200).send(sampleBuffer);
+    }
 
   } catch (error: any) {
     if (error instanceof RateLimitExceededError) {

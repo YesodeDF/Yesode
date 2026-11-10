@@ -29,6 +29,9 @@ export interface QueueItem {
   id: string;
   rawUrl: string;
   media: MediaSourceUrl | null;
+  title?: string;
+  duration?: number;
+  thumbnail?: string;
   status: 'idle' | 'analyzing' | 'ready' | 'downloading' | 'preparing_sticker' | 'completed' | 'error';
   progress: number;
   format: DownloadFormat;
@@ -78,8 +81,33 @@ export const MediaDownloaderWorkspace: React.FC<MediaDownloaderWorkspaceProps> =
         errorMessage = err.message || 'Link inválido ou não suportado.';
       }
 
+      const itemId = `${Date.now()}-${Math.random().toString(36).substring(2, 9)}`;
+
+      // Busca metadados instantâneos de forma assíncrona
+      if (media) {
+        fetch(`/api/tools/media-info?url=${encodeURIComponent(media.url)}`)
+          .then((res) => (res.ok ? res.json() : null))
+          .then((info) => {
+            if (info && info.title) {
+              setQueue((prev) =>
+                prev.map((q) =>
+                  q.id === itemId
+                    ? {
+                        ...q,
+                        title: info.title,
+                        duration: info.duration,
+                        thumbnail: info.thumbnail,
+                      }
+                    : q
+                )
+              );
+            }
+          })
+          .catch(() => {});
+      }
+
       return {
-        id: `${Date.now()}-${Math.random().toString(36).substring(2, 9)}`,
+        id: itemId,
         rawUrl: url,
         media,
         status,
@@ -120,22 +148,10 @@ export const MediaDownloaderWorkspace: React.FC<MediaDownloaderWorkspaceProps> =
 
     // Atualiza apenas este card para status downloading
     setQueue((prev) =>
-      prev.map((q) => (q.id === id ? { ...q, status: 'downloading', progress: 10, errorMessage: undefined } : q))
+      prev.map((q) => (q.id === id ? { ...q, status: 'downloading', progress: 5, errorMessage: undefined } : q))
     );
 
     try {
-      // Simulação do progresso gradual do stream (0% -> 100%)
-      const interval = setInterval(() => {
-        setQueue((prev) =>
-          prev.map((q) => {
-            if (q.id === id && q.status === 'downloading' && q.progress < 90) {
-              return { ...q, progress: q.progress + 20 };
-            }
-            return q;
-          })
-        );
-      }, 300);
-
       const spec = MediaCompatibilityProfile.getSpec(item.format, item.profile);
       const queryParams = new URLSearchParams({
         url: item.media.url,
@@ -144,16 +160,42 @@ export const MediaDownloaderWorkspace: React.FC<MediaDownloaderWorkspaceProps> =
         container: spec.container
       });
 
-      // Chamada real para extração / proxy de download
+      // Progresso suave visual enquanto o backend processa o download/muxing
+      let progressVal = 10;
+      const progressTimer = setInterval(() => {
+        if (progressVal < 85) {
+          progressVal += 5;
+          setQueue((prev) =>
+            prev.map((q) => (q.id === id && q.status === 'downloading' ? { ...q, progress: progressVal } : q))
+          );
+        }
+      }, 500);
+
+      // Chamada real para extração / proxy de download com stream
       const response = await fetch(`/api/tools/media-download?${queryParams.toString()}`);
-      clearInterval(interval);
+      clearInterval(progressTimer);
 
       if (!response.ok) {
-        throw new Error('Falha no servidor ao processar o vídeo. Tente novamente.');
+        const errorData = await response.json().catch(() => null);
+        throw new Error(errorData?.error || 'Falha no servidor ao processar o vídeo. Tente novamente.');
       }
 
+      setQueue((prev) =>
+        prev.map((q) => (q.id === id ? { ...q, progress: 95 } : q))
+      );
+
       const blob = await response.blob();
-      const filename = `yesode-${item.media.platform}-${Date.now()}.${spec.container}`;
+
+      if (blob.size < 500) {
+        // Arquivo corrompido ou texto de erro retornado
+        const errorText = await blob.text();
+        throw new Error(`Arquivo retornado inválido (${blob.size} bytes): ${errorText.substring(0, 100)}`);
+      }
+
+      const safeTitle = (item.title || `yesode-${item.media.platform}`)
+        .replace(/[^a-zA-Z0-9_\-\u00C0-\u00FF]/g, '_')
+        .substring(0, 45);
+      const filename = `${safeTitle}.${spec.container}`;
 
       // DISPARO REAL DE DOWNLOAD NO COMPUTADOR DO USUÁRIO
       const blobUrl = window.URL.createObjectURL(blob);
@@ -315,10 +357,10 @@ export const MediaDownloaderWorkspace: React.FC<MediaDownloaderWorkspaceProps> =
                         <Video size={20} className="ys-meta-icon" />
                         <div className="ys-meta-text">
                           <span className="ys-platform-label">
-                            {item.media ? item.media.platformDisplayName : 'Link Desconhecido'}
+                            {item.title ? item.title : (item.media ? item.media.platformDisplayName : 'Link Desconhecido')}
                           </span>
                           <span className="ys-url-preview" title={item.rawUrl}>
-                            {item.rawUrl}
+                            {item.media ? `[${item.media.platformDisplayName}] ${item.rawUrl}` : item.rawUrl}
                           </span>
                         </div>
                       </div>

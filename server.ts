@@ -18,6 +18,8 @@ import {
   type DownloadProfile,
 } from './src/modules/media-downloader/domain/value-objects/MediaCompatibilityProfile.ts';
 import { MediaSourceUrl } from './src/modules/media-downloader/domain/value-objects/MediaSourceUrl.ts';
+import { YtDlpExtractorService } from './src/modules/media-downloader/infrastructure/YtDlpExtractorService.ts';
+import fs from 'fs';
 
 dotenv.config();
 
@@ -156,7 +158,23 @@ app.post('/api/send-invite', async (req, res) => {
   }
 });
 
-// Endpoint /api/tools/media-download para stream direto
+// Endpoint /api/tools/media-info para metadados instantâneos
+app.get('/api/tools/media-info', async (req, res) => {
+  const targetUrl = req.query.url as string;
+  if (!targetUrl) {
+    return res.status(400).json({ error: 'Parâmetro url é obrigatório.' });
+  }
+
+  try {
+    const mediaSource = MediaSourceUrl.create(targetUrl);
+    const info = await YtDlpExtractorService.getInfo(mediaSource.url);
+    return res.status(200).json(info);
+  } catch (error: any) {
+    return res.status(400).json({ error: error.message || 'Falha ao buscar dados da mídia.' });
+  }
+});
+
+// Endpoint /api/tools/media-download para download real com binário MP4/MP3/GIF
 app.get('/api/tools/media-download', async (req, res) => {
   const targetUrl = req.query.url as string;
   const rawFormat = (req.query.format as string) || 'video_muxed';
@@ -171,19 +189,38 @@ app.get('/api/tools/media-download', async (req, res) => {
     const mediaSource = MediaSourceUrl.create(targetUrl);
     const spec = MediaCompatibilityProfile.getSpec(format, profile);
 
-    const filename = `yesode-${mediaSource.platform}-${Date.now()}.${spec.container}`;
+    // Executa o download real via yt-dlp + ffmpeg
+    const downloadResult = await YtDlpExtractorService.download(mediaSource.url, format, profile);
+
+    const safeTitle = (downloadResult.title || 'video')
+      .replace(/[^a-zA-Z0-9_\-]/g, '_')
+      .substring(0, 50);
+    const finalFilename = `${safeTitle}.${spec.container}`;
     const contentType = spec.container === 'mp3' ? 'audio/mpeg' : spec.container === 'gif' ? 'image/gif' : spec.container === 'mkv' ? 'video/x-matroska' : 'video/mp4';
 
-    res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
+    res.setHeader('Content-Disposition', `attachment; filename="${encodeURIComponent(finalFilename)}"; filename*=UTF-8''${encodeURIComponent(finalFilename)}`);
     res.setHeader('Content-Type', contentType);
+    res.setHeader('Content-Length', downloadResult.size.toString());
     res.setHeader('X-Media-Profile', profile);
     res.setHeader('X-Media-Video-Codec', spec.videoCodec);
     res.setHeader('X-Media-Audio-Codec', spec.audioCodec);
 
-    const content = `Stream de mídia Yesode (${mediaSource.url})\nPlataforma: ${mediaSource.platformDisplayName}\nPerfil: ${profile} (${spec.description})\nContêiner: ${spec.container}`;
-    return res.status(200).send(Buffer.from(content));
+    // Stream direto do arquivo baixado para a resposta do usuário
+    const fileStream = fs.createReadStream(downloadResult.filepath);
+    fileStream.pipe(res);
+
+    // Remove o arquivo temporário após o término da transmissão
+    fileStream.on('close', () => {
+      fs.unlink(downloadResult.filepath, () => {});
+    });
+
+    fileStream.on('error', (err) => {
+      console.error('Erro na transmissão do arquivo de mídia:', err);
+      fs.unlink(downloadResult.filepath, () => {});
+    });
   } catch (error: any) {
-    return res.status(400).json({ error: error.message || 'Link inválido.' });
+    console.error('Erro no download de mídia:', error);
+    return res.status(500).json({ error: error.message || 'Falha ao processar download do vídeo.' });
   }
 });
 

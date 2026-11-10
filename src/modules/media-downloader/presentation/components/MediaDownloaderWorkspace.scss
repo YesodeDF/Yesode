@@ -1,10 +1,17 @@
 .ys-media-downloader {
   margin-top: 1.5rem;
+  width: 100%;
+  overflow-x: hidden;
+
+  @media (max-width: 600px) {
+    margin-top: 0.75rem;
+  }
 }
 
 .ys-downloader-container {
   max-width: 980px;
   margin: 0 auto;
+  width: 100%;
 }
 
 .ys-downloader-card {
@@ -13,19 +20,31 @@
   border-radius: 16px;
   padding: 3rem 2.5rem;
   box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+  box-sizing: border-box;
+  width: 100%;
+  overflow: hidden;
 
-  @media (max-width: 650px) {
+  @media (max-width: 768px) {
     padding: 1.75rem 1.25rem;
+    border-radius: 14px;
+  }
+
+  @media (max-width: 480px) {
+    padding: 1.25rem 0.85rem;
   }
 }
 
 .ys-downloader-header {
   margin-bottom: 2rem;
   text-align: center;
+
+  @media (max-width: 600px) {
+    margin-bottom: 1.25rem;
+  }
 }
 
 .ys-downloader-title {
-  font-size: 2rem;
+  font-size: clamp(1.4rem, 4vw, 2rem);
   font-weight: 700;
   color: var(--text-primary);
   margin-bottom: 0.75rem;
@@ -34,11 +53,15 @@
 }
 
 .ys-downloader-subtitle {
-  font-size: 1rem;
+  font-size: 0.95rem;
   color: var(--text-muted);
   line-height: 1.6;
   max-width: 680px;
   margin: 0 auto;
+
+  @media (max-width: 600px) {
+    font-size: 0.85rem;
+  }
 }
 
 // Banner de Compatibilidade Universal
@@ -52,6 +75,12 @@
   padding: 1.15rem 1.4rem;
   margin-bottom: 2rem;
 
+  @media (max-width: 600px) {
+    padding: 0.85rem 1rem;
+    margin-bottom: 1.25rem;
+    gap: 0.75rem;
+  }
+
   .ys-compatibility-icon {
     flex-shrink: 0;
     margin-top: 0.15rem;
@@ -64,13 +93,13 @@
 
     strong {
       color: var(--accent);
-      font-size: 0.95rem;
+      font-size: 0.9rem;
       font-weight: 700;
     }
 
     span {
       color: var(--text-secondary);
-      font-size: 0.875rem;
+      font-size: 0.825rem;
       line-height: 1.5;
     }
   }
@@ -86,6 +115,8 @@
   @media (max-width: 768px) {
     flex-direction: column;
     align-items: stretch;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
   }
 }
 
@@ -98,21 +129,21 @@
 }
 
 .ys-input-headline {
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   font-weight: 600;
   color: var(--text-secondary);
 }
 
 .ys-multi-textarea {
   width: 100%;
-  min-height: 100px;
+  min-height: 90px;
   border-radius: 10px;
   padding: 1rem 1.25rem;
   background: var(--bg-surface);
   border: 1px solid var(--border);
   color: var(--text-primary);
   font-family: inherit;
-  font-size: 0.95rem;
+  font-size: 16px; // Previne zoom no iOS Safari
   line-height: 1.5;
   resize: vertical;
   box-sizing: border-box;
@@ -128,10 +159,15 @@
     box-shadow: 0 0 0 3px rgba(196, 169, 98, 0.15);
     outline: none;
   }
+
+  @media (max-width: 600px) {
+    padding: 0.75rem 0.85rem;
+    min-height: 75px;
+  }
 }
 
 .ys-add-queue-btn {
-  height: 54px;
+  height: 52px;
   padding: 0 1.75rem;
   font-size: 0.95rem;
   font-weight: 700;
@@ -144,49 +180,63 @@
 
   @media (max-width: 768px) {
     width: 100%;
-    margin-top: 0.5rem;
+    margin-top: 0.25rem;
+    min-height: 48px;
   }
 }
 
 .ys-platform-chips {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.65rem;
+  gap: 0.5rem;
   justify-content: center;
   margin-top: 1rem;
   margin-bottom: 1.5rem;
+
+  @media (max-width: 600px) {
+    gap: 0.35rem;
+    margin-bottom: 1rem;
+  }
 }
 
 .ys-chip {
-  font-size: 0.8rem;
-  padding: 0.35rem 0.85rem;
+  font-size: 0.75rem;
+  padding: 0.35rem 0.75rem;
   border-radius: 20px;
   background: var(--bg-surface);
   border: 1px solid var(--border);
   color: var(--text-secondary);
   font-weight: 500;
+  text-align: center;
 }
 
 // Queue List Styling
 .ys-queue-container {
-  margin-top: 3rem;
+  margin-top: 2.5rem;
   border-top: 1px solid var(--border);
-  padding-top: 2.25rem;
+  padding-top: 1.75rem;
+
+  @media (max-width: 600px) {
+    margin-top: 1.5rem;
+    padding-top: 1.25rem;
+  }
 }
 
 .ys-queue-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 1.75rem;
+  margin-bottom: 1.5rem;
+  gap: 0.5rem;
 
   .ys-queue-title-wrap {
     display: flex;
     flex-direction: column;
-    gap: 0.25rem;
+    gap: 0.2rem;
+    overflow: hidden;
 
     h4 {
-      font-size: 1.4rem;
+      font-size: 1.25rem;
       font-weight: 700;
       color: var(--text-primary);
       margin: 0;
@@ -194,16 +244,20 @@
     }
 
     .ys-queue-hint {
-      font-size: 0.825rem;
+      font-size: 0.775rem;
       color: var(--text-muted);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
   }
 }
 
 .ys-clear-all {
-  font-size: 0.85rem;
+  font-size: 0.8rem;
   color: var(--text-muted);
   font-weight: 600;
+  white-space: nowrap;
 
   &:hover {
     color: var(--accent);
@@ -213,19 +267,32 @@
 .ys-queue-list {
   display: flex;
   flex-direction: column;
-  gap: 1.75rem;
+  gap: 1.5rem;
+
+  @media (max-width: 600px) {
+    gap: 1rem;
+  }
 }
 
 .ys-queue-card {
   background: var(--bg-surface);
   border: 1px solid var(--border);
   border-radius: 14px;
-  padding: 1.75rem 1.75rem;
+  padding: 1.5rem;
   display: flex;
   flex-direction: column;
-  gap: 1.4rem;
+  gap: 1.25rem;
   transition: all 0.2s ease;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  width: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
+
+  @media (max-width: 600px) {
+    padding: 1rem 0.85rem;
+    gap: 1rem;
+    border-radius: 12px;
+  }
 
   &.status-downloading {
     border-color: var(--accent);
@@ -245,42 +312,49 @@
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  gap: 1rem;
+  gap: 0.75rem;
+  width: 100%;
 }
 
 .ys-card-meta {
   display: flex;
   align-items: flex-start;
-  gap: 1rem;
+  gap: 0.75rem;
   overflow: hidden;
+  min-width: 0; // Previne quebra de flex em links longos
+  flex: 1;
 }
 
 .ys-meta-icon {
   color: var(--accent);
   flex-shrink: 0;
-  margin-top: 0.25rem;
+  margin-top: 0.2rem;
 }
 
 .ys-meta-text {
   display: flex;
   flex-direction: column;
-  gap: 0.3rem;
+  gap: 0.25rem;
   overflow: hidden;
+  min-width: 0;
 }
 
 .ys-platform-label {
-  font-size: 1.1rem;
+  font-size: 1rem;
   font-weight: 700;
   color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .ys-url-preview {
-  font-size: 0.85rem;
+  font-size: 0.775rem;
   color: var(--text-muted);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  max-width: 650px;
+  max-width: 100%;
 }
 
 .ys-remove-btn {
@@ -288,11 +362,12 @@
   border: none;
   color: var(--text-muted);
   cursor: pointer;
-  padding: 0.5rem;
-  border-radius: 8px;
+  padding: 0.4rem;
+  border-radius: 6px;
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-shrink: 0;
   transition: all 0.2s;
 
   &:hover {
@@ -305,17 +380,25 @@
 .ys-card-settings-grid {
   display: flex;
   flex-direction: column;
-  gap: 1.25rem;
+  gap: 1.15rem;
   background: rgba(0, 0, 0, 0.2);
   border: 1px solid rgba(255, 255, 255, 0.06);
   border-radius: 10px;
-  padding: 1.25rem 1.4rem;
+  padding: 1.15rem;
+  box-sizing: border-box;
+  width: 100%;
+
+  @media (max-width: 600px) {
+    padding: 0.85rem;
+    gap: 0.85rem;
+  }
 }
 
 .ys-setting-group {
   display: flex;
   flex-direction: column;
-  gap: 0.65rem;
+  gap: 0.5rem;
+  width: 100%;
 }
 
 .ys-setting-label-row {
@@ -323,11 +406,12 @@
   align-items: center;
   justify-content: space-between;
   gap: 0.5rem;
+  flex-wrap: wrap;
 }
 
 .ys-setting-label {
-  font-size: 0.85rem;
-  font-weight: 600;
+  font-size: 0.8rem;
+  font-weight: 700;
   color: var(--text-secondary);
   text-transform: uppercase;
   letter-spacing: 0.04em;
@@ -337,34 +421,42 @@
   display: inline-flex;
   align-items: center;
   gap: 0.35rem;
-  font-size: 0.75rem;
+  font-size: 0.725rem;
   font-weight: 700;
   color: var(--accent);
   background: rgba(196, 169, 98, 0.15);
-  padding: 0.2rem 0.6rem;
+  padding: 0.2rem 0.5rem;
   border-radius: 999px;
   border: 1px solid rgba(196, 169, 98, 0.3);
 }
 
-.ys-format-pills, .ys-profile-selector {
+.ys-format-pills {
   display: flex;
-  gap: 0.75rem;
+  gap: 0.5rem;
   flex-wrap: wrap;
+
+  @media (max-width: 600px) {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.4rem;
+  }
 }
 
 .ys-format-pill {
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
-  padding: 0.6rem 1.1rem;
+  justify-content: center;
+  gap: 0.45rem;
+  padding: 0.55rem 0.95rem;
   border-radius: 8px;
   background: var(--card-bg);
   border: 1px solid var(--border);
   color: var(--text-secondary);
-  font-size: 0.85rem;
+  font-size: 0.825rem;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s ease;
+  min-height: 40px;
 
   &:hover {
     border-color: var(--accent);
@@ -377,28 +469,52 @@
     color: var(--accent);
     font-weight: 700;
   }
+
+  @media (max-width: 600px) {
+    padding: 0.5rem 0.4rem;
+    font-size: 0.775rem;
+    text-align: center;
+    span {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  }
+}
+
+.ys-profile-selector {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+
+  @media (max-width: 600px) {
+    flex-direction: column;
+    gap: 0.4rem;
+  }
 }
 
 .ys-profile-pill {
   display: inline-flex;
   align-items: center;
-  gap: 0.6rem;
-  padding: 0.6rem 1.1rem;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding: 0.55rem 0.95rem;
   border-radius: 8px;
   background: var(--card-bg);
   border: 1px solid var(--border);
   color: var(--text-secondary);
-  font-size: 0.85rem;
+  font-size: 0.825rem;
   font-weight: 500;
   cursor: pointer;
   transition: all 0.2s ease;
+  min-height: 40px;
 
   .ys-badge-tag {
-    font-size: 0.7rem;
+    font-size: 0.675rem;
     font-weight: 700;
     background: rgba(196, 169, 98, 0.25);
     color: var(--accent);
-    padding: 0.15rem 0.45rem;
+    padding: 0.15rem 0.4rem;
     border-radius: 4px;
     text-transform: uppercase;
   }
@@ -414,42 +530,48 @@
     color: var(--accent);
     font-weight: 700;
   }
+
+  @media (max-width: 600px) {
+    width: 100%;
+    padding: 0.6rem 0.75rem;
+    font-size: 0.8rem;
+  }
+}
+
+.ys-profile-warning, .ys-profile-info {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  padding: 0.65rem 0.85rem;
+  border-radius: 8px;
+  font-size: 0.8rem;
+  line-height: 1.4;
+  margin-top: 0.25rem;
+
+  svg {
+    flex-shrink: 0;
+    margin-top: 0.1rem;
+  }
 }
 
 .ys-profile-warning {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
   background: rgba(245, 158, 11, 0.12);
   border: 1px solid rgba(245, 158, 11, 0.3);
-  padding: 0.65rem 1rem;
-  border-radius: 8px;
   color: #F59E0B;
-  font-size: 0.825rem;
-  line-height: 1.4;
-  margin-top: 0.25rem;
 }
 
 .ys-profile-info {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
   background: rgba(59, 130, 246, 0.1);
   border: 1px solid rgba(59, 130, 246, 0.25);
-  padding: 0.65rem 1rem;
-  border-radius: 8px;
   color: #93C5FD;
-  font-size: 0.825rem;
-  line-height: 1.4;
-  margin-top: 0.25rem;
 }
 
 // Progress
 .ys-card-progress-bar {
   display: flex;
   flex-direction: column;
-  gap: 0.65rem;
-  padding: 0.75rem 0;
+  gap: 0.5rem;
+  padding: 0.5rem 0;
 }
 
 .ys-progress-track {
@@ -469,7 +591,7 @@
 .ys-progress-info {
   display: flex;
   justify-content: space-between;
-  font-size: 0.85rem;
+  font-size: 0.8rem;
   color: var(--text-secondary);
   font-weight: 500;
 }
@@ -480,20 +602,33 @@
   align-items: center;
   background: rgba(239, 68, 68, 0.12);
   border: 1px solid rgba(239, 68, 68, 0.3);
-  padding: 0.85rem 1.15rem;
+  padding: 0.75rem 1rem;
   border-radius: 8px;
   color: #EF4444;
-  font-size: 0.875rem;
+  font-size: 0.85rem;
   font-weight: 500;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+
+  @media (max-width: 600px) {
+    flex-direction: column;
+    align-items: stretch;
+    text-align: center;
+  }
 }
 
 .ys-retry-btn {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 0.4rem;
   padding: 0.4rem 0.85rem !important;
   font-size: 0.8rem !important;
   font-weight: 600;
+
+  @media (max-width: 600px) {
+    width: 100%;
+  }
 }
 
 .ys-card-success-banner {
@@ -502,30 +637,41 @@
   gap: 0.75rem;
   background: rgba(16, 185, 129, 0.12);
   border: 1px solid rgba(16, 185, 129, 0.3);
-  padding: 0.85rem 1.15rem;
+  padding: 0.85rem 1rem;
   border-radius: 8px;
   color: #10B981;
-  font-size: 0.9rem;
+  font-size: 0.875rem;
   font-weight: 600;
 }
 
 // Action Buttons
 .ys-card-actions {
   display: flex;
-  gap: 1.15rem;
+  gap: 0.85rem;
   flex-wrap: wrap;
   padding-top: 0.75rem;
   border-top: 1px solid rgba(255, 255, 255, 0.06);
+
+  @media (max-width: 680px) {
+    flex-direction: column;
+    gap: 0.65rem;
+  }
 }
 
 .ys-start-download-btn, .ys-make-sticker-btn {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 0.5rem;
-  font-size: 0.9rem !important;
-  padding: 0.75rem 1.5rem !important;
+  font-size: 0.875rem !important;
+  padding: 0.75rem 1.25rem !important;
   font-weight: 600 !important;
   border-radius: 8px !important;
+  min-height: 46px;
+
+  @media (max-width: 680px) {
+    width: 100% !important;
+  }
 }
 
 .ys-spin {

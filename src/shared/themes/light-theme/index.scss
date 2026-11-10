@@ -17,6 +17,17 @@ body[data-theme="light"] {
   --glass: #{$glass-light};
   --gradient-headline: #{$gradient-headline-light};
 
+  /* Unified tokens for tools and workspaces */
+  --card-bg: #{$cards-light};
+  --bg-surface: #{$bg-light-elev};
+  --bg-base: #FFFFFF;
+  --bg-hover: rgba(196, 169, 98, 0.1);
+  --text-primary: #{$headings-light};
+  --text-secondary: #{$text-light};
+  --accent: #{$primary};
+  --accent-bright: #{$primary-bright};
+  --header-height: 76px;
+
   /* Legacy & utility alias variables */
   --bg-color: #{$bg-light};
   --text-color: #{$headings-light};

@@ -18,6 +18,17 @@ body[data-theme="dark"] {
   --glass: #{$glass-dark};
   --gradient-headline: #{$gradient-headline-dark};
 
+  /* Unified tokens for tools and workspaces */
+  --card-bg: #{$cards-dark};
+  --bg-surface: #{$bg-dark-elev};
+  --bg-base: #0B0D12;
+  --bg-hover: rgba(196, 169, 98, 0.12);
+  --text-primary: #{$headings-dark};
+  --text-secondary: #{$text-dark};
+  --accent: #{$primary};
+  --accent-bright: #{$primary-bright};
+  --header-height: 76px;
+
   /* Legacy & utility alias variables */
   --bg-color: #{$bg-dark};
   --text-color: #{$headings-dark};

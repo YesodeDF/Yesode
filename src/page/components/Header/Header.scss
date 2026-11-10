@@ -141,20 +141,20 @@
   // Mobile panel
   .ys-mobile-panel {
     margin-top: 0.5rem;
-    background: var(--glass);
-    backdrop-filter: blur(20px) saturate(180%);
-    -webkit-backdrop-filter: blur(20px) saturate(180%);
-    border: 1px solid var(--border);
+    background: #14171F;
+    border: 1px solid var(--border-strong);
     border-radius: $radius-lg;
     overflow: hidden;
     max-height: 0;
     opacity: 0;
-    transition: max-height 0.3s ease, opacity 0.2s ease;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.7);
+    transition: max-height 0.35s ease, opacity 0.25s ease;
 
     &.is-open {
-      max-height: 400px;
+      max-height: 80vh;
       opacity: 1;
-      padding: 0.5rem;
+      padding: 0.75rem;
+      overflow-y: auto;
     }
 
     .ys-mobile-link {
@@ -168,11 +168,70 @@
       font-size: 0.95rem;
       font-weight: 500;
       color: var(--headings);
-      padding: 0.875rem 1rem;
+      padding: 0.75rem 1rem;
       border-radius: $radius-sm;
       transition: $transition-fast;
 
       &:hover { background: rgba(127, 127, 127, 0.08); }
+    }
+
+    .ys-mobile-tools-section {
+      margin-top: 0.5rem;
+      background: rgba(196, 169, 98, 0.06);
+      border: 1px solid rgba(196, 169, 98, 0.2);
+      border-radius: $radius-md;
+      padding: 0.5rem;
+    }
+
+    .ys-mobile-tools-header {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--accent) !important;
+      font-weight: 700 !important;
+      padding: 0.5rem 0.75rem !important;
+    }
+
+    .ys-mobile-tools-sublinks {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+      padding-left: 0.5rem;
+    }
+
+    .ys-mobile-sublink {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 0.75rem;
+      font-size: 0.85rem;
+      color: var(--text-secondary, #9CA3AF);
+      border-radius: $radius-sm;
+      transition: all 0.2s;
+
+      svg {
+        color: var(--accent);
+        flex-shrink: 0;
+      }
+
+      &:hover {
+        background: rgba(196, 169, 98, 0.12);
+        color: var(--text-primary, #ffffff);
+      }
+    }
+
+    .ys-mobile-cta-row {
+      margin-top: 0.75rem;
+      padding-top: 0.75rem;
+      border-top: 1px solid var(--border);
+    }
+
+    .ys-mobile-cta-btn {
+      width: 100%;
+      justify-content: center;
+      height: 44px;
+      font-size: 0.9rem !important;
+      font-weight: 700 !important;
     }
   }
 

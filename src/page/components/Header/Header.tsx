@@ -237,14 +237,46 @@ export const Header: React.FC = () => {
           </button>
         ))}
 
-        <Link
-          to={`/${lang}/ferramentas`}
-          className="ys-mobile-link"
-          style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: '#C4A962', fontWeight: 600 }}
-          onClick={() => setMobileOpen(false)}
-        >
-          <Wrench size={16} /> Ferramentas Gratuitas
-        </Link>
+        <div className="ys-mobile-tools-section">
+          <Link
+            to={`/${lang}/ferramentas`}
+            className="ys-mobile-link ys-mobile-tools-header"
+            onClick={() => setMobileOpen(false)}
+          >
+            <Wrench size={16} /> <span>Ferramentas Gratuitas</span>
+          </Link>
+          <div className="ys-mobile-tools-sublinks">
+            <Link
+              to={`/${lang}/ferramentas/gerador-qr-code-pix`}
+              className="ys-mobile-sublink"
+              onClick={() => setMobileOpen(false)}
+            >
+              <QrCode size={14} /> <span>Gerador QR Code e Pix</span>
+            </Link>
+            <Link
+              to={`/${lang}/ferramentas/baixar-videos-youtube-redes-sociais`}
+              className="ys-mobile-sublink"
+              onClick={() => setMobileOpen(false)}
+            >
+              <Video size={14} /> <span>Downloader de Mídia (YT & X)</span>
+            </Link>
+            <Link
+              to={`/${lang}/ferramentas/criar-figurinha-whatsapp`}
+              className="ys-mobile-sublink"
+              onClick={() => setMobileOpen(false)}
+            >
+              <Smile size={14} /> <span>Figurinhas WhatsApp</span>
+            </Link>
+          </div>
+        </div>
+
+        <div className="ys-mobile-cta-row">
+          <Button
+            label={t('header.cta')}
+            className="p-button-primary ys-mobile-cta-btn"
+            onClick={handleHeaderCta}
+          />
+        </div>
 
         {isAuthenticated && (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', marginTop: '1rem', paddingTop: '1rem', borderTop: '1px solid rgba(196, 169, 98, 0.3)' }}>

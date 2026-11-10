@@ -12,6 +12,12 @@ import { BotTrapValidator } from './src/modules/security/domain/services/BotTrap
 import { HtmlSanitizer } from './src/modules/security/infrastructure/HtmlSanitizer.ts';
 import { AdminAuthGuard } from './src/modules/security/infrastructure/AdminAuthGuard.ts';
 import { SecurityError, RateLimitExceededError, UnauthorizedError } from './src/modules/security/domain/exceptions/SecurityErrors.ts';
+import {
+  MediaCompatibilityProfile,
+  type DownloadFormat,
+  type DownloadProfile,
+} from './src/modules/media-downloader/domain/value-objects/MediaCompatibilityProfile.ts';
+import { MediaSourceUrl } from './src/modules/media-downloader/domain/value-objects/MediaSourceUrl.ts';
 
 dotenv.config();
 
@@ -153,18 +159,32 @@ app.post('/api/send-invite', async (req, res) => {
 // Endpoint /api/tools/media-download para stream direto
 app.get('/api/tools/media-download', async (req, res) => {
   const targetUrl = req.query.url as string;
-  const format = (req.query.format as string) || 'video';
+  const rawFormat = (req.query.format as string) || 'video_muxed';
+  const format: DownloadFormat = rawFormat === 'audio' ? 'audio_only' : rawFormat === 'gif' ? 'gif' : rawFormat === 'video' ? 'video_muxed' : (rawFormat as DownloadFormat);
+  const profile = ((req.query.profile as string) || 'compatibility') as DownloadProfile;
 
   if (!targetUrl) {
     return res.status(400).json({ error: 'Parâmetro url é obrigatório.' });
   }
 
-  const filename = `yesode-media-${Date.now()}.${format === 'audio' ? 'mp3' : format === 'gif' ? 'gif' : 'mp4'}`;
-  res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
-  res.setHeader('Content-Type', format === 'audio' ? 'audio/mpeg' : format === 'gif' ? 'image/gif' : 'video/mp4');
+  try {
+    const mediaSource = MediaSourceUrl.create(targetUrl);
+    const spec = MediaCompatibilityProfile.getSpec(format, profile);
 
-  const content = `Stream de mídia Yesode (${targetUrl}) - Formato: ${format}`;
-  return res.status(200).send(Buffer.from(content));
+    const filename = `yesode-${mediaSource.platform}-${Date.now()}.${spec.container}`;
+    const contentType = spec.container === 'mp3' ? 'audio/mpeg' : spec.container === 'gif' ? 'image/gif' : spec.container === 'mkv' ? 'video/x-matroska' : 'video/mp4';
+
+    res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
+    res.setHeader('Content-Type', contentType);
+    res.setHeader('X-Media-Profile', profile);
+    res.setHeader('X-Media-Video-Codec', spec.videoCodec);
+    res.setHeader('X-Media-Audio-Codec', spec.audioCodec);
+
+    const content = `Stream de mídia Yesode (${mediaSource.url})\nPlataforma: ${mediaSource.platformDisplayName}\nPerfil: ${profile} (${spec.description})\nContêiner: ${spec.container}`;
+    return res.status(200).send(Buffer.from(content));
+  } catch (error: any) {
+    return res.status(400).json({ error: error.message || 'Link inválido.' });
+  }
 });
 
 app.use(express.static(path.join(__dirname, 'dist')));

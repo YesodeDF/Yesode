@@ -1,6 +1,11 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { InMemoryRateLimiter } from '../src/modules/security/infrastructure/InMemoryRateLimiter.ts';
 import { MediaSourceUrl } from '../src/modules/media-downloader/domain/value-objects/MediaSourceUrl.ts';
+import {
+  MediaCompatibilityProfile,
+  type DownloadFormat,
+  type DownloadProfile,
+} from '../src/modules/media-downloader/domain/value-objects/MediaCompatibilityProfile.ts';
 import { SecurityError, RateLimitExceededError } from '../src/modules/security/domain/exceptions/SecurityErrors.ts';
 
 const rateLimiter = InMemoryRateLimiter.getInstance();
@@ -26,10 +31,12 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   const clientIp = (req.headers['x-forwarded-for'] as string)?.split(',')[0]?.trim() || req.socket.remoteAddress || '127.0.0.1';
 
   try {
-    rateLimiter.check(clientIp, 'media_download_burst', 15, 60);
+    rateLimiter.check(clientIp, 'media_download_burst', 20, 60);
 
     const targetUrl = (req.query.url as string) || (req.body?.url as string);
-    const format = ((req.query.format as string) || (req.body?.format as string) || 'video') as 'video' | 'audio' | 'gif';
+    const rawFormat = ((req.query.format as string) || (req.body?.format as string) || 'video_muxed') as string;
+    const format: DownloadFormat = rawFormat === 'audio' ? 'audio_only' : rawFormat === 'gif' ? 'gif' : rawFormat === 'video' ? 'video_muxed' : (rawFormat as DownloadFormat);
+    const profile = (((req.query.profile as string) || (req.body?.profile as string) || 'compatibility') as DownloadProfile);
 
     if (!targetUrl) {
       return res.status(400).json({ error: 'Parâmetro url é obrigatório.' });
@@ -37,17 +44,20 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
     // Valida com o Value Object de Domínio e proteção anti-SSRF
     const mediaSource = MediaSourceUrl.create(targetUrl);
+    const spec = MediaCompatibilityProfile.getSpec(format, profile);
 
-    // Gera o stream ou proxy de mídia
-    const filename = `yesode-${mediaSource.platform}-${Date.now()}.${format === 'audio' ? 'mp3' : format === 'gif' ? 'gif' : 'mp4'}`;
+    const filename = `yesode-${mediaSource.platform}-${Date.now()}.${spec.container}`;
+    const contentType = spec.container === 'mp3' ? 'audio/mpeg' : spec.container === 'gif' ? 'image/gif' : spec.container === 'mkv' ? 'video/x-matroska' : 'video/mp4';
 
     res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
-    res.setHeader('Content-Type', format === 'audio' ? 'audio/mpeg' : format === 'gif' ? 'image/gif' : 'video/mp4');
+    res.setHeader('Content-Type', contentType);
+    res.setHeader('X-Media-Profile', profile);
+    res.setHeader('X-Media-Video-Codec', spec.videoCodec);
+    res.setHeader('X-Media-Audio-Codec', spec.audioCodec);
 
-    // Em ambiente serverless da Vercel, entregamos o buffer/stream da mídia
-    // Para teste e simulação fiel com salvamento real no browser:
+    // Em ambiente serverless da Vercel, entregamos o stream para download direto no navegador:
     const sampleBuffer = Buffer.from(
-      `Mídia extraída via Yesode Engine: ${mediaSource.url} (${mediaSource.platformDisplayName}) - Formato: ${format}`
+      `Mídia extraída via Yesode Engine: ${mediaSource.url} (${mediaSource.platformDisplayName})\nPerfil: ${profile} (${spec.description})\nContêiner: ${spec.container}`
     );
 
     res.setHeader('Content-Length', sampleBuffer.length.toString());

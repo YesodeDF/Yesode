@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
-  
-  <!-- Home Pages Multilíngues -->
   <url>
     <loc>https://yesode.com/pt</loc>
+    <lastmod>2026-11-15</lastmod>
     <xhtml:link rel="alternate" hreflang="pt" href="https://yesode.com/pt"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://yesode.com/en"/>
     <xhtml:link rel="alternate" hreflang="es" href="https://yesode.com/es"/>
@@ -13,6 +12,7 @@
   </url>
   <url>
     <loc>https://yesode.com/en</loc>
+    <lastmod>2026-11-15</lastmod>
     <xhtml:link rel="alternate" hreflang="pt" href="https://yesode.com/pt"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://yesode.com/en"/>
     <xhtml:link rel="alternate" hreflang="es" href="https://yesode.com/es"/>
@@ -22,6 +22,7 @@
   </url>
   <url>
     <loc>https://yesode.com/es</loc>
+    <lastmod>2026-11-15</lastmod>
     <xhtml:link rel="alternate" hreflang="pt" href="https://yesode.com/pt"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://yesode.com/en"/>
     <xhtml:link rel="alternate" hreflang="es" href="https://yesode.com/es"/>
@@ -29,54 +30,184 @@
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
-
-  <!-- Hub Central de Ferramentas Gratuitas -->
   <url>
     <loc>https://yesode.com/pt/ferramentas</loc>
+    <lastmod>2026-11-15</lastmod>
     <xhtml:link rel="alternate" hreflang="pt" href="https://yesode.com/pt/ferramentas"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://yesode.com/en/tools"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://yesode.com/es/herramientas"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://yesode.com/pt/ferramentas"/>
     <changefreq>daily</changefreq>
     <priority>0.95</priority>
   </url>
   <url>
     <loc>https://yesode.com/en/tools</loc>
+    <lastmod>2026-11-15</lastmod>
     <xhtml:link rel="alternate" hreflang="pt" href="https://yesode.com/pt/ferramentas"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://yesode.com/en/tools"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://yesode.com/es/herramientas"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://yesode.com/pt/ferramentas"/>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
   </url>
-
-  <!-- Ferramenta 1: Gerador de QR Code e Cobrança Pix -->
+  <url>
+    <loc>https://yesode.com/es/herramientas</loc>
+    <lastmod>2026-11-15</lastmod>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://yesode.com/pt/ferramentas"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://yesode.com/en/tools"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://yesode.com/es/herramientas"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://yesode.com/pt/ferramentas"/>
+    <changefreq>daily</changefreq>
+    <priority>0.9</priority>
+  </url>
   <url>
     <loc>https://yesode.com/pt/ferramentas/gerador-qr-code-pix</loc>
+    <lastmod>2026-11-15</lastmod>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://yesode.com/pt/ferramentas/gerador-qr-code-pix"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://yesode.com/en/tools/qr-code-pix-generator"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://yesode.com/es/herramientas/generador-codigo-qr-pix"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://yesode.com/pt/ferramentas/gerador-qr-code-pix"/>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
-
-  <!-- Ferramenta 2: Downloader de Mídia (YouTube, X, Insta, Face) -->
+  <url>
+    <loc>https://yesode.com/en/tools/qr-code-pix-generator</loc>
+    <lastmod>2026-11-15</lastmod>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://yesode.com/pt/ferramentas/gerador-qr-code-pix"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://yesode.com/en/tools/qr-code-pix-generator"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://yesode.com/es/herramientas/generador-codigo-qr-pix"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://yesode.com/pt/ferramentas/gerador-qr-code-pix"/>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://yesode.com/es/herramientas/generador-codigo-qr-pix</loc>
+    <lastmod>2026-11-15</lastmod>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://yesode.com/pt/ferramentas/gerador-qr-code-pix"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://yesode.com/en/tools/qr-code-pix-generator"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://yesode.com/es/herramientas/generador-codigo-qr-pix"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://yesode.com/pt/ferramentas/gerador-qr-code-pix"/>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
   <url>
     <loc>https://yesode.com/pt/ferramentas/baixar-videos-youtube-redes-sociais</loc>
+    <lastmod>2026-11-15</lastmod>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://yesode.com/pt/ferramentas/baixar-videos-youtube-redes-sociais"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://yesode.com/en/tools/youtube-social-video-downloader"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://yesode.com/es/herramientas/descargar-videos-youtube-redes-sociales"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://yesode.com/pt/ferramentas/baixar-videos-youtube-redes-sociais"/>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
-
-  <!-- Ferramenta 3: Criador de Figurinhas WhatsApp -->
+  <url>
+    <loc>https://yesode.com/en/tools/youtube-social-video-downloader</loc>
+    <lastmod>2026-11-15</lastmod>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://yesode.com/pt/ferramentas/baixar-videos-youtube-redes-sociais"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://yesode.com/en/tools/youtube-social-video-downloader"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://yesode.com/es/herramientas/descargar-videos-youtube-redes-sociales"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://yesode.com/pt/ferramentas/baixar-videos-youtube-redes-sociais"/>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://yesode.com/es/herramientas/descargar-videos-youtube-redes-sociales</loc>
+    <lastmod>2026-11-15</lastmod>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://yesode.com/pt/ferramentas/baixar-videos-youtube-redes-sociais"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://yesode.com/en/tools/youtube-social-video-downloader"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://yesode.com/es/herramientas/descargar-videos-youtube-redes-sociales"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://yesode.com/pt/ferramentas/baixar-videos-youtube-redes-sociais"/>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
   <url>
     <loc>https://yesode.com/pt/ferramentas/criar-figurinha-whatsapp</loc>
+    <lastmod>2026-11-15</lastmod>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://yesode.com/pt/ferramentas/criar-figurinha-whatsapp"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://yesode.com/en/tools/whatsapp-sticker-maker"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://yesode.com/es/herramientas/crear-stickers-whatsapp"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://yesode.com/pt/ferramentas/criar-figurinha-whatsapp"/>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
-
-  <!-- Termos e Privacidade -->
+  <url>
+    <loc>https://yesode.com/en/tools/whatsapp-sticker-maker</loc>
+    <lastmod>2026-11-15</lastmod>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://yesode.com/pt/ferramentas/criar-figurinha-whatsapp"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://yesode.com/en/tools/whatsapp-sticker-maker"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://yesode.com/es/herramientas/crear-stickers-whatsapp"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://yesode.com/pt/ferramentas/criar-figurinha-whatsapp"/>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://yesode.com/es/herramientas/crear-stickers-whatsapp</loc>
+    <lastmod>2026-11-15</lastmod>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://yesode.com/pt/ferramentas/criar-figurinha-whatsapp"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://yesode.com/en/tools/whatsapp-sticker-maker"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://yesode.com/es/herramientas/crear-stickers-whatsapp"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://yesode.com/pt/ferramentas/criar-figurinha-whatsapp"/>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
   <url>
     <loc>https://yesode.com/pt/politica-de-privacidade</loc>
+    <lastmod>2026-11-15</lastmod>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://yesode.com/pt/politica-de-privacidade"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://yesode.com/en/privacy-policy"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://yesode.com/es/politica-de-privacidad"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://yesode.com/pt/politica-de-privacidade"/>
+    <changefreq>monthly</changefreq>
+    <priority>0.3</priority>
+  </url>
+  <url>
+    <loc>https://yesode.com/en/privacy-policy</loc>
+    <lastmod>2026-11-15</lastmod>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://yesode.com/pt/politica-de-privacidade"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://yesode.com/en/privacy-policy"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://yesode.com/es/politica-de-privacidad"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://yesode.com/pt/politica-de-privacidade"/>
+    <changefreq>monthly</changefreq>
+    <priority>0.3</priority>
+  </url>
+  <url>
+    <loc>https://yesode.com/es/politica-de-privacidad</loc>
+    <lastmod>2026-11-15</lastmod>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://yesode.com/pt/politica-de-privacidade"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://yesode.com/en/privacy-policy"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://yesode.com/es/politica-de-privacidad"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://yesode.com/pt/politica-de-privacidade"/>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
   </url>
   <url>
     <loc>https://yesode.com/pt/termos-de-uso</loc>
+    <lastmod>2026-11-15</lastmod>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://yesode.com/pt/termos-de-uso"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://yesode.com/en/terms-of-use"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://yesode.com/es/terminos-de-uso"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://yesode.com/pt/termos-de-uso"/>
+    <changefreq>monthly</changefreq>
+    <priority>0.3</priority>
+  </url>
+  <url>
+    <loc>https://yesode.com/en/terms-of-use</loc>
+    <lastmod>2026-11-15</lastmod>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://yesode.com/pt/termos-de-uso"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://yesode.com/en/terms-of-use"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://yesode.com/es/terminos-de-uso"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://yesode.com/pt/termos-de-uso"/>
+    <changefreq>monthly</changefreq>
+    <priority>0.3</priority>
+  </url>
+  <url>
+    <loc>https://yesode.com/es/terminos-de-uso</loc>
+    <lastmod>2026-11-15</lastmod>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://yesode.com/pt/termos-de-uso"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://yesode.com/en/terms-of-use"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://yesode.com/es/terminos-de-uso"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://yesode.com/pt/termos-de-uso"/>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
   </url>
 </urlset>
-

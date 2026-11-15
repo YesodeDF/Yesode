@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Button } from 'primereact/button';
 import { CheckCircle2, ExternalLink, Sparkles, Layers, ArrowUpRight, Wrench, QrCode, Video, Smile } from 'lucide-react';
 import { useNavigate, useParams } from 'react-router-dom';
+import { getToolPath, normalizeLang } from '@/modules/landing/domain/ToolRoutes.ts';
 import { trackEvent } from '@shared/utils/analytics';
 import './ProductsShowcase.scss';
 
@@ -112,39 +113,39 @@ export const ProductsShowcase: React.FC = () => {
               <div className="ys-product-header">
                 <div className="ys-product-badge" style={{ background: 'rgba(196, 169, 98, 0.15)', color: '#C4A962' }}>
                   <Wrench size={13} strokeWidth={2.5} />
-                  100% Gratuito e Sem Anúncios
+                  {t('products.free_badge')}
                 </div>
               </div>
 
-              <h3 className="ys-product-title">Yesode Free Tools</h3>
-              <div className="ys-product-tagline">Utilitários Essenciais de Engenharia para o Dia a Dia</div>
+              <h3 className="ys-product-title">{t('products.free_title')}</h3>
+              <div className="ys-product-tagline">{t('products.free_tagline')}</div>
               <p className="ys-product-desc">
-                Disponibilizamos gratuitamente ferramentas com a mesma robustez arquitetural dos nossos softwares corporativos:
+                {t('products.free_desc')}
               </p>
 
               <ul className="ys-product-features">
                 <li>
                   <QrCode size={16} strokeWidth={2.25} />
-                  <span>Gerador QR Code e Cobrança Pix Oficial EMV®</span>
+                  <span>{t('products.free_feat_1')}</span>
                 </li>
                 <li>
                   <Video size={16} strokeWidth={2.25} />
-                  <span>Downloader de Vídeos/Áudios (YouTube, X, Insta, Face)</span>
+                  <span>{t('products.free_feat_2')}</span>
                 </li>
                 <li>
                   <Smile size={16} strokeWidth={2.25} />
-                  <span>Criador de Figurinhas WhatsApp (WebP 512x512)</span>
+                  <span>{t('products.free_feat_3')}</span>
                 </li>
               </ul>
             </div>
 
             <div className="ys-product-footer">
-              <span className="ys-product-stack">Client-Side · TypeScript · Zero Rastreamento</span>
+              <span className="ys-product-stack">{t('products.free_stack')}</span>
               <Button
                 className="p-button-primary"
-                onClick={() => navigate(`/${lang}/ferramentas`)}
+                onClick={() => navigate(getToolPath(normalizeLang(lang)))}
               >
-                <span>Abrir Ferramentas Gratuitas</span>
+                <span>{t('products.free_cta')}</span>
                 <ArrowUpRight size={15} strokeWidth={2.25} />
               </Button>
             </div>

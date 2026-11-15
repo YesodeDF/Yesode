@@ -1,39 +1,50 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
-import { QrCode, Video, Smile, ShieldCheck, Sparkles, Terminal } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
+import { QrCode, Video, Smile, ShieldCheck, Sparkles, Terminal, HelpCircle, ListChecks } from 'lucide-react';
 import { QrGeneratorWorkspace } from '@/modules/qr-generator/presentation/components/QrGeneratorWorkspace.tsx';
 import { MediaDownloaderWorkspace } from '@/modules/media-downloader/presentation/components/MediaDownloaderWorkspace.tsx';
 import { WhatsAppStickerWorkspace } from '@/modules/whatsapp-sticker/presentation/components/WhatsAppStickerWorkspace.tsx';
 import { SeoHead } from '@/shared/components/SeoHead.tsx';
+import {
+  BASE_URL,
+  getTabFromPathname,
+  getToolAlternates,
+  getToolPath,
+  normalizeLang,
+  type ToolTab,
+} from '@/modules/landing/domain/ToolRoutes.ts';
 import './FreeToolsPage.scss';
 
-export type ToolTab = 'qr' | 'media' | 'sticker';
+export type { ToolTab };
+
+interface GuideStep {
+  name: string;
+  text: string;
+}
+
+interface GuideFaq {
+  q: string;
+  a: string;
+}
 
 export const FreeToolsPage: React.FC = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const { lang = 'pt' } = useParams<{ lang: string }>();
+  const { lang: rawLang } = useParams<{ lang: string }>();
+  const lang = normalizeLang(rawLang);
+  const { t } = useTranslation();
 
-  // Sincroniza a aba ativa com a URL semântica para indexação no Google
-  const getTabFromPath = (): ToolTab => {
-    if (location.pathname.includes('gerador-qr-code-pix')) return 'qr';
-    if (location.pathname.includes('baixar-videos')) return 'media';
-    if (location.pathname.includes('criar-figurinha-whatsapp')) return 'sticker';
-    return 'qr';
-  };
-
-  const [activeTab, setActiveTab] = useState<ToolTab>(getTabFromPath);
+  const [activeTab, setActiveTab] = useState<ToolTab>(() => getTabFromPathname(location.pathname));
   const [prefilledVideoForSticker, setPrefilledVideoForSticker] = useState<string>('');
 
   useEffect(() => {
-    setActiveTab(getTabFromPath());
+    setActiveTab(getTabFromPathname(location.pathname));
   }, [location.pathname]);
 
   const handleTabChange = (tab: ToolTab) => {
     setActiveTab(tab);
-    if (tab === 'qr') navigate(`/${lang}/ferramentas/gerador-qr-code-pix`);
-    else if (tab === 'media') navigate(`/${lang}/ferramentas/baixar-videos-youtube-redes-sociais`);
-    else if (tab === 'sticker') navigate(`/${lang}/ferramentas/criar-figurinha-whatsapp`);
+    navigate(getToolPath(lang, tab));
   };
 
   const handleSendToSticker = (videoUrl: string) => {
@@ -41,108 +52,143 @@ export const FreeToolsPage: React.FC = () => {
     handleTabChange('sticker');
   };
 
-  // SEO & JSON-LD Dinâmico para busca número 1 no Google e citação por LLMs
-  const seoData = {
-    qr: {
-      title: 'Gerador de QR Code Pix e Links Grátis — Oficial EMV® e CRC16 | Yesode',
-      description: 'Crie QR Codes Pix estáticos oficiais com validação CRC16, decodificador Pix Copia e Cola e QR Codes para links. 100% grátis, sem cadastro e sem anúncios.',
-      keywords: ['gerador de qrcode pix', 'pix copia e cola', 'qr code pix emv', 'gerar qr code gratis', 'criar qrcode sem anuncio', 'qr code png alta resolucao'],
-      canonical: `https://yesode.com/${lang}/ferramentas/gerador-qr-code-pix`,
-      schema: {
-        '@type': 'WebApplication',
-        name: 'Yesode Gerador de QR Code e Cobrança Pix Oficial',
-        applicationCategory: 'FinanceApplication',
-        operatingSystem: 'All',
-        offers: {
-          '@type': 'Offer',
-          price: '0',
-          priceCurrency: 'BRL',
-        },
-        description: 'Gerador normativo de pagamentos Pix padrão Banco Central e gerador de QR Code de links.',
+  const localeMap: Record<string, string> = {
+    pt: 'pt_BR',
+    en: 'en_US',
+    es: 'es_ES',
+  };
+
+  const currencyMap: Record<string, string> = {
+    pt: 'BRL',
+    en: 'USD',
+    es: 'USD',
+  };
+
+  const ogImageMap: Record<ToolTab, string> = {
+    qr: `${BASE_URL}/og-qr.png`,
+    media: `${BASE_URL}/og-media.png`,
+    sticker: `${BASE_URL}/og-sticker.png`,
+  };
+
+  const steps = t(`tools.guides.${activeTab}.steps`, { returnObjects: true }) as GuideStep[];
+  const faqs = t(`tools.guides.${activeTab}.faqs`, { returnObjects: true }) as GuideFaq[];
+
+  const canonical = `${BASE_URL}${getToolPath(lang, activeTab)}`;
+  const seoTitle = t(`tools.seo.${activeTab}_title`);
+  const seoDesc = t(`tools.seo.${activeTab}_desc`);
+  const seoKeywords = t(`tools.seo.${activeTab}_keywords`, { returnObjects: true }) as string[];
+
+  const jsonLd: Record<string, any>[] = [
+    {
+      '@type': 'WebApplication',
+      name: t(`tools.seo.${activeTab}_schema_name`),
+      url: canonical,
+      inLanguage: lang,
+      applicationCategory: activeTab === 'qr' ? 'FinanceApplication' : 'MultimediaApplication',
+      operatingSystem: 'All',
+      offers: {
+        '@type': 'Offer',
+        price: '0',
+        priceCurrency: currencyMap[lang],
       },
+      description: t(`tools.seo.${activeTab}_schema_desc`),
     },
-    media: {
-      title: 'Baixar Vídeos e Áudios do YouTube, X, Instagram e Facebook Grátis | Yesode',
-      description: 'Baixe vídeos em até 4K e áudios MP3 320kbps do YouTube, X/Twitter, Instagram Reels e Facebook sem anúncios, sem vírus e com alta velocidade.',
-      keywords: ['baixar video do youtube', 'yt downloader gratis', 'baixar video do twitter x', 'download reels instagram', 'baixar video facebook', 'youtube mp3 320k'],
-      canonical: `https://yesode.com/${lang}/ferramentas/baixar-videos-youtube-redes-sociais`,
-      schema: {
-        '@type': 'WebApplication',
-        name: 'Yesode Downloader de Mídias e Redes Sociais',
-        applicationCategory: 'MultimediaApplication',
-        operatingSystem: 'All',
-        offers: {
-          '@type': 'Offer',
-          price: '0',
-          priceCurrency: 'BRL',
+    {
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        {
+          '@type': 'ListItem',
+          position: 1,
+          name: t('tools.seo.breadcrumb_home'),
+          item: `${BASE_URL}/${lang}`,
         },
-        description: 'Extrator de vídeos em alta resolução e áudios para YouTube, X, Instagram e Facebook.',
-      },
-    },
-    sticker: {
-      title: 'Criar Figurinhas WhatsApp de Vídeo e GIF Online (WebP 512x512) | Yesode',
-      description: 'Transforme trechos de vídeos e GIFs em figurinhas animadas para WhatsApp no padrão oficial 512x512 WebP e limite de 500KB. Rápido e gratuito.',
-      keywords: ['criar figurinha whatsapp', 'video para sticker whatsapp', 'gif para figurinha animada', 'sticker 512x512 webp', 'fazer figurinha online'],
-      canonical: `https://yesode.com/${lang}/ferramentas/criar-figurinha-whatsapp`,
-      schema: {
-        '@type': 'WebApplication',
-        name: 'Yesode WhatsApp Sticker Studio',
-        applicationCategory: 'MultimediaApplication',
-        operatingSystem: 'All',
-        offers: {
-          '@type': 'Offer',
-          price: '0',
-          priceCurrency: 'BRL',
+        {
+          '@type': 'ListItem',
+          position: 2,
+          name: t('tools.seo.breadcrumb_tools'),
+          item: `${BASE_URL}${getToolPath(lang)}`,
         },
-        description: 'Conversor de vídeos e GIFs para figurinhas animadas do WhatsApp em formato WebP 512x512.',
-      },
+        {
+          '@type': 'ListItem',
+          position: 3,
+          name: t(`tools.tabs.${activeTab}_name`),
+          item: canonical,
+        },
+      ],
     },
-  }[activeTab];
+    {
+      '@type': 'Organization',
+      name: 'Yesode',
+      url: BASE_URL,
+      logo: `${BASE_URL}/logo.svg`,
+      sameAs: ['https://github.com/YesodeDF', 'https://www.linkedin.com/company/yesode'],
+    },
+  ];
+
+  if (Array.isArray(steps) && steps.length > 0) {
+    jsonLd.push({
+      '@type': 'HowTo',
+      name: seoTitle,
+      description: seoDesc,
+      inLanguage: lang,
+      step: steps.map((s, idx) => ({
+        '@type': 'HowToStep',
+        position: idx + 1,
+        name: s.name,
+        text: s.text,
+      })),
+    });
+  }
+
+  if (Array.isArray(faqs) && faqs.length > 0) {
+    jsonLd.push({
+      '@type': 'FAQPage',
+      inLanguage: lang,
+      mainEntity: faqs.map((item) => ({
+        '@type': 'Question',
+        name: item.q,
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: item.a,
+        },
+      })),
+    });
+  }
 
   return (
     <div className="ys-free-tools-page">
       <SeoHead
-        title={seoData.title}
-        description={seoData.description}
-        canonicalUrl={seoData.canonical}
-        keywords={seoData.keywords}
-        jsonLd={[
-          seoData.schema,
-          {
-            '@type': 'Organization',
-            name: 'Yesode',
-            url: 'https://yesode.com',
-            logo: 'https://yesode.com/logo.svg',
-            sameAs: ['https://github.com/YesodeDF', 'https://www.linkedin.com/company/yesode'],
-          },
-        ]}
+        title={seoTitle}
+        description={seoDesc}
+        canonicalUrl={canonical}
+        keywords={Array.isArray(seoKeywords) ? seoKeywords : []}
+        ogImage={ogImageMap[activeTab]}
+        locale={localeMap[lang]}
+        lang={lang}
+        alternates={getToolAlternates(activeTab)}
+        jsonLd={jsonLd}
       />
 
       <div className="container">
-        {/* Page Hero */}
         <div className="ys-tools-hero">
           <div className="ys-tools-badge">
             <Sparkles size={14} />
-            <span>Yesode Labs — Ferramentas Gratuitas</span>
+            <span>{t('tools.hero_badge')}</span>
           </div>
           <h1 className="ys-tools-headline">
-            Engenharia de Alta Performance. <br />
-            <span className="gradient-text-gold">100% Grátis e Sem Anúncios.</span>
+            {t('tools.hero_title_1')} <br />
+            <span className="gradient-text-gold">{t('tools.hero_title_2')}</span>
           </h1>
-          <p className="ys-tools-description">
-            Utilitários essenciais construídos com a mesma arquitetura crítica que entregamos para nossos clientes corporativos.
-            Zero pop-ups, zero cadastros obrigatórios e total privacidade dos seus dados.
-          </p>
+          <p className="ys-tools-description">{t('tools.hero_desc')}</p>
 
           <div className="ys-tools-banner-desktop">
             <Terminal size={16} />
             <span>
-              <strong>Em Breve:</strong> Aplicativos Desktop nativos (Windows, macOS e Linux) para download direto e bypass offline.
+              <strong>{t('tools.desktop_banner_strong')}</strong> {t('tools.desktop_banner_text')}
             </span>
           </div>
         </div>
 
-        {/* Tools Navigator */}
         <div className="ys-tools-nav-bar">
           <button
             type="button"
@@ -151,8 +197,8 @@ export const FreeToolsPage: React.FC = () => {
           >
             <QrCode size={18} />
             <div className="ys-tool-tab-info">
-              <span className="ys-tool-tab-name">Gerador QR Code e Pix</span>
-              <span className="ys-tool-tab-sub">EMV®, CRC16 e Links</span>
+              <span className="ys-tool-tab-name">{t('tools.tabs.qr_name')}</span>
+              <span className="ys-tool-tab-sub">{t('tools.tabs.qr_sub')}</span>
             </div>
           </button>
 
@@ -163,8 +209,8 @@ export const FreeToolsPage: React.FC = () => {
           >
             <Video size={18} />
             <div className="ys-tool-tab-info">
-              <span className="ys-tool-tab-name">Downloader de Mídia</span>
-              <span className="ys-tool-tab-sub">YouTube, X, Insta e Facebook</span>
+              <span className="ys-tool-tab-name">{t('tools.tabs.media_name')}</span>
+              <span className="ys-tool-tab-sub">{t('tools.tabs.media_sub')}</span>
             </div>
           </button>
 
@@ -175,13 +221,12 @@ export const FreeToolsPage: React.FC = () => {
           >
             <Smile size={18} />
             <div className="ys-tool-tab-info">
-              <span className="ys-tool-tab-name">Figurinhas WhatsApp</span>
-              <span className="ys-tool-tab-sub">Vídeos/GIFs para WebP 512x512</span>
+              <span className="ys-tool-tab-name">{t('tools.tabs.sticker_name')}</span>
+              <span className="ys-tool-tab-sub">{t('tools.tabs.sticker_sub')}</span>
             </div>
           </button>
         </div>
 
-        {/* Active Workspace */}
         <div className="ys-tool-workspace-container">
           {activeTab === 'qr' && <QrGeneratorWorkspace />}
           {activeTab === 'media' && (
@@ -192,20 +237,53 @@ export const FreeToolsPage: React.FC = () => {
           )}
         </div>
 
-        {/* Security and Architecture Guarantees */}
+        {Array.isArray(steps) && Array.isArray(faqs) && (
+          <section className="ys-tools-seo-guides" aria-label={t('tools.guides.howto_title')}>
+            <div className="ys-guide-panel">
+              <h2 className="ys-guide-heading">
+                <ListChecks size={18} />
+                <span>{t('tools.guides.howto_title')}</span>
+              </h2>
+              <ol className="ys-howto-list">
+                {steps.map((step, i) => (
+                  <li key={i} className="ys-howto-item">
+                    <strong>{step.name}</strong>
+                    <p>{step.text}</p>
+                  </li>
+                ))}
+              </ol>
+            </div>
+
+            <div className="ys-guide-panel">
+              <h2 className="ys-guide-heading">
+                <HelpCircle size={18} />
+                <span>{t('tools.guides.faq_title')}</span>
+              </h2>
+              <div className="ys-faq-list">
+                {faqs.map((item, i) => (
+                  <details key={i} className="ys-faq-item">
+                    <summary>{item.q}</summary>
+                    <p>{item.a}</p>
+                  </details>
+                ))}
+              </div>
+            </div>
+          </section>
+        )}
+
         <div className="ys-tools-trust-section">
           <div className="ys-trust-item">
             <ShieldCheck size={20} className="ys-trust-icon" />
             <div>
-              <h5>Privacidade Absoluta</h5>
-              <p>Processamento local direto na memória do seu navegador. Não guardamos senhas, links ou dados bancários.</p>
+              <h5>{t('tools.trust.privacy_title')}</h5>
+              <p>{t('tools.trust.privacy_desc')}</p>
             </div>
           </div>
           <div className="ys-trust-item">
             <Sparkles size={20} className="ys-trust-icon" />
             <div>
-              <h5>Sem Monetização Oculta</h5>
-              <p>Sem banners do Google Ads, sem rastreadores abusivos e sem tempo de espera artificial.</p>
+              <h5>{t('tools.trust.no_ads_title')}</h5>
+              <p>{t('tools.trust.no_ads_desc')}</p>
             </div>
           </div>
         </div>
@@ -213,4 +291,3 @@ export const FreeToolsPage: React.FC = () => {
     </div>
   );
 };
-

@@ -3,12 +3,12 @@ export type DownloadProfile = 'compatibility' | 'whatsapp_4k' | 'studio_max';
 
 export interface ProfileOption {
   id: DownloadProfile;
-  name: string;
-  badge: string;
+  nameKey: string;
+  badgeKey: string;
   isRecommended: boolean;
-  description: string;
+  descriptionKey: string;
   container: 'mp4' | 'mkv';
-  warning?: string;
+  warningKey?: string;
 }
 
 export interface CodecSpec {
@@ -26,34 +26,33 @@ export class MediaCompatibilityProfile {
   public static readonly AVAILABLE_PROFILES: ProfileOption[] = [
     {
       id: 'compatibility',
-      name: 'Máxima Compatibilidade (WhatsApp / Universal)',
-      badge: 'Recomendado',
+      nameKey: 'tools.media.profiles.compatibility.name',
+      badgeKey: 'tools.media.profiles.compatibility.badge',
       isRecommended: true,
       container: 'mp4',
-      description: 'H.264 + AAC em MP4 estrito. Roda liso e nativo em qualquer celular Android, iPhone, WhatsApp Web e TVs sem travamentos.'
+      descriptionKey: 'tools.media.profiles.compatibility.description',
     },
     {
       id: 'whatsapp_4k',
-      name: 'WhatsApp 4K (Documento MP4)',
-      badge: 'Alta Definição',
+      nameKey: 'tools.media.profiles.whatsapp_4k.name',
+      badgeKey: 'tools.media.profiles.whatsapp_4k.badge',
       isRecommended: false,
       container: 'mp4',
-      description: 'Vídeo em altíssima resolução com áudio estéreo AAC (512k) transcodificado para compatibilidade.'
+      descriptionKey: 'tools.media.profiles.whatsapp_4k.description',
     },
     {
       id: 'studio_max',
-      name: 'Máxima Qualidade (Estúdio / MKV)',
-      badge: 'Profissional',
+      nameKey: 'tools.media.profiles.studio_max.name',
+      badgeKey: 'tools.media.profiles.studio_max.badge',
       isRecommended: false,
       container: 'mkv',
-      description: 'Fluxo bruto de estúdio (AV1/VP9 + Opus). Ideal para edição no Premiere e DaVinci Resolve.',
-      warning: 'Atenção: codecs de estúdio não rodam no WhatsApp e podem travar em celulares comuns.'
-    }
+      descriptionKey: 'tools.media.profiles.studio_max.description',
+      warningKey: 'tools.media.profiles.studio_max.warning',
+    },
   ];
 
   /**
-   * Retorna os parâmetros exatos do pipeline com base no formato e perfil selecionado.
-   * Sempre prioriza Máxima Compatibilidade (H.264 + AAC) como padrão.
+   * Returns pipeline codec and container parameters for the requested format and profile.
    */
   public static getSpec(format: DownloadFormat, profile: DownloadProfile = 'compatibility'): CodecSpec {
     if (format === 'audio_only') {
@@ -63,9 +62,9 @@ export class MediaCompatibilityProfile {
         container: 'mp3',
         formatSort: ['acodec:mp3', 'abr:320'],
         postprocessorArgs: {
-          merger: ['-c:a', 'libmp3lame', '-b:a', '320k']
+          merger: ['-c:a', 'libmp3lame', '-b:a', '320k'],
         },
-        description: 'Áudio MP3 320kbps Universal (Compatível com 100% dos reprodutores de som).'
+        description: 'Universal MP3 320kbps audio.',
       };
     }
 
@@ -76,9 +75,9 @@ export class MediaCompatibilityProfile {
         container: 'gif',
         formatSort: ['vcodec:h264'],
         postprocessorArgs: {
-          merger: ['-vf', 'fps=15,scale=480:-1:flags=lanczos,split[s0][s1];[s0]palettegen[p];[s1][p]paletteuse']
+          merger: ['-vf', 'fps=15,scale=480:-1:flags=lanczos,split[s0][s1];[s0]palettegen[p];[s1][p]paletteuse'],
         },
-        description: 'GIF animado leve com paleta otimizada para compartilhamento.'
+        description: 'Optimized animated GIF.',
       };
     }
 
@@ -89,13 +88,12 @@ export class MediaCompatibilityProfile {
         container: 'mp4',
         formatSort: profile === 'compatibility' ? ['vcodec:h264'] : ['bestvideo'],
         postprocessorArgs: {
-          merger: ['-an', '-c:v', 'copy']
+          merger: ['-an', '-c:v', 'copy'],
         },
-        description: 'Vídeo MP4 sem áudio (Mudo).'
+        description: 'Muted MP4 video stream.',
       };
     }
 
-    // format === 'video_muxed'
     if (profile === 'studio_max') {
       return {
         videoCodec: 'best',
@@ -103,7 +101,7 @@ export class MediaCompatibilityProfile {
         container: 'mkv',
         formatSort: ['bestvideo+bestaudio/best'],
         postprocessorArgs: {},
-        description: 'Arquivo MKV bruto com melhor resolução e áudio original de estúdio.'
+        description: 'Raw studio MKV stream.',
       };
     }
 
@@ -114,23 +112,21 @@ export class MediaCompatibilityProfile {
         container: 'mp4',
         formatSort: ['bestvideo+bestaudio/best'],
         postprocessorArgs: {
-          merger: ['-c:a', 'aac', '-b:a', '512k', '-movflags', '+faststart']
+          merger: ['-c:a', 'aac', '-b:a', '512k', '-movflags', '+faststart'],
         },
-        description: 'MP4 4K com áudio AAC compatível para envio como documento no WhatsApp.'
+        description: '4K MP4 with AAC audio.',
       };
     }
 
-    // Default: 'compatibility'
     return {
       videoCodec: 'h264',
       audioCodec: 'aac',
       container: 'mp4',
       formatSort: ['vcodec:h264', 'acodec:m4a', 'res:1080'],
       postprocessorArgs: {
-        merger: ['-c:v', 'copy', '-c:a', 'aac', '-b:a', '192k', '-movflags', '+faststart']
+        merger: ['-c:v', 'copy', '-c:a', 'aac', '-b:a', '192k', '-movflags', '+faststart'],
       },
-      description: 'MP4 Universal H.264 + AAC (+faststart). Roda em qualquer celular, TV e WhatsApp sem travar.'
+      description: 'Universal MP4 H.264 + AAC (+faststart).',
     };
   }
 }
-

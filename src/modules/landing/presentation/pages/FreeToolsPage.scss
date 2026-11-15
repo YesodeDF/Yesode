@@ -218,3 +218,87 @@
   flex-shrink: 0;
   margin-top: 0.2rem;
 }
+
+.ys-tools-seo-guides {
+  margin-top: 2.5rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.ys-guide-panel {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 1.5rem;
+}
+
+.ys-guide-heading {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0 0 1rem;
+
+  svg {
+    color: var(--accent);
+    flex-shrink: 0;
+  }
+}
+
+.ys-howto-list {
+  margin: 0;
+  padding-left: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.ys-howto-item {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  line-height: 1.5;
+
+  strong {
+    display: block;
+    color: var(--text-primary);
+    margin-bottom: 0.2rem;
+  }
+
+  p {
+    margin: 0;
+  }
+}
+
+.ys-faq-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.ys-faq-item {
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 0.75rem 1rem;
+  background: var(--bg-surface);
+
+  summary {
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: var(--text-primary);
+  }
+
+  p {
+    margin: 0.55rem 0 0;
+    font-size: 0.86rem;
+    line-height: 1.5;
+    color: var(--text-secondary);
+  }
+}

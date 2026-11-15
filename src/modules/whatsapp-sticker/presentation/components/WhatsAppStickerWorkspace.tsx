@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Button } from 'primereact/button';
 import { Toast } from 'primereact/toast';
 import {
@@ -14,7 +15,7 @@ import {
   ShieldCheck,
   Camera,
   CheckCircle2,
-  Info
+  Info,
 } from 'lucide-react';
 import { StickerSpec, type CropMode } from '../../domain/value-objects/StickerSpec.ts';
 import { WhatsAppStickerExifService } from '../../infrastructure/WhatsAppStickerExifService.ts';
@@ -27,21 +28,20 @@ export interface WhatsAppStickerWorkspaceProps {
 export const WhatsAppStickerWorkspace: React.FC<WhatsAppStickerWorkspaceProps> = ({
   initialVideoUrl,
 }) => {
+  const { t } = useTranslation();
   const [videoFile, setVideoFile] = useState<File | null>(null);
   const [videoSrc, setVideoSrc] = useState<string>(initialVideoUrl || '');
   const [startTime, setStartTime] = useState(0);
   const [endTime, setEndTime] = useState(3);
   const [videoDuration, setVideoDuration] = useState(0);
 
-  // Recorte (Crop) State
   const [cropMode, setCropMode] = useState<CropMode>('custom_crop');
   const [zoom, setZoom] = useState(1.0);
-  const [positionX, setPositionX] = useState(50); // 0 a 100%
-  const [positionY, setPositionY] = useState(50); // 0 a 100%
-  const [cropSize, setCropSize] = useState(100); // 30 a 100%
+  const [positionX, setPositionX] = useState(50);
+  const [positionY, setPositionY] = useState(50);
+  const [cropSize, setCropSize] = useState(100);
 
-  // Metadados do Pacote WhatsApp (EXIF)
-  const [packName, setPackName] = useState('Yesode Figurinhas');
+  const [packName, setPackName] = useState(() => t('tools.sticker.default_pack_name'));
   const [authorName, setAuthorName] = useState('Yesode Studio');
 
   const [processing, setProcessing] = useState(false);
@@ -52,7 +52,6 @@ export const WhatsAppStickerWorkspace: React.FC<WhatsAppStickerWorkspaceProps> =
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
-  // Auto-carrega vídeo quando enviado da aba de download
   useEffect(() => {
     if (initialVideoUrl) {
       setVideoSrc(initialVideoUrl);
@@ -61,7 +60,14 @@ export const WhatsAppStickerWorkspace: React.FC<WhatsAppStickerWorkspaceProps> =
     }
   }, [initialVideoUrl]);
 
-  // Atualiza live preview sempre que o usuário mexe no crop ou no vídeo
+  const resolveErrorMessage = (err: any, fallbackKey: string): string => {
+    if (err?.code) {
+      const translated = t(`tools.errors.${err.code}`, { defaultValue: '' });
+      if (translated) return translated;
+    }
+    return err?.message || t(fallbackKey);
+  };
+
   const updatePreview = useCallback(() => {
     const video = videoRef.current;
     const canvas = canvasRef.current;
@@ -100,12 +106,11 @@ export const WhatsAppStickerWorkspace: React.FC<WhatsAppStickerWorkspaceProps> =
 
       const previewDataUrl = canvas.toDataURL('image/webp', 0.85);
       setLivePreviewUrl(previewDataUrl);
-    } catch (e) {
-      // Ignora erros temporários de seek
+    } catch {
+      // Ignore transient seek errors while scrubbing
     }
   }, [startTime, endTime, cropMode, zoom, positionX, positionY, cropSize]);
 
-  // Dispara atualização de preview quando sliders mudam
   useEffect(() => {
     updatePreview();
   }, [updatePreview]);
@@ -116,8 +121,8 @@ export const WhatsAppStickerWorkspace: React.FC<WhatsAppStickerWorkspaceProps> =
       if (!file.type.startsWith('video/') && !file.type.includes('gif')) {
         toast.current?.show({
           severity: 'warn',
-          summary: 'Formato Inválido',
-          detail: 'Por favor, envie um arquivo de vídeo (MP4/WebM) ou GIF.',
+          summary: t('tools.sticker.toast_invalid_summary'),
+          detail: t('tools.sticker.toast_invalid_detail'),
           life: 3000,
         });
         return;
@@ -147,13 +152,13 @@ export const WhatsAppStickerWorkspace: React.FC<WhatsAppStickerWorkspaceProps> =
       const video = videoRef.current;
       const canvas = canvasRef.current;
       if (!video || !canvas) {
-        throw new Error('Elemento de mídia não inicializado.');
+        throw new Error('Media element not initialized.');
       }
 
       canvas.width = StickerSpec.TARGET_DIMENSION;
       canvas.height = StickerSpec.TARGET_DIMENSION;
       const ctx = canvas.getContext('2d');
-      if (!ctx) throw new Error('Não foi possível obter contexto 2D do Canvas.');
+      if (!ctx) throw new Error('Unable to acquire 2D Canvas context.');
 
       ctx.clearRect(0, 0, 512, 512);
 
@@ -170,10 +175,8 @@ export const WhatsAppStickerWorkspace: React.FC<WhatsAppStickerWorkspaceProps> =
         rect.dHeight
       );
 
-      // Renderiza WebP intermediário a partir do canvas
-      const rawWebpDataUrl = canvas.toDataURL('image/webp', 0.90);
+      const rawWebpDataUrl = canvas.toDataURL('image/webp', 0.9);
 
-      // Injeta os metadados EXIF oficiais exigidos pelo WhatsApp
       const stickerBlob = await WhatsAppStickerExifService.processCanvasDataUrl(rawWebpDataUrl, {
         packName,
         authorName,
@@ -186,16 +189,16 @@ export const WhatsAppStickerWorkspace: React.FC<WhatsAppStickerWorkspaceProps> =
 
       toast.current?.show({
         severity: 'success',
-        summary: 'Figurinha WhatsApp Pronta!',
-        detail: 'Metadados EXIF e dimensões 512x512 injetados com sucesso.',
+        summary: t('tools.sticker.toast_ready_summary'),
+        detail: t('tools.sticker.toast_ready_detail'),
         life: 4000,
       });
     } catch (err: any) {
       setProcessing(false);
       toast.current?.show({
         severity: 'error',
-        summary: 'Erro na Criação',
-        detail: err.message || 'Falha ao processar vídeo.',
+        summary: t('tools.sticker.toast_err_summary'),
+        detail: resolveErrorMessage(err, 'tools.sticker.toast_err_detail'),
         life: 4000,
       });
     }
@@ -205,15 +208,15 @@ export const WhatsAppStickerWorkspace: React.FC<WhatsAppStickerWorkspaceProps> =
     if (!generatedStickerUrl) return;
     const a = document.createElement('a');
     a.href = generatedStickerUrl;
-    a.download = `figurinha-whatsapp-${Date.now()}.webp`;
+    a.download = `whatsapp-sticker-${Date.now()}.webp`;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
 
     toast.current?.show({
       severity: 'info',
-      summary: 'Download Concluído',
-      detail: 'Arraste o arquivo .webp diretamente para qualquer conversa do WhatsApp!',
+      summary: t('tools.sticker.toast_dl_summary'),
+      detail: t('tools.sticker.toast_dl_detail'),
       life: 5000,
     });
   };
@@ -223,12 +226,11 @@ export const WhatsAppStickerWorkspace: React.FC<WhatsAppStickerWorkspaceProps> =
       <Toast ref={toast} position="bottom-right" />
 
       <div className="ys-sticker-grid">
-        {/* Left: Video input, Crop and settings */}
         <div className="ys-sticker-card ys-sticker-settings-card">
           <div className="ys-sticker-card-header">
-            <h3 className="ys-sticker-card-title">Sticker Studio — WhatsApp</h3>
+            <h3 className="ys-sticker-card-title">{t('tools.sticker.title')}</h3>
             <p className="ys-sticker-card-subtitle">
-              Recorte, dê zoom e converta qualquer trecho de vídeo em figurinha (Sticker WebP 512×512) com <strong>metadados EXIF oficiais</strong> reconhecidos pelo WhatsApp.
+              {t('tools.sticker.subtitle_prefix')} <strong>{t('tools.sticker.subtitle_bold')}</strong> {t('tools.sticker.subtitle_suffix')}
             </p>
           </div>
 
@@ -243,15 +245,14 @@ export const WhatsAppStickerWorkspace: React.FC<WhatsAppStickerWorkspaceProps> =
             <label htmlFor="sticker-file-input" className="ys-upload-label">
               <Upload size={24} className="ys-upload-icon" />
               <span className="ys-upload-text">
-                {videoFile ? videoFile.name : videoSrc ? 'Vídeo Carregado via Downloader' : 'Clique para selecionar um vídeo (MP4) ou GIF'}
+                {videoFile ? videoFile.name : videoSrc ? t('tools.sticker.upload_loaded') : t('tools.sticker.upload_prompt')}
               </span>
-              <span className="ys-upload-subtext">Ou arraste seu arquivo aqui</span>
+              <span className="ys-upload-subtext">{t('tools.sticker.upload_subtext')}</span>
             </label>
           </div>
 
           {videoSrc && (
             <div className="ys-video-controls-section">
-              {/* Player do Vídeo com Monitor de Tempo */}
               <div className="ys-video-preview-wrapper">
                 <video
                   ref={videoRef}
@@ -272,7 +273,6 @@ export const WhatsAppStickerWorkspace: React.FC<WhatsAppStickerWorkspaceProps> =
                 />
               </div>
 
-              {/* Botão para Capturar o Frame Exato */}
               <div className="ys-capture-row">
                 <Button
                   type="button"
@@ -280,17 +280,16 @@ export const WhatsAppStickerWorkspace: React.FC<WhatsAppStickerWorkspaceProps> =
                   onClick={updatePreview}
                 >
                   <Camera size={14} />
-                  <span>Capturar Frame do Vídeo Atual</span>
+                  <span>{t('tools.sticker.capture_btn')}</span>
                 </Button>
-                <span className="ys-capture-hint">Pause ou arraste o vídeo no momento desejado</span>
+                <span className="ys-capture-hint">{t('tools.sticker.capture_hint')}</span>
               </div>
 
-              {/* Seletor de Modo de Recorte (Crop) */}
               <div className="ys-crop-box-container">
                 <div className="ys-crop-box-header">
                   <div className="ys-crop-title">
                     <Crop size={16} />
-                    <span>Enquadramento e Recorte (Crop 512×512):</span>
+                    <span>{t('tools.sticker.crop_title')}</span>
                   </div>
                 </div>
 
@@ -301,45 +300,44 @@ export const WhatsAppStickerWorkspace: React.FC<WhatsAppStickerWorkspaceProps> =
                     onClick={() => setCropMode('custom_crop')}
                   >
                     <Move size={14} />
-                    <span>Recorte Livre (Zoom & Posição)</span>
+                    <span>{t('tools.sticker.crop_custom')}</span>
                   </button>
                   <button
                     type="button"
                     className={`ys-crop-pill ${cropMode === 'top_crop' ? 'is-active' : ''}`}
                     onClick={() => setCropMode('top_crop')}
                   >
-                    <span>Topo (1:1 Celular)</span>
+                    <span>{t('tools.sticker.crop_top')}</span>
                   </button>
                   <button
                     type="button"
                     className={`ys-crop-pill ${cropMode === 'center_crop' ? 'is-active' : ''}`}
                     onClick={() => setCropMode('center_crop')}
                   >
-                    <span>Centro (1:1)</span>
+                    <span>{t('tools.sticker.crop_center')}</span>
                   </button>
                   <button
                     type="button"
                     className={`ys-crop-pill ${cropMode === 'bottom_crop' ? 'is-active' : ''}`}
                     onClick={() => setCropMode('bottom_crop')}
                   >
-                    <span>Base (1:1)</span>
+                    <span>{t('tools.sticker.crop_bottom')}</span>
                   </button>
                   <button
                     type="button"
                     className={`ys-crop-pill ${cropMode === 'fit_pad' ? 'is-active' : ''}`}
                     onClick={() => setCropMode('fit_pad')}
                   >
-                    <span>Ajustar Inteiro (Transparente)</span>
+                    <span>{t('tools.sticker.crop_fit')}</span>
                   </button>
                 </div>
 
-                {/* Controles Avançados de Recorte Livre (Sliders de Posição e Zoom) */}
                 {cropMode === 'custom_crop' && (
                   <div className="ys-crop-sliders-card">
                     <div className="ys-slider-group">
                       <div className="ys-slider-label-row">
                         <label>
-                          <ZoomIn size={14} /> Zoom / Escala da Figurinha:
+                          <ZoomIn size={14} /> {t('tools.sticker.zoom_label')}
                         </label>
                         <strong>{zoom.toFixed(1)}x</strong>
                       </div>
@@ -356,9 +354,9 @@ export const WhatsAppStickerWorkspace: React.FC<WhatsAppStickerWorkspaceProps> =
 
                     <div className="ys-slider-group">
                       <div className="ys-slider-label-row">
-                        <label>Posição Vertical (Y):</label>
+                        <label>{t('tools.sticker.pos_y_label')}</label>
                         <strong>
-                          {positionY <= 25 ? 'Topo' : positionY >= 75 ? 'Base' : 'Centro'} ({positionY}%)
+                          {positionY <= 25 ? t('tools.sticker.pos_top') : positionY >= 75 ? t('tools.sticker.pos_bottom') : t('tools.sticker.pos_center')} ({positionY}%)
                         </strong>
                       </div>
                       <input
@@ -371,17 +369,17 @@ export const WhatsAppStickerWorkspace: React.FC<WhatsAppStickerWorkspaceProps> =
                         onChange={(e) => setPositionY(parseInt(e.target.value, 10))}
                       />
                       <div className="ys-slider-ticks">
-                        <span>Topo (0%)</span>
-                        <span>Centro (50%)</span>
-                        <span>Base (100%)</span>
+                        <span>{t('tools.sticker.pos_top')} (0%)</span>
+                        <span>{t('tools.sticker.pos_center')} (50%)</span>
+                        <span>{t('tools.sticker.pos_bottom')} (100%)</span>
                       </div>
                     </div>
 
                     <div className="ys-slider-group">
                       <div className="ys-slider-label-row">
-                        <label>Posição Horizontal (X):</label>
+                        <label>{t('tools.sticker.pos_x_label')}</label>
                         <strong>
-                          {positionX <= 25 ? 'Esquerda' : positionX >= 75 ? 'Direita' : 'Centro'} ({positionX}%)
+                          {positionX <= 25 ? t('tools.sticker.pos_left') : positionX >= 75 ? t('tools.sticker.pos_right') : t('tools.sticker.pos_center')} ({positionX}%)
                         </strong>
                       </div>
                       <input
@@ -394,15 +392,15 @@ export const WhatsAppStickerWorkspace: React.FC<WhatsAppStickerWorkspaceProps> =
                         onChange={(e) => setPositionX(parseInt(e.target.value, 10))}
                       />
                       <div className="ys-slider-ticks">
-                        <span>Esquerda (0%)</span>
-                        <span>Centro (50%)</span>
-                        <span>Direita (100%)</span>
+                        <span>{t('tools.sticker.pos_left')} (0%)</span>
+                        <span>{t('tools.sticker.pos_center')} (50%)</span>
+                        <span>{t('tools.sticker.pos_right')} (100%)</span>
                       </div>
                     </div>
 
                     <div className="ys-slider-group">
                       <div className="ys-slider-label-row">
-                        <label>Tamanho do Enquadramento:</label>
+                        <label>{t('tools.sticker.crop_size_label')}</label>
                         <strong>{cropSize}%</strong>
                       </div>
                       <input
@@ -419,20 +417,19 @@ export const WhatsAppStickerWorkspace: React.FC<WhatsAppStickerWorkspaceProps> =
                 )}
               </div>
 
-              {/* Trim Controls */}
               <div className="ys-trim-box">
                 <div className="ys-trim-header">
                   <span className="ys-trim-title">
-                    <Scissors size={14} /> Corte Temporal (Máx. 6 segundos)
+                    <Scissors size={14} /> {t('tools.sticker.trim_title')}
                   </span>
                   <span className="ys-trim-duration">
-                    Duração: <strong>{(endTime - startTime).toFixed(1)}s</strong> (Total: {videoDuration.toFixed(1)}s)
+                    {t('tools.sticker.trim_duration')} <strong>{(endTime - startTime).toFixed(1)}s</strong> ({t('tools.sticker.trim_total')} {videoDuration.toFixed(1)}s)
                   </span>
                 </div>
 
                 <div className="ys-trim-inputs">
                   <div className="ys-field">
-                    <label className="ys-field-label">Início (segundos):</label>
+                    <label className="ys-field-label">{t('tools.sticker.trim_start')}</label>
                     <input
                       type="number"
                       step="0.2"
@@ -444,7 +441,7 @@ export const WhatsAppStickerWorkspace: React.FC<WhatsAppStickerWorkspaceProps> =
                     />
                   </div>
                   <div className="ys-field">
-                    <label className="ys-field-label">Fim (segundos):</label>
+                    <label className="ys-field-label">{t('tools.sticker.trim_end')}</label>
                     <input
                       type="number"
                       step="0.2"
@@ -457,30 +454,29 @@ export const WhatsAppStickerWorkspace: React.FC<WhatsAppStickerWorkspaceProps> =
                 </div>
               </div>
 
-              {/* Metadados do Pacote WhatsApp */}
               <div className="ys-exif-box">
                 <div className="ys-exif-header">
                   <ShieldCheck size={16} color="#C4A962" />
-                  <span>Metadados Oficiais WhatsApp (EXIF)</span>
+                  <span>{t('tools.sticker.exif_title')}</span>
                 </div>
                 <div className="ys-exif-inputs">
                   <div className="ys-field">
-                    <label className="ys-field-label">Nome do Pacote:</label>
+                    <label className="ys-field-label">{t('tools.sticker.pack_label')}</label>
                     <input
                       type="text"
                       value={packName}
                       className="ys-text-input"
-                      placeholder="Ex: Minhas Figurinhas"
+                      placeholder={t('tools.sticker.pack_placeholder')}
                       onChange={(e) => setPackName(e.target.value)}
                     />
                   </div>
                   <div className="ys-field">
-                    <label className="ys-field-label">Autor / Criador:</label>
+                    <label className="ys-field-label">{t('tools.sticker.author_label')}</label>
                     <input
                       type="text"
                       value={authorName}
                       className="ys-text-input"
-                      placeholder="Ex: Yesode"
+                      placeholder={t('tools.sticker.author_placeholder')}
                       onChange={(e) => setAuthorName(e.target.value)}
                     />
                   </div>
@@ -495,12 +491,12 @@ export const WhatsAppStickerWorkspace: React.FC<WhatsAppStickerWorkspaceProps> =
                 {processing ? (
                   <>
                     <Loader2 size={18} className="ys-spin" />
-                    <span>Processando Figurinha WebP com EXIF...</span>
+                    <span>{t('tools.sticker.processing_btn')}</span>
                   </>
                 ) : (
                   <>
                     <Sparkles size={18} />
-                    <span>Criar Figurinha WhatsApp</span>
+                    <span>{t('tools.sticker.create_btn')}</span>
                   </>
                 )}
               </Button>
@@ -508,26 +504,24 @@ export const WhatsAppStickerWorkspace: React.FC<WhatsAppStickerWorkspaceProps> =
           )}
         </div>
 
-        {/* Right: WhatsApp Chat Balloon Preview and Download */}
         <div className="ys-sticker-card ys-sticker-preview-card">
           <div className="ys-preview-card-header">
-            <h4 className="ys-preview-title">Visualização no WhatsApp</h4>
+            <h4 className="ys-preview-title">{t('tools.sticker.preview_title')}</h4>
             <span className="ys-preview-badge">512 × 512 px</span>
           </div>
 
-          {/* WhatsApp Chat Simulation */}
           <div className="ys-whatsapp-mock">
             <div className="ys-whatsapp-bubble">
               {generatedStickerUrl || livePreviewUrl ? (
                 <img
                   src={generatedStickerUrl || livePreviewUrl}
-                  alt="Figurinha WhatsApp"
+                  alt={t('tools.sticker.preview_alt')}
                   className="ys-sticker-img"
                 />
               ) : (
                 <div className="ys-sticker-mock-empty">
                   <Smile size={48} opacity={0.3} />
-                  <span>Sua figurinha WebP aparecerá aqui com recorte e transparência</span>
+                  <span>{t('tools.sticker.preview_empty')}</span>
                 </div>
               )}
               <span className="ys-whatsapp-time">12:00 ✓✓</span>
@@ -536,7 +530,6 @@ export const WhatsAppStickerWorkspace: React.FC<WhatsAppStickerWorkspaceProps> =
 
           <canvas ref={canvasRef} style={{ display: 'none' }} />
 
-          {/* Botão de Download */}
           {generatedStickerUrl ? (
             <div className="ys-sticker-download-area">
               <Button
@@ -544,21 +537,20 @@ export const WhatsAppStickerWorkspace: React.FC<WhatsAppStickerWorkspaceProps> =
                 onClick={downloadSticker}
               >
                 <Download size={18} />
-                <span>Salvar Figurinha (.webp) no Computador</span>
+                <span>{t('tools.sticker.download_btn')}</span>
               </Button>
 
-              {/* Guia de Compatibilidade do WhatsApp */}
               <div className="ys-whatsapp-guide-card">
                 <div className="ys-guide-header">
                   <CheckCircle2 size={16} color="#10B981" />
-                  <strong>Reconhecimento Oficial no WhatsApp:</strong>
+                  <strong>{t('tools.sticker.guide_title')}</strong>
                 </div>
                 <ul className="ys-guide-steps">
                   <li>
-                    <strong>No WhatsApp Web / Desktop:</strong> Arraste o arquivo baixado diretamente para a conversa. Ele é enviado automaticamente como figurinha nativa (sem borda branca e com fundo transparente).
+                    <strong>{t('tools.sticker.guide_web_label')}</strong> {t('tools.sticker.guide_web_text')}
                   </li>
                   <li>
-                    <strong>No WhatsApp do Celular:</strong> Envie o arquivo para o seu número ou toque nele na conversa e selecione <em>"Adicionar às Favoritas"</em>.
+                    <strong>{t('tools.sticker.guide_mobile_label')}</strong> {t('tools.sticker.guide_mobile_text')}
                   </li>
                 </ul>
               </div>
@@ -566,7 +558,7 @@ export const WhatsAppStickerWorkspace: React.FC<WhatsAppStickerWorkspaceProps> =
           ) : (
             <div className="ys-preview-hint">
               <Info size={14} />
-              <span>O preview acima reflete em tempo real os ajustes de corte e zoom. Clique em "Criar Figurinha WhatsApp" para embutir o EXIF e liberar o download.</span>
+              <span>{t('tools.sticker.preview_hint')}</span>
             </div>
           )}
         </div>

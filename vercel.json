@@ -10,6 +10,25 @@
       ]
     }
   ],
+  "redirects": [
+    {
+      "source": "/:path*",
+      "has": [{ "type": "host", "value": "yesode.com.br" }],
+      "destination": "https://yesode.com/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/:path*",
+      "has": [{ "type": "host", "value": "www.yesode.com.br" }],
+      "destination": "https://yesode.com/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/en/tools/media-downloader",
+      "destination": "/en/tools/youtube-social-video-downloader",
+      "permanent": true
+    }
+  ],
   "rewrites": [
     {
       "source": "/api/tools/media-download",

@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Routes, Route, useLocation, useParams, useNavigate } from 'react-router-dom';
+import { Routes, Route, Navigate, useLocation, useParams, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Header } from './components/Header/Header';
 import { Hero } from './components/Hero/Hero';
@@ -44,7 +44,7 @@ const detectLanguage = (): string => {
   if (['en', 'pt', 'es'].includes(browserLang)) {
     return browserLang;
   }
-  return 'en';
+  return 'pt';
 };
 
 const LanguageLayout: React.FC = () => {
@@ -87,16 +87,32 @@ const LanguageLayout: React.FC = () => {
       <main id="main">
         <Routes>
           <Route path="/" element={<Home />} />
+          {/* Portuguese routes */}
           <Route path="/ferramentas" element={<FreeToolsPage />} />
           <Route path="/ferramentas/gerador-qr-code-pix" element={<FreeToolsPage />} />
           <Route path="/ferramentas/baixar-videos-youtube-redes-sociais" element={<FreeToolsPage />} />
           <Route path="/ferramentas/criar-figurinha-whatsapp" element={<FreeToolsPage />} />
+
+          {/* English routes + legacy redirects */}
           <Route path="/tools" element={<FreeToolsPage />} />
           <Route path="/tools/qr-code-pix-generator" element={<FreeToolsPage />} />
-          <Route path="/tools/media-downloader" element={<FreeToolsPage />} />
+          <Route path="/tools/youtube-social-video-downloader" element={<FreeToolsPage />} />
           <Route path="/tools/whatsapp-sticker-maker" element={<FreeToolsPage />} />
+          <Route path="/tools/media-downloader" element={<Navigate to="/en/tools/youtube-social-video-downloader" replace />} />
+
+          {/* Spanish routes */}
+          <Route path="/herramientas" element={<FreeToolsPage />} />
+          <Route path="/herramientas/generador-codigo-qr-pix" element={<FreeToolsPage />} />
+          <Route path="/herramientas/descargar-videos-youtube-redes-sociales" element={<FreeToolsPage />} />
+          <Route path="/herramientas/crear-stickers-whatsapp" element={<FreeToolsPage />} />
+
+          {/* Legal routes across languages */}
           <Route path="/politica-de-privacidade" element={<PrivacyPolicy />} />
+          <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+          <Route path="/politica-de-privacidad" element={<PrivacyPolicy />} />
           <Route path="/termos-de-uso" element={<TermsOfUse />} />
+          <Route path="/terms-of-use" element={<TermsOfUse />} />
+          <Route path="/terminos-de-uso" element={<TermsOfUse />} />
         </Routes>
       </main>
       <Footer />

@@ -24,17 +24,17 @@ export interface StickerSpecParams {
 }
 
 export class StickerSpec {
-  public static readonly TARGET_DIMENSION = 512; // 512x512 px padrão WhatsApp
+  public static readonly TARGET_DIMENSION = 512;
   public static readonly MAX_DURATION_SECONDS = 6.0;
-  public static readonly MAX_SIZE_BYTES = 500 * 1024; // 500 KB teto estrito
+  public static readonly MAX_SIZE_BYTES = 500 * 1024;
 
   private readonly _startTime: number;
   private readonly _endTime: number;
   private readonly _cropMode: CropMode;
   private readonly _zoom: number;
-  private readonly _positionX: number; // 0 a 100%
-  private readonly _positionY: number; // 0 a 100%
-  private readonly _cropSize: number; // 30 a 100%
+  private readonly _positionX: number;
+  private readonly _positionY: number;
+  private readonly _cropSize: number;
 
   private constructor(
     startTime: number,
@@ -64,7 +64,7 @@ export class StickerSpec {
     const cropSize = params?.cropSize ?? 100;
 
     if (startTime < 0 || endTime <= startTime) {
-      throw new StickerDomainError('Intervalo de corte temporal inválido.');
+      throw new StickerDomainError('Invalid trim time interval.', 'invalid_trim_interval');
     }
     const duration = endTime - startTime;
     if (duration > this.MAX_DURATION_SECONDS) {
@@ -107,13 +107,12 @@ export class StickerSpec {
   }
 
   /**
-   * Calcula as coordenadas de recorte e posicionamento para o canvas 512x512
+   * Computes source crop and destination coordinates for the 512x512 WebP canvas.
    */
   public calculateCropRect(videoWidth: number, videoHeight: number): CropRect {
     const vw = Math.max(1, videoWidth);
     const vh = Math.max(1, videoHeight);
 
-    // Modo 1: Ajustar Proporcional (Fit Pad com fundo transparente)
     if (this._cropMode === 'fit_pad') {
       const scale = Math.min(512 / vw, 512 / vh);
       const dWidth = vw * scale;
@@ -130,7 +129,6 @@ export class StickerSpec {
       };
     }
 
-    // Modo 2: Top Crop (Quadrado no topo - ideal para vídeos de celular/stories)
     if (this._cropMode === 'top_crop') {
       const minDim = Math.min(vw, vh);
       return {
@@ -145,7 +143,6 @@ export class StickerSpec {
       };
     }
 
-    // Modo 3: Bottom Crop (Quadrado na base)
     if (this._cropMode === 'bottom_crop') {
       const minDim = Math.min(vw, vh);
       return {
@@ -160,7 +157,6 @@ export class StickerSpec {
       };
     }
 
-    // Modo 4: Center Crop (Quadrado centralizado)
     if (this._cropMode === 'center_crop') {
       const minDim = Math.min(vw, vh);
       return {
@@ -175,7 +171,6 @@ export class StickerSpec {
       };
     }
 
-    // Modo 5: Custom Crop (Livre com Zoom e Posição X e Y)
     const minDim = Math.min(vw, vh);
     const windowDim = (minDim * (this._cropSize / 100)) / this._zoom;
 

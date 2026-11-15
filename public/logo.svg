@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <defs>
+    <linearGradient id="yesodeGold" x1="0" y1="0" x2="128" y2="128" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#E0C277"/>
+      <stop offset="100%" stop-color="#C4A962"/>
+    </linearGradient>
+  </defs>
+  <rect width="128" height="128" rx="24" fill="#0A0F1C"/>
+  <path d="M24 32L64 64L104 32V48L64 80L24 48Z" fill="url(#yesodeGold)"/>
+  <rect x="56" y="72" width="16" height="32" rx="4" fill="url(#yesodeGold)"/>
+</svg>

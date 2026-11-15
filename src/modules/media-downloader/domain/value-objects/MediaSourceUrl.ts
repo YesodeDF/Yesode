@@ -14,19 +14,18 @@ export class MediaSourceUrl {
   public static create(raw: string): MediaSourceUrl {
     const trimmed = (raw || '').trim();
     if (!trimmed) {
-      throw new UnsupportedPlatformError('Por favor, cole um link de mídia.');
+      throw new UnsupportedPlatformError('Please paste a media link.');
     }
 
     let parsed: URL;
     try {
       parsed = new URL(trimmed.startsWith('http') ? trimmed : `https://${trimmed}`);
     } catch {
-      throw new MediaSecurityError('Formato de URL inválido.');
+      throw new MediaSecurityError('Invalid URL format.');
     }
 
     const host = parsed.hostname.toLowerCase();
 
-    // Proteção contra SSRF e IPs privados/locais
     if (
       host === 'localhost' ||
       host === '127.0.0.1' ||
@@ -34,7 +33,7 @@ export class MediaSourceUrl {
       host.startsWith('10.') ||
       host.startsWith('172.16.')
     ) {
-      throw new MediaSecurityError('Endereço IP ou anfitrião local não permitido.');
+      throw new MediaSecurityError('Local or private IP host is not allowed.');
     }
 
     if (host.includes('youtube.com') || host.includes('youtu.be')) {

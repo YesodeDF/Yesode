@@ -7,7 +7,15 @@
     "nav_faq": "FAQ",
     "nav_contact": "Contacto",
     "cta": "Agendar Consultoría",
-    "toggle_theme": "Cambiar Tema"
+    "toggle_theme": "Cambiar Tema",
+    "tools": "Herramientas",
+    "tools_free": "Herramientas Gratuitas",
+    "tools_qr_title": "Generador QR y Pix",
+    "tools_qr_sub": "EMV®, CRC16 y Enlaces",
+    "tools_media_title": "Descargador de Medios",
+    "tools_media_sub": "YouTube, X, Insta y Facebook",
+    "tools_sticker_title": "Stickers WhatsApp",
+    "tools_sticker_sub": "Videos y GIFs a WebP 512x512"
   },
   "hero": {
     "status": "System Online — Yesode V1.0.0",
@@ -37,12 +45,36 @@
     "title_suffix": " de ingeniería.",
     "subtitle": "Cada capacidad resuelve un problema operativo concreto. Usted compone su propio stack, sin atar el roadmap a un solo proveedor.",
     "items": [
-      { "title": "Deep Search y KPIs", "desc": "Toma de decisiones basada en datos reales e indexación profunda de la operación. Métricas conectadas al P&L.", "tag": "Insight" },
-      { "title": "Brand Intelligence", "desc": "Soluciones alineadas con la identidad y el tono de voz del negocio.", "tag": "Voice" },
-      { "title": "Engineering by Design", "desc": "Arquitectura a medida desde el primer token — sin concesiones.", "tag": "Core" },
-      { "title": "Infra como Producto", "desc": "Plataformas internas que aceleran al equipo, no que piden mantenimiento.", "tag": "Platform" },
-      { "title": "Continuous Delivery", "desc": "Pipelines determinísticos, blue/green, observabilidad end-to-end.", "tag": "Ops" },
-      { "title": "Security by Default", "desc": "Zero-trust, cifrado en tránsito y reposo, auditoría continua.", "tag": "Trust" }
+      {
+        "title": "Deep Search y KPIs",
+        "desc": "Toma de decisiones basada en datos reales e indexación profunda de la operación. Métricas conectadas al P&L.",
+        "tag": "Insight"
+      },
+      {
+        "title": "Brand Intelligence",
+        "desc": "Soluciones alineadas con la identidad y el tono de voz del negocio.",
+        "tag": "Voice"
+      },
+      {
+        "title": "Engineering by Design",
+        "desc": "Arquitectura a medida desde el primer token — sin concesiones.",
+        "tag": "Core"
+      },
+      {
+        "title": "Infra como Producto",
+        "desc": "Plataformas internas que aceleran al equipo, no que piden mantenimiento.",
+        "tag": "Platform"
+      },
+      {
+        "title": "Continuous Delivery",
+        "desc": "Pipelines determinísticos, blue/green, observabilidad end-to-end.",
+        "tag": "Ops"
+      },
+      {
+        "title": "Security by Default",
+        "desc": "Zero-trust, cifrado en tránsito y reposo, auditoría continua.",
+        "tag": "Trust"
+      }
     ]
   },
   "cases": {
@@ -89,9 +121,21 @@
     "quote_tag": "/* Principio */",
     "quote_text": "\"Cada línea de código entregada tiene una justificación económica. Cada decisión de arquitectura tiene dueño.\"",
     "stats": [
-      { "value": "0", "label": "Capas de Intermediación", "desc": "Directo con la ingeniería." },
-      { "value": "1", "label": "Punto Único de Contacto", "desc": "CTO o Lead Engineer." },
-      { "value": "100%", "label": "Enfoque en Resultados", "desc": "KPIs del P&L, no del PM." }
+      {
+        "value": "0",
+        "label": "Capas de Intermediación",
+        "desc": "Directo con la ingeniería."
+      },
+      {
+        "value": "1",
+        "label": "Punto Único de Contacto",
+        "desc": "CTO o Lead Engineer."
+      },
+      {
+        "value": "100%",
+        "label": "Enfoque en Resultados",
+        "desc": "KPIs del P&L, no del PM."
+      }
     ]
   },
   "process": {
@@ -105,25 +149,41 @@
         "title": "Discovery",
         "duration": "1—2 semanas",
         "desc": "Inmersión en el problema real. Mapeamos KPIs del P&L, cuellos de botella técnicos y restricciones.",
-        "deliverables": ["Diagnóstico técnico", "Mapa de riesgos", "Plan de ataque"]
+        "deliverables": [
+          "Diagnóstico técnico",
+          "Mapa de riesgos",
+          "Plan de ataque"
+        ]
       },
       {
         "title": "Architecture",
         "duration": "2—3 semanas",
         "desc": "Diseño de la solución con decisiones documentadas. Tradeoffs en papel antes del código.",
-        "deliverables": ["ADRs", "Diagrama de arquitectura", "Presupuesto de SLO"]
+        "deliverables": [
+          "ADRs",
+          "Diagrama de arquitectura",
+          "Presupuesto de SLO"
+        ]
       },
       {
         "title": "Build",
         "duration": "6—16 semanas",
         "desc": "Ejecución en squads compactos. Entregas semanales con demos y métricas en vivo.",
-        "deliverables": ["Releases incrementales", "Pipeline CI/CD", "Observabilidad"]
+        "deliverables": [
+          "Releases incrementales",
+          "Pipeline CI/CD",
+          "Observabilidad"
+        ]
       },
       {
         "title": "Run",
         "duration": "Continuo",
         "desc": "Operación asistida con on-call, ajustes finos y traspaso progresivo al equipo interno.",
-        "deliverables": ["Runbooks", "Capacitación del equipo", "Cultura post-mortem"]
+        "deliverables": [
+          "Runbooks",
+          "Capacitación del equipo",
+          "Cultura post-mortem"
+        ]
       }
     ]
   },
@@ -136,10 +196,26 @@
     "arch_meta": "main · prod · v1.0.0",
     "status": "All systems operational",
     "nodes": [
-      { "label": "API Gateway", "tag": "Edge", "desc": "mTLS · Rate limit · WAF" },
-      { "label": "Microservices Core", "tag": "Domain", "desc": "Event-driven · Hexagonal" },
-      { "label": "Data Layer", "tag": "Persistence", "desc": "PostgreSQL · Redis · S3" },
-      { "label": "Analytics y KPIs", "tag": "Insights", "desc": "Real-time OLAP · Dashboards" }
+      {
+        "label": "API Gateway",
+        "tag": "Edge",
+        "desc": "mTLS · Rate limit · WAF"
+      },
+      {
+        "label": "Microservices Core",
+        "tag": "Domain",
+        "desc": "Event-driven · Hexagonal"
+      },
+      {
+        "label": "Data Layer",
+        "tag": "Persistence",
+        "desc": "PostgreSQL · Redis · S3"
+      },
+      {
+        "label": "Analytics y KPIs",
+        "tag": "Insights",
+        "desc": "Real-time OLAP · Dashboards"
+      }
     ]
   },
   "faq": {
@@ -328,7 +404,16 @@
       "desc": "Nuestro equipo de ingeniería está construyendo activamente nuevas plataformas SaaS para atender demandas de automatización e inteligencia corporativa.",
       "tag": "Yesode Labs",
       "cta": "Saber más"
-    }
+    },
+    "free_badge": "100% Gratis y Sin Anuncios",
+    "free_title": "Yesode Free Tools",
+    "free_tagline": "Utilidades Esenciales de Ingeniería para el Día a Día",
+    "free_desc": "Ofrecemos gratuitamente herramientas construidas con el mismo rigor arquitectónico que entregamos a clientes corporativos:",
+    "free_feat_1": "Generador de Código QR y Cobro Pix Oficial EMV®",
+    "free_feat_2": "Descargador de Videos y Audios (YouTube, X, Insta, Face)",
+    "free_feat_3": "Creador de Stickers para WhatsApp (WebP 512x512)",
+    "free_stack": "Client-Side · TypeScript · Cero Rastreo",
+    "free_cta": "Abrir Herramientas Gratuitas"
   },
   "lang": {
     "en": "English",
@@ -338,5 +423,352 @@
   "seo": {
     "title": "Yesode — Consultoría de Ingeniería de Software a Medida para Operaciones Críticas",
     "description": "Arquitectura a medida, ingeniería directa con el equipo técnico, entregas alineadas con el P&L. Consultoría de software para empresas que tratan la tecnología como ventaja competitiva."
+  },
+  "tools": {
+    "hero_badge": "Yesode Labs — Herramientas Gratuitas",
+    "hero_title_1": "Ingeniería de Alto Rendimiento.",
+    "hero_title_2": "100% Gratis y Sin Anuncios.",
+    "hero_desc": "Utilidades esenciales construidas con la misma arquitectura crítica que entregamos a nuestros clientes corporativos. Cero pop-ups, cero registros y privacidad total.",
+    "desktop_banner_strong": "Próximamente:",
+    "desktop_banner_text": "Aplicaciones de escritorio nativas (Windows, macOS y Linux) para descarga directa y modo offline.",
+    "tabs": {
+      "qr_name": "Generador QR y Pix",
+      "qr_sub": "EMV®, CRC16 y Enlaces",
+      "media_name": "Descargador de Medios",
+      "media_sub": "YouTube, X, Insta y Facebook",
+      "sticker_name": "Stickers WhatsApp",
+      "sticker_sub": "Videos y GIFs a WebP 512x512"
+    },
+    "trust": {
+      "privacy_title": "Privacidad Absoluta",
+      "privacy_desc": "Procesamiento local directo en la memoria de tu navegador. No guardamos contraseñas, enlaces ni datos bancarios.",
+      "no_ads_title": "Sin Monetización Oculta",
+      "no_ads_desc": "Sin banners publicitarios, sin rastreadores invasivos y sin esperas artificiales."
+    },
+    "seo": {
+      "qr_title": "Generador de Código QR y Pix Oficial EMV® Gratis (CRC16) | Yesode",
+      "qr_desc": "Crea códigos QR Pix estáticos oficiales con validación CRC16, decodifica Pix Copia e Cola y genera códigos QR limpios para enlaces. 100% gratis y sin anuncios.",
+      "qr_keywords": [
+        "generador codigo qr gratis",
+        "generador qr pix",
+        "decodificador pix emv",
+        "qr sin anuncios",
+        "codigo qr png alta resolucion",
+        "crear qr pix gratis"
+      ],
+      "qr_schema_name": "Yesode Generador de Código QR y Pix Oficial",
+      "qr_schema_desc": "Generador normativo de pagos Pix estándar Banco Central de Brasil y creador de QR para enlaces.",
+      "media_title": "Descargar Videos y Audios de YouTube, X, Instagram y Facebook Gratis | Yesode",
+      "media_desc": "Descarga videos en MP4 compatible y audios de YouTube, X/Twitter, Instagram Reels y Facebook sin anuncios, sin virus y a máxima velocidad.",
+      "media_keywords": [
+        "descargar videos youtube gratis",
+        "bajar video twitter x",
+        "descargar reels instagram",
+        "descargar video facebook",
+        "descargador sin anuncios",
+        "descargar audio youtube"
+      ],
+      "media_schema_name": "Yesode Descargador de Medios y Redes Sociales",
+      "media_schema_desc": "Extractor de videos en alta compatibilidad y audios para YouTube, X, Instagram y Facebook.",
+      "sticker_title": "Crear Stickers para WhatsApp de Video y GIF Online (WebP 512x512) | Yesode",
+      "sticker_desc": "Convierte clips de video y GIFs en stickers para WhatsApp en formato oficial WebP 512x512 (<500 KB) con recorte libre, zoom y metadatos EXIF.",
+      "sticker_keywords": [
+        "crear stickers whatsapp online",
+        "video a sticker whatsapp",
+        "gif a sticker animado",
+        "sticker 512x512 webp",
+        "hacer stickers gratis"
+      ],
+      "sticker_schema_name": "Yesode WhatsApp Sticker Studio",
+      "sticker_schema_desc": "Conversor de videos y GIFs a stickers de WhatsApp en formato WebP 512x512 con EXIF oficial.",
+      "breadcrumb_home": "Inicio",
+      "breadcrumb_tools": "Herramientas Gratuitas"
+    },
+    "guides": {
+      "howto_title": "Cómo usar esta herramienta",
+      "faq_title": "Preguntas Frecuentes",
+      "qr": {
+        "steps": [
+          {
+            "name": "Elige Pix Oficial o Enlace",
+            "text": "Selecciona Cobro Pix Oficial para pagos o Enlace y Texto para URLs libres."
+          },
+          {
+            "name": "Pega o completa los datos",
+            "text": "Pega un código Pix Copia e Cola para decodificarlo al instante o ingresa clave Pix, beneficiario, ciudad y monto opcional."
+          },
+          {
+            "name": "Descarga el PNG o copia el código",
+            "text": "Haz clic en Generar QR Pix, descarga la imagen PNG o copia el código EMV® validado con CRC16."
+          }
+        ],
+        "faqs": [
+          {
+            "q": "¿Es seguro el generador de QR y Pix de Yesode?",
+            "a": "Sí. Todo el cálculo EMV® y CRC16-CCITT se ejecuta 100% en tu navegador. Ninguna clave ni monto se envía a servidores."
+          },
+          {
+            "q": "¿Funciona con Pix estático y dinámico?",
+            "a": "Sí. Puedes generar códigos QR Pix estáticos oficiales y pegar códigos estáticos o dinámicos para inspeccionarlos y renderizarlos."
+          },
+          {
+            "q": "¿Los códigos QR de enlaces caducan o muestran anuncios?",
+            "a": "No. Los códigos QR codifican tu URL directamente, sin acortadores intermedios, sin caducidad y sin anuncios."
+          },
+          {
+            "q": "¿Puedo descargar el QR en alta resolución?",
+            "a": "Sí, la exportación genera un archivo PNG nítido listo para imprimir o compartir."
+          }
+        ]
+      },
+      "media": {
+        "steps": [
+          {
+            "name": "Pega uno o varios enlaces",
+            "text": "Ingresa URLs de YouTube, X/Twitter, Instagram o Facebook (una por línea) y haz clic en Agregar a la Cola."
+          },
+          {
+            "name": "Elige formato y compatibilidad",
+            "text": "Mantén Máxima Compatibilidad (MP4 H.264 + AAC) para reproducir en cualquier móvil y WhatsApp, o elige audio/GIF."
+          },
+          {
+            "name": "Descarga o envía a Sticker Studio",
+            "text": "Haz clic en Descargar Archivo para guardar en tu dispositivo o en Crear Sticker WhatsApp para recortarlo a 512x512."
+          }
+        ],
+        "faqs": [
+          {
+            "q": "¿Por qué Máxima Compatibilidad es el perfil predeterminado?",
+            "a": "Porque genera MP4 con video H.264 y audio AAC, garantizando reproducción nativa en WhatsApp, iPhone, Android, Windows y Smart TV."
+          },
+          {
+            "q": "¿Qué plataformas son compatibles?",
+            "a": "YouTube (videos y Shorts), X/Twitter (videos y GIFs), Instagram (Reels y publicaciones) y Facebook Watch."
+          },
+          {
+            "q": "¿Necesito instalar algún programa o extensión?",
+            "a": "No. Todo funciona directo en el navegador sin extensiones, pop-ups ni registro."
+          },
+          {
+            "q": "¿Puedo convertir un video descargado en sticker?",
+            "a": "Sí. Haz clic en Crear Sticker WhatsApp en cualquier tarjeta de la cola para abrirlo en Sticker Studio."
+          }
+        ]
+      },
+      "sticker": {
+        "steps": [
+          {
+            "name": "Sube un video o GIF",
+            "text": "Selecciona un archivo MP4, WebM o GIF desde tu dispositivo o envíalo directo desde el Descargador."
+          },
+          {
+            "name": "Ajusta recorte, zoom y tiempo",
+            "text": "Usa Recorte Libre con zoom y posición X/Y (o los modos Arriba, Centro, Abajo y Ajustar) y recorta hasta 6 segundos."
+          },
+          {
+            "name": "Genera y arrastra a WhatsApp",
+            "text": "Haz clic en Crear Sticker WhatsApp para incrustar los metadatos EXIF oficiales 0x5741 en WebP 512x512 y descarga."
+          }
+        ],
+        "faqs": [
+          {
+            "q": "¿Por qué WhatsApp reconoce este archivo como sticker nativo?",
+            "a": "Porque inyectamos el bloque EXIF oficial (etiqueta 0x5741) dentro de un contenedor WebP VP8X de 512x512 píxeles."
+          },
+          {
+            "q": "¿Cómo envío el sticker descargado en WhatsApp?",
+            "a": "En WhatsApp Web o Desktop, arrastra el archivo .webp directo al chat. En el móvil, envíatelo y selecciona Agregar a Favoritos."
+          },
+          {
+            "q": "¿Cuál es el límite de duración y tamaño?",
+            "a": "Siguiendo las normas de WhatsApp, la duración máxima es de 6 segundos y el archivo se optimiza por debajo de 500 KB."
+          },
+          {
+            "q": "¿Puedo recortar solo una zona del video?",
+            "a": "Sí. El modo Recorte Libre permite hacer zoom de 1x a 3x, mover X/Y y ajustar el tamaño del encuadre con vista previa en vivo."
+          }
+        ]
+      }
+    },
+    "qr": {
+      "tab_pix": "Cobro Pix Oficial",
+      "tab_link": "Enlace o Texto",
+      "pix_title": "Pega el Código Pix o Crea el Tuyo",
+      "pix_subtitle": "Genera o decodifica el código oficial EMV® estándar Banco Central con CRC16. 100% privado en tu navegador.",
+      "paste_label": "Pega tu Pix Copia e Cola aquí (000201...):",
+      "decoded_badge": "Decodificado con éxito",
+      "paste_placeholder": "Pega aquí el código Pix para decodificar y generar el QR automáticamente...",
+      "divider": "O CREA TU PIX MANUALMENTE",
+      "key_label": "Clave Pix (CPF, Correo, Teléfono o Aleatoria) *",
+      "key_placeholder": "Ej: finanzas@tuempresa.com o +5511999998888",
+      "merchant_label": "Nombre del Beneficiario *",
+      "merchant_placeholder": "Ej: JUAN PEREZ",
+      "city_label": "Ciudad *",
+      "city_placeholder": "Ej: SAO PAULO",
+      "amount_label": "Monto BRL (Opcional)",
+      "amount_placeholder": "Ej: 50.00",
+      "txid_label": "Identificador (TxID)",
+      "txid_placeholder": "Ej: PEDIDO123 o ***",
+      "generate_btn": "Generar Código QR Pix",
+      "link_title": "Generador de Código QR para Enlace o Texto",
+      "link_subtitle": "Genera al instante un código QR limpio, sin redirecciones intermedias ni anuncios.",
+      "link_label": "URL de Destino o Texto",
+      "link_placeholder": "https://tuempresa.com",
+      "preview_title": "Resultado en Tiempo Real",
+      "preview_alt": "Código QR generado",
+      "preview_placeholder": "Completa los campos o pega un código Pix para generar",
+      "download_png": "Descargar Imagen PNG",
+      "copy_paste_label": "Código Copia e Cola:",
+      "copied": "¡Copiado!",
+      "copy": "Copiar",
+      "toast_decoded_summary": "Pix Reconocido",
+      "toast_decoded_detail": "¡Código oficial EMV decodificado y QR generado al instante!",
+      "toast_generated_summary": "QR Generado",
+      "toast_generated_detail": "Cobro Pix oficial listo para pagar.",
+      "toast_warn_summary": "Aviso de Validación",
+      "toast_warn_fallback": "Verifica los datos ingresados.",
+      "toast_copied_summary": "Copiado",
+      "toast_copied_detail": "¡Código Pix copiado al portapapeles!"
+    },
+    "media": {
+      "title": "Descargar Videos y Audios en Alta Calidad",
+      "subtitle_prefix": "Extracción sin anuncios, sin límites y con guardado directo en tu dispositivo. Pega",
+      "subtitle_bold": "uno o varios enlaces",
+      "subtitle_suffix": "de YouTube, X, Instagram o Facebook.",
+      "compat_title": "Perfil Predeterminado: Máxima Compatibilidad Universal",
+      "compat_desc_1": "Todas las descargas se generan por defecto en contenedor",
+      "compat_desc_bold1": "MP4 seguro (H.264 + AAC)",
+      "compat_desc_and": "y",
+      "compat_desc_bold2": "MP3 320k",
+      "compat_desc_2": ", garantizando reproducción instantánea en cualquier móvil, WhatsApp y TV sin fallos de códec.",
+      "input_label": "Pega aquí uno o varios enlaces (uno por línea):",
+      "input_placeholder": "Ejemplo:\nhttps://www.youtube.com/watch?v=...\nhttps://x.com/user/status/...",
+      "add_btn": "Agregar a la Cola",
+      "chip_yt": "YouTube (1080p, 4K y MP3)",
+      "chip_x": "X / Twitter (Videos y GIFs)",
+      "chip_ig": "Instagram (Reels, Posts y Videos)",
+      "chip_fb": "Facebook Watch",
+      "queue_title": "Cola de Medios",
+      "queue_hint": "Cada enlace se descarga de forma independiente.",
+      "clear_queue": "Limpar Cola",
+      "unknown_link": "Enlace Desconocido",
+      "remove_title": "Quitar de la cola",
+      "format_label": "Formato de Archivo:",
+      "format_video": "Video MP4",
+      "format_audio": "Audio MP3 / M4A",
+      "format_video_only": "Solo Video (Mudo)",
+      "format_gif": "GIF Animado",
+      "profile_label": "Perfil de Compatibilidad:",
+      "profile_total": "Compatibilidad Total",
+      "profile_default_tag": "Predeterminado",
+      "profile_studio_warn": "Atención: El formato de estudio (MKV / AV1) no es compatible con WhatsApp y puede fallar en móviles.",
+      "profile_compat_info": "Codificado en MP4 H.264 + AAC con faststart. Funciona con 100% de éxito en móviles, WhatsApp y ordenadores.",
+      "progress_label": "Transfiriendo stream y preparando archivo...",
+      "error_fallback": "Error al procesar.",
+      "retry_btn": "Intentar de Nuevo",
+      "completed_label": "¡Archivo descargado y guardado en tu dispositivo!",
+      "downloading_btn": "Descargando",
+      "download_btn": "Descargar Archivo",
+      "preparing_sticker_btn": "Preparando Sticker...",
+      "make_sticker_btn": "Crear Sticker WhatsApp",
+      "toast_empty_summary": "Enlace Vacío",
+      "toast_empty_detail": "Por favor, ingresa al menos un enlace para descargar.",
+      "toast_success_summary": "Descarga Completa",
+      "toast_success_detail": "Archivo guardado con éxito en tu dispositivo",
+      "toast_fail_summary": "Error de Descarga",
+      "toast_fail_detail": "Error al extraer el video.",
+      "toast_sticker_summary": "Aviso",
+      "toast_sticker_detail": "Redirigiendo a Sticker Studio para cargar el archivo.",
+      "err_server": "Error del servidor al procesar el video. Inténtalo de nuevo.",
+      "err_invalid_blob": "Archivo devuelto inválido",
+      "profiles": {
+        "compatibility": {
+          "name": "Máxima Compatibilidad (WhatsApp y Universal)",
+          "badge": "Recomendado",
+          "description": "H.264 + AAC en MP4 estricto. Funciona fluido en Android, iPhone, WhatsApp Web y TV."
+        },
+        "whatsapp_4k": {
+          "name": "WhatsApp 4K (Documento MP4)",
+          "badge": "Alta Definición",
+          "description": "Video en alta resolución con audio estéreo AAC compatible."
+        },
+        "studio_max": {
+          "name": "Máxima Calidad (Estudio / MKV)",
+          "badge": "Profesional",
+          "description": "Flujo bruto de estudio (AV1/VP9 + Opus) para edición en Premiere y DaVinci Resolve.",
+          "warning": "Atención: los códecs de estudio no funcionan en WhatsApp y pueden fallar en móviles."
+        }
+      }
+    },
+    "sticker": {
+      "title": "Sticker Studio — WhatsApp",
+      "subtitle_prefix": "Recorta, haz zoom y convierte cualquier video en sticker (WebP 512×512) con",
+      "subtitle_bold": "metadatos EXIF oficiales",
+      "subtitle_suffix": "reconocidos por WhatsApp.",
+      "upload_loaded": "Video cargado desde el Descargador",
+      "upload_prompt": "Haz clic para seleccionar un video (MP4) o GIF",
+      "upload_subtext": "O arrastra tu archivo aquí",
+      "capture_btn": "Capturar Frame Actual",
+      "capture_hint": "Pausa o desliza el video hasta el momento exacto",
+      "crop_title": "Encuadre y Recorte (Crop 512×512):",
+      "crop_custom": "Recorte Libre (Zoom y Posición)",
+      "crop_top": "Arriba (1:1 Móvil)",
+      "crop_center": "Centro (1:1)",
+      "crop_bottom": "Abajo (1:1)",
+      "crop_fit": "Ajustar Completo (Transparente)",
+      "zoom_label": "Zoom / Escala del Sticker:",
+      "pos_y_label": "Posición Vertical (Y):",
+      "pos_x_label": "Posición Horizontal (X):",
+      "pos_top": "Arriba",
+      "pos_bottom": "Abajo",
+      "pos_center": "Centro",
+      "pos_left": "Izquierda",
+      "pos_right": "Derecha",
+      "crop_size_label": "Tamaño del Encuadre:",
+      "trim_title": "Recorte Temporal (Máx. 6 segundos)",
+      "trim_duration": "Duración:",
+      "trim_total": "Total:",
+      "trim_start": "Inicio (segundos):",
+      "trim_end": "Fin (segundos):",
+      "exif_title": "Metadatos Oficiales WhatsApp (EXIF)",
+      "pack_label": "Nombre del Paquete:",
+      "pack_placeholder": "Ej: Mis Stickers",
+      "author_label": "Autor / Creador:",
+      "author_placeholder": "Ej: Yesode",
+      "default_pack_name": "Yesode Stickers",
+      "processing_btn": "Procesando Sticker WebP con EXIF...",
+      "create_btn": "Crear Sticker WhatsApp",
+      "preview_title": "Vista Previa en WhatsApp",
+      "preview_alt": "Sticker WhatsApp",
+      "preview_empty": "Tu sticker WebP aparecerá aquí con recorte y transparencia",
+      "download_btn": "Guardar Sticker (.webp) en Dispositivo",
+      "guide_title": "Reconocimiento Oficial en WhatsApp:",
+      "guide_web_label": "En WhatsApp Web / Desktop:",
+      "guide_web_text": "Arrastra el archivo .webp descargado directo al chat. Se enviará automáticamente como sticker nativo transparente.",
+      "guide_mobile_label": "En WhatsApp Móvil:",
+      "guide_mobile_text": "Envíate el archivo o tócalo en el chat y selecciona \"Agregar a Favoritos\".",
+      "preview_hint": "La vista previa se actualiza en tiempo real con tus ajustes de recorte y zoom. Haz clic en \"Crear Sticker WhatsApp\" para incrustar el EXIF y descargar.",
+      "toast_invalid_summary": "Formato Inválido",
+      "toast_invalid_detail": "Por favor, sube un archivo de video (MP4/WebM) o GIF.",
+      "toast_ready_summary": "¡Sticker WhatsApp Listo!",
+      "toast_ready_detail": "Metadatos EXIF y dimensiones 512x512 inyectados con éxito.",
+      "toast_err_summary": "Error de Creación",
+      "toast_err_detail": "No se pudo procesar el video.",
+      "toast_dl_summary": "Descarga Completa",
+      "toast_dl_detail": "¡Arrastra el archivo .webp directamente a cualquier chat de WhatsApp!"
+    },
+    "errors": {
+      "invalid_pix_key": "La clave Pix no puede estar vacía o es inválida.",
+      "invalid_crc16": "Firma CRC16 inválida en el código Pix EMV.",
+      "invalid_pix_payload": "Código Pix Copia e Cola inválido.",
+      "qr_domain_error": "Verifica los datos ingresados para el Pix.",
+      "unsupported_platform": "Enlace no compatible. Aceptamos YouTube, X (Twitter), Instagram y Facebook.",
+      "media_security": "URL inválida o acceso no permitido.",
+      "media_domain_error": "Enlace de medios inválido.",
+      "duration_exceeded": "La duración del sticker no puede superar los 6 segundos (límite de WhatsApp).",
+      "file_size_exceeded": "El sticker generado debe pesar menos de 500 KB para WhatsApp.",
+      "invalid_trim_interval": "Intervalo de tiempo inválido.",
+      "sticker_domain_error": "Error de validación en el sticker."
+    }
   }
 }

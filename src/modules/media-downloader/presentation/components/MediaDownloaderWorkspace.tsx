@@ -1,4 +1,5 @@
 import React, { useState, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Button } from 'primereact/button';
 import { Toast } from 'primereact/toast';
 import {
@@ -15,7 +16,7 @@ import {
   X,
   ShieldCheck,
   AlertTriangle,
-  Info
+  Info,
 } from 'lucide-react';
 import { MediaSourceUrl } from '../../domain/value-objects/MediaSourceUrl.ts';
 import {
@@ -47,11 +48,19 @@ export interface MediaDownloaderWorkspaceProps {
 export const MediaDownloaderWorkspace: React.FC<MediaDownloaderWorkspaceProps> = ({
   onSendToStickerMaker,
 }) => {
+  const { t } = useTranslation();
   const [inputText, setInputText] = useState('');
   const [queue, setQueue] = useState<QueueItem[]>([]);
   const toast = useRef<Toast>(null);
 
-  // Adicionar um ou múltiplos links à fila
+  const resolveErrorMessage = (err: any, fallbackKey: string): string => {
+    if (err?.code) {
+      const translated = t(`tools.errors.${err.code}`, { defaultValue: '' });
+      if (translated) return translated;
+    }
+    return err?.message || t(fallbackKey);
+  };
+
   const handleAddLinks = (e: React.FormEvent) => {
     e.preventDefault();
     const lines = inputText
@@ -62,8 +71,8 @@ export const MediaDownloaderWorkspace: React.FC<MediaDownloaderWorkspaceProps> =
     if (lines.length === 0) {
       toast.current?.show({
         severity: 'warn',
-        summary: 'Link Vazio',
-        detail: 'Por favor, insira pelo menos um link para download.',
+        summary: t('tools.media.toast_empty_summary'),
+        detail: t('tools.media.toast_empty_detail'),
         life: 3000,
       });
       return;
@@ -78,12 +87,11 @@ export const MediaDownloaderWorkspace: React.FC<MediaDownloaderWorkspaceProps> =
         media = MediaSourceUrl.create(url);
       } catch (err: any) {
         status = 'error';
-        errorMessage = err.message || 'Link inválido ou não suportado.';
+        errorMessage = resolveErrorMessage(err, 'tools.errors.media_domain_error');
       }
 
       const itemId = `${Date.now()}-${Math.random().toString(36).substring(2, 9)}`;
 
-      // Busca metadados instantâneos de forma assíncrona
       if (media) {
         fetch(`/api/tools/media-info?url=${encodeURIComponent(media.url)}`)
           .then((res) => (res.ok ? res.json() : null))
@@ -93,17 +101,17 @@ export const MediaDownloaderWorkspace: React.FC<MediaDownloaderWorkspaceProps> =
                 prev.map((q) =>
                   q.id === itemId
                     ? {
-                        ...q,
-                        title: info.title,
-                        duration: info.duration,
-                        thumbnail: info.thumbnail,
-                      }
+                      ...q,
+                      title: info.title,
+                      duration: info.duration,
+                      thumbnail: info.thumbnail,
+                    }
                     : q
                 )
               );
             }
           })
-          .catch(() => {});
+          .catch(() => { });
       }
 
       return {
@@ -113,7 +121,7 @@ export const MediaDownloaderWorkspace: React.FC<MediaDownloaderWorkspaceProps> =
         status,
         progress: 0,
         format: 'video_muxed',
-        profile: 'compatibility', // Sempre inicia com Máxima Compatibilidade por padrão
+        profile: 'compatibility',
         errorMessage,
       };
     });
@@ -122,31 +130,26 @@ export const MediaDownloaderWorkspace: React.FC<MediaDownloaderWorkspaceProps> =
     setInputText('');
   };
 
-  // Alterar formato de um item específico na fila
   const handleFormatChange = (id: string, format: DownloadFormat) => {
     setQueue((prev) =>
       prev.map((item) => (item.id === id ? { ...item, format } : item))
     );
   };
 
-  // Alterar perfil de compatibilidade de um item específico
   const handleProfileChange = (id: string, profile: DownloadProfile) => {
     setQueue((prev) =>
       prev.map((item) => (item.id === id ? { ...item, profile } : item))
     );
   };
 
-  // Remover item da fila
   const handleRemoveItem = (id: string) => {
     setQueue((prev) => prev.filter((item) => item.id !== id));
   };
 
-  // Executar download individual assíncrono com salvamento real no PC
   const handleStartDownload = async (id: string) => {
     const item = queue.find((q) => q.id === id);
     if (!item || !item.media) return;
 
-    // Atualiza apenas este card para status downloading
     setQueue((prev) =>
       prev.map((q) => (q.id === id ? { ...q, status: 'downloading', progress: 5, errorMessage: undefined } : q))
     );
@@ -157,10 +160,9 @@ export const MediaDownloaderWorkspace: React.FC<MediaDownloaderWorkspaceProps> =
         url: item.media.url,
         format: item.format,
         profile: item.profile,
-        container: spec.container
+        container: spec.container,
       });
 
-      // Progresso suave visual enquanto o backend processa o download/muxing
       let progressVal = 10;
       const progressTimer = setInterval(() => {
         if (progressVal < 85) {
@@ -171,13 +173,12 @@ export const MediaDownloaderWorkspace: React.FC<MediaDownloaderWorkspaceProps> =
         }
       }, 500);
 
-      // Chamada real para extração / proxy de download com stream
       const response = await fetch(`/api/tools/media-download?${queryParams.toString()}`);
       clearInterval(progressTimer);
 
       if (!response.ok) {
         const errorData = await response.json().catch(() => null);
-        throw new Error(errorData?.error || 'Falha no servidor ao processar o vídeo. Tente novamente.');
+        throw new Error(errorData?.error || t('tools.media.err_server'));
       }
 
       setQueue((prev) =>
@@ -187,9 +188,8 @@ export const MediaDownloaderWorkspace: React.FC<MediaDownloaderWorkspaceProps> =
       const blob = await response.blob();
 
       if (blob.size < 500) {
-        // Arquivo corrompido ou texto de erro retornado
         const errorText = await blob.text();
-        throw new Error(`Arquivo retornado inválido (${blob.size} bytes): ${errorText.substring(0, 100)}`);
+        throw new Error(`${t('tools.media.err_invalid_blob')} (${blob.size} bytes): ${errorText.substring(0, 100)}`);
       }
 
       const safeTitle = (item.title || `yesode-${item.media.platform}`)
@@ -197,7 +197,6 @@ export const MediaDownloaderWorkspace: React.FC<MediaDownloaderWorkspaceProps> =
         .substring(0, 45);
       const filename = `${safeTitle}.${spec.container}`;
 
-      // DISPARO REAL DE DOWNLOAD NO COMPUTADOR DO USUÁRIO
       const blobUrl = window.URL.createObjectURL(blob);
       const link = document.createElement('a');
       link.href = blobUrl;
@@ -206,7 +205,6 @@ export const MediaDownloaderWorkspace: React.FC<MediaDownloaderWorkspaceProps> =
       link.click();
       document.body.removeChild(link);
 
-      // Conclui com sucesso
       setQueue((prev) =>
         prev.map((q) =>
           q.id === id
@@ -217,30 +215,28 @@ export const MediaDownloaderWorkspace: React.FC<MediaDownloaderWorkspaceProps> =
 
       toast.current?.show({
         severity: 'success',
-        summary: 'Download Concluído',
-        detail: `Arquivo salvo com sucesso em seu computador (${filename}).`,
+        summary: t('tools.media.toast_success_summary'),
+        detail: `${t('tools.media.toast_success_detail')} (${filename}).`,
         life: 4000,
       });
-
     } catch (err: any) {
       setQueue((prev) =>
         prev.map((q) =>
           q.id === id
-            ? { ...q, status: 'error', progress: 0, errorMessage: err.message || 'O download falhou. Clique em tentar de novo.' }
+            ? { ...q, status: 'error', progress: 0, errorMessage: err.message || t('tools.media.error_fallback') }
             : q
         )
       );
 
       toast.current?.show({
         severity: 'error',
-        summary: 'Falha no Download',
-        detail: err.message || 'Erro ao extrair vídeo.',
+        summary: t('tools.media.toast_fail_summary'),
+        detail: err.message || t('tools.media.toast_fail_detail'),
         life: 4000,
       });
     }
   };
 
-  // Preparar mídia com loader e navegar para o criador de figurinhas
   const handleConvertToSticker = async (id: string) => {
     const item = queue.find((q) => q.id === id);
     if (!item || !item.media || !onSendToStickerMaker) return;
@@ -262,15 +258,14 @@ export const MediaDownloaderWorkspace: React.FC<MediaDownloaderWorkspaceProps> =
       );
 
       onSendToStickerMaker(videoBlobUrl);
-
-    } catch (err: any) {
+    } catch {
       setQueue((prev) =>
         prev.map((q) => (q.id === id ? { ...q, status: 'ready' } : q))
       );
       toast.current?.show({
         severity: 'warn',
-        summary: 'Aviso',
-        detail: 'Redirecionando para o Sticker Studio para carregar o arquivo.',
+        summary: t('tools.media.toast_sticker_summary'),
+        detail: t('tools.media.toast_sticker_detail'),
         life: 3000,
       });
       onSendToStickerMaker(item.media.url);
@@ -284,80 +279,77 @@ export const MediaDownloaderWorkspace: React.FC<MediaDownloaderWorkspaceProps> =
       <div className="ys-downloader-container">
         <div className="ys-downloader-card">
           <div className="ys-downloader-header">
-            <h3 className="ys-downloader-title">Baixar Vídeos e Áudios em Alta Qualidade</h3>
+            <h3 className="ys-downloader-title">{t('tools.media.title')}</h3>
             <p className="ys-downloader-subtitle">
-              Extração sem anúncios, sem limites e com salvamento direto na sua máquina. Cole <strong>um ou vários links</strong> do YouTube, X, Instagram ou Facebook.
+              {t('tools.media.subtitle_prefix')} <strong>{t('tools.media.subtitle_bold')}</strong> {t('tools.media.subtitle_suffix')}
             </p>
           </div>
 
-          {/* Banner de Garantia de Máxima Compatibilidade Universal */}
           <div className="ys-compatibility-banner">
             <div className="ys-compatibility-icon">
               <ShieldCheck size={20} color="#C4A962" />
             </div>
             <div className="ys-compatibility-body">
-              <strong>Perfil Padrão: Máxima Compatibilidade Universal</strong>
+              <strong>{t('tools.media.compat_title')}</strong>
               <span>
-                Todos os downloads são gerados por padrão em contêiner <strong>MP4 seguro (H.264 + AAC)</strong> e <strong>MP3 320k</strong>, garantindo que o vídeo rode instantaneamente em qualquer smartphone, WhatsApp e TV, sem travamentos de codec de estúdio.
+                {t('tools.media.compat_desc_1')} <strong>{t('tools.media.compat_desc_bold1')}</strong> {t('tools.media.compat_desc_and')}{' '}
+                <strong>{t('tools.media.compat_desc_bold2')}</strong>
+                {t('tools.media.compat_desc_2')}
               </span>
             </div>
           </div>
 
-          {/* Form para adicionar 1 ou múltiplos links com espaçamento generoso */}
           <form className="ys-multi-input-form" onSubmit={handleAddLinks}>
             <div className="ys-multi-input-wrapper">
               <label className="ys-input-headline" htmlFor="media-links-textarea">
-                Cole aqui um ou vários links (um por linha):
+                {t('tools.media.input_label')}
               </label>
               <textarea
                 id="media-links-textarea"
                 rows={3}
                 value={inputText}
-                placeholder="Exemplo:&#10;https://www.youtube.com/watch?v=...&#10;https://x.com/user/status/..."
+                placeholder={t('tools.media.input_placeholder')}
                 className="ys-multi-textarea"
                 onChange={(e) => setInputText(e.target.value)}
               />
             </div>
             <Button type="submit" className="p-button-primary ys-add-queue-btn">
               <Plus size={18} />
-              <span>Adicionar à Fila</span>
+              <span>{t('tools.media.add_btn')}</span>
             </Button>
           </form>
 
-          {/* Supported platform chips */}
           <div className="ys-platform-chips">
-            <span className="ys-chip">YouTube (1080p, 4K e MP3)</span>
-            <span className="ys-chip">X / Twitter (Vídeos e GIFs)</span>
-            <span className="ys-chip">Instagram (Reels, Posts e Vídeos)</span>
-            <span className="ys-chip">Facebook Watch</span>
+            <span className="ys-chip">{t('tools.media.chip_yt')}</span>
+            <span className="ys-chip">{t('tools.media.chip_x')}</span>
+            <span className="ys-chip">{t('tools.media.chip_ig')}</span>
+            <span className="ys-chip">{t('tools.media.chip_fb')}</span>
           </div>
 
-          {/* Fila Assíncrona de Downloads */}
           {queue.length > 0 && (
             <div className="ys-queue-container">
               <div className="ys-queue-header">
                 <div className="ys-queue-title-wrap">
-                  <h4>Fila de Mídias ({queue.length})</h4>
-                  <span className="ys-queue-hint">Cada link é baixado de forma independente.</span>
+                  <h4>{t('tools.media.queue_title')} ({queue.length})</h4>
+                  <span className="ys-queue-hint">{t('tools.media.queue_hint')}</span>
                 </div>
                 <Button
                   className="p-button-text p-button-sm ys-clear-all"
                   onClick={() => setQueue([])}
                 >
-                  Limpar Fila
+                  {t('tools.media.clear_queue')}
                 </Button>
               </div>
 
               <div className="ys-queue-list">
                 {queue.map((item) => (
                   <div key={item.id} className={`ys-queue-card status-${item.status}`}>
-                    {/* Header do Card com Plataforma e Botão Fechar */}
                     <div className="ys-card-top-row">
                       <div className="ys-card-meta">
                         <Video size={20} className="ys-meta-icon" />
                         <div className="ys-meta-text">
                           <span className="ys-platform-label">
-                            {item.title ? item.title : (item.media ? item.media.platformDisplayName : 'Link Desconhecido')}
+                            {item.title ? item.title : (item.media ? item.media.platformDisplayName : t('tools.media.unknown_link'))}
                           </span>
                           <span className="ys-url-preview" title={item.rawUrl}>
                             {item.media ? `[${item.media.platformDisplayName}] ${item.rawUrl}` : item.rawUrl}
@@ -369,18 +361,16 @@ export const MediaDownloaderWorkspace: React.FC<MediaDownloaderWorkspaceProps> =
                         type="button"
                         className="ys-remove-btn"
                         onClick={() => handleRemoveItem(item.id)}
-                        title="Remover da fila"
+                        title={t('tools.media.remove_title')}
                       >
                         <X size={18} />
                       </button>
                     </div>
 
-                    {/* Controles de Formato e Perfil */}
                     {item.media && item.status !== 'completed' && (
                       <div className="ys-card-settings-grid">
-                        {/* Seletor de Formato */}
                         <div className="ys-setting-group">
-                          <span className="ys-setting-label">Formato do Arquivo:</span>
+                          <span className="ys-setting-label">{t('tools.media.format_label')}</span>
                           <div className="ys-format-pills">
                             <button
                               type="button"
@@ -389,7 +379,7 @@ export const MediaDownloaderWorkspace: React.FC<MediaDownloaderWorkspaceProps> =
                               disabled={item.status === 'downloading' || item.status === 'preparing_sticker'}
                             >
                               <Video size={14} />
-                              <span>Vídeo MP4</span>
+                              <span>{t('tools.media.format_video')}</span>
                             </button>
                             <button
                               type="button"
@@ -398,7 +388,7 @@ export const MediaDownloaderWorkspace: React.FC<MediaDownloaderWorkspaceProps> =
                               disabled={item.status === 'downloading' || item.status === 'preparing_sticker'}
                             >
                               <Music size={14} />
-                              <span>Áudio MP3 (320k)</span>
+                              <span>{t('tools.media.format_audio')}</span>
                             </button>
                             <button
                               type="button"
@@ -407,7 +397,7 @@ export const MediaDownloaderWorkspace: React.FC<MediaDownloaderWorkspaceProps> =
                               disabled={item.status === 'downloading' || item.status === 'preparing_sticker'}
                             >
                               <Film size={14} />
-                              <span>Somente Vídeo (Mudo)</span>
+                              <span>{t('tools.media.format_video_only')}</span>
                             </button>
                             {(item.media.platform === 'twitter' || item.media.platform === 'youtube') && (
                               <button
@@ -417,20 +407,19 @@ export const MediaDownloaderWorkspace: React.FC<MediaDownloaderWorkspaceProps> =
                                 disabled={item.status === 'downloading' || item.status === 'preparing_sticker'}
                               >
                                 <Sparkles size={14} />
-                                <span>GIF Animado</span>
+                                <span>{t('tools.media.format_gif')}</span>
                               </button>
                             )}
                           </div>
                         </div>
 
-                        {/* Seletor de Perfil (apenas para vídeo) */}
                         {(item.format === 'video_muxed' || item.format === 'video_only') && (
                           <div className="ys-setting-group">
                             <div className="ys-setting-label-row">
-                              <span className="ys-setting-label">Perfil de Compatibilidade:</span>
+                              <span className="ys-setting-label">{t('tools.media.profile_label')}</span>
                               {item.profile === 'compatibility' && (
                                 <span className="ys-pill-badge-recommended">
-                                  <ShieldCheck size={12} /> Compatibilidade Total
+                                  <ShieldCheck size={12} /> {t('tools.media.profile_total')}
                                 </span>
                               )}
                             </div>
@@ -443,29 +432,23 @@ export const MediaDownloaderWorkspace: React.FC<MediaDownloaderWorkspaceProps> =
                                   onClick={() => handleProfileChange(item.id, prof.id)}
                                   disabled={item.status === 'downloading' || item.status === 'preparing_sticker'}
                                 >
-                                  <span className="ys-profile-name">{prof.name}</span>
-                                  {prof.isRecommended && <span className="ys-badge-tag">Padrão</span>}
+                                  <span className="ys-profile-name">{t(prof.nameKey)}</span>
+                                  {prof.isRecommended && <span className="ys-badge-tag">{t('tools.media.profile_default_tag')}</span>}
                                 </button>
                               ))}
                             </div>
 
-                            {/* Alerta caso escolha perfil de estúdio */}
                             {item.profile === 'studio_max' && (
                               <div className="ys-profile-warning">
                                 <AlertTriangle size={14} />
-                                <span>
-                                  Atenção: O formato de estúdio (MKV / AV1) não é compatível com WhatsApp e pode travar em reprodutores convencionais.
-                                </span>
+                                <span>{t('tools.media.profile_studio_warn')}</span>
                               </div>
                             )}
 
-                            {/* Informação sobre Máxima Compatibilidade */}
                             {item.profile === 'compatibility' && (
                               <div className="ys-profile-info">
                                 <Info size={14} />
-                                <span>
-                                  Codificado em MP4 H.264 + AAC com faststart. Funciona com 100% de sucesso em celulares, grupos de WhatsApp e computadores.
-                                </span>
+                                <span>{t('tools.media.profile_compat_info')}</span>
                               </div>
                             )}
                           </div>
@@ -473,7 +456,6 @@ export const MediaDownloaderWorkspace: React.FC<MediaDownloaderWorkspaceProps> =
                       </div>
                     )}
 
-                    {/* Progress Bar (se estiver baixando) */}
                     {item.status === 'downloading' && (
                       <div className="ys-card-progress-bar">
                         <div className="ys-progress-track">
@@ -483,35 +465,32 @@ export const MediaDownloaderWorkspace: React.FC<MediaDownloaderWorkspaceProps> =
                           />
                         </div>
                         <div className="ys-progress-info">
-                          <span>Transferindo stream e preparando arquivo...</span>
+                          <span>{t('tools.media.progress_label')}</span>
                           <strong>{item.progress}%</strong>
                         </div>
                       </div>
                     )}
 
-                    {/* Error Banner isolado */}
                     {item.status === 'error' && (
                       <div className="ys-card-error-banner">
-                        <span>{item.errorMessage || 'Falha ao processar.'}</span>
+                        <span>{item.errorMessage || t('tools.media.error_fallback')}</span>
                         <Button
                           className="p-button-outlined p-button-sm ys-retry-btn"
                           onClick={() => handleStartDownload(item.id)}
                         >
                           <RefreshCw size={14} />
-                          <span>Tentar de Novo</span>
+                          <span>{t('tools.media.retry_btn')}</span>
                         </Button>
                       </div>
                     )}
 
-                    {/* Completed Banner */}
                     {item.status === 'completed' && (
                       <div className="ys-card-success-banner">
                         <CheckCircle2 size={18} color="#10B981" />
-                        <span>Arquivo baixado e salvo no seu computador!</span>
+                        <span>{t('tools.media.completed_label')}</span>
                       </div>
                     )}
 
-                    {/* Card Actions com Espaçamento Amplo */}
                     <div className="ys-card-actions">
                       {item.status !== 'completed' && item.status !== 'error' && (
                         <Button
@@ -522,12 +501,12 @@ export const MediaDownloaderWorkspace: React.FC<MediaDownloaderWorkspaceProps> =
                           {item.status === 'downloading' ? (
                             <>
                               <Loader2 size={16} className="ys-spin" />
-                              <span>Baixando ({item.progress}%)...</span>
+                              <span>{t('tools.media.downloading_btn')} ({item.progress}%)...</span>
                             </>
                           ) : (
                             <>
                               <Download size={16} />
-                              <span>Baixar Arquivo</span>
+                              <span>{t('tools.media.download_btn')}</span>
                             </>
                           )}
                         </Button>
@@ -542,12 +521,12 @@ export const MediaDownloaderWorkspace: React.FC<MediaDownloaderWorkspaceProps> =
                           {item.status === 'preparing_sticker' ? (
                             <>
                               <Loader2 size={16} className="ys-spin" />
-                              <span>Preparando Figurinha...</span>
+                              <span>{t('tools.media.preparing_sticker_btn')}</span>
                             </>
                           ) : (
                             <>
                               <Sparkles size={16} />
-                              <span>Fazer Figurinha WhatsApp</span>
+                              <span>{t('tools.media.make_sticker_btn')}</span>
                               <ArrowRight size={14} />
                             </>
                           )}
@@ -564,4 +543,3 @@ export const MediaDownloaderWorkspace: React.FC<MediaDownloaderWorkspaceProps> =
     </div>
   );
 };
-

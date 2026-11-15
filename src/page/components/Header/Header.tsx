@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useNavigate, useLocation, Link, useParams } from 'react-router-dom';
+import { getToolPath, normalizeLang } from '@/modules/landing/domain/ToolRoutes.ts';
 import { Button } from 'primereact/button';
 import { useTranslation } from 'react-i18next';
 import { ThemeToggle } from '../ThemeToggle/ThemeToggle';
@@ -95,9 +96,9 @@ export const Header: React.FC = () => {
   return (
     <header className={`ys-header ${scrolled ? 'is-scrolled' : ''}`}>
       <div className="ys-header-shell">
-        <Link 
-          className="ys-logo" 
-          to={isAuthenticated ? "/admin" : `/${lang}`} 
+        <Link
+          className="ys-logo"
+          to={isAuthenticated ? "/admin" : `/${lang}`}
           onClick={handleLogoClick}
           aria-label="Yesode"
           title={isAuthenticated ? "Ir para Painel Admin" : "Yesode"}
@@ -140,7 +141,7 @@ export const Header: React.FC = () => {
               onClick={handleToolsClick}
             >
               <Wrench size={14} />
-              <span>Ferramentas</span>
+              <span>{t('header.tools')}</span>
               <ChevronDown size={13} className={`ys-chevron ${toolsDropdownOpen ? 'is-open' : ''}`} />
             </button>
 
@@ -151,36 +152,36 @@ export const Header: React.FC = () => {
                 onMouseLeave={handleToolsMouseLeave}
               >
                 <Link
-                  to={`/${lang}/ferramentas/gerador-qr-code-pix`}
+                  to={getToolPath(normalizeLang(lang), 'qr')}
                   className="ys-tools-dropdown-item"
                   onClick={() => setToolsDropdownOpen(false)}
                 >
                   <QrCode size={15} />
                   <div>
-                    <strong>Gerador QR Code e Pix</strong>
-                    <small>Cobranças EMV®, CRC16 e Links</small>
+                    <strong>{t('header.tools_qr_title')}</strong>
+                    <small>{t('header.tools_qr_sub')}</small>
                   </div>
                 </Link>
                 <Link
-                  to={`/${lang}/ferramentas/baixar-videos-youtube-redes-sociais`}
+                  to={getToolPath(normalizeLang(lang), 'media')}
                   className="ys-tools-dropdown-item"
                   onClick={() => setToolsDropdownOpen(false)}
                 >
                   <Video size={15} />
                   <div>
-                    <strong>Downloader de Mídia</strong>
-                    <small>YouTube, X, Insta e Facebook</small>
+                    <strong>{t('header.tools_media_title')}</strong>
+                    <small>{t('header.tools_media_sub')}</small>
                   </div>
                 </Link>
                 <Link
-                  to={`/${lang}/ferramentas/criar-figurinha-whatsapp`}
+                  to={getToolPath(normalizeLang(lang), 'sticker')}
                   className="ys-tools-dropdown-item"
                   onClick={() => setToolsDropdownOpen(false)}
                 >
                   <Smile size={15} />
                   <div>
-                    <strong>Figurinhas WhatsApp</strong>
-                    <small>Vídeos e GIFs para WebP</small>
+                    <strong>{t('header.tools_sticker_title')}</strong>
+                    <small>{t('header.tools_sticker_sub')}</small>
                   </div>
                 </Link>
               </div>
@@ -239,33 +240,33 @@ export const Header: React.FC = () => {
 
         <div className="ys-mobile-tools-section">
           <Link
-            to={`/${lang}/ferramentas`}
+            to={getToolPath(normalizeLang(lang))}
             className="ys-mobile-link ys-mobile-tools-header"
             onClick={() => setMobileOpen(false)}
           >
-            <Wrench size={16} /> <span>Ferramentas Gratuitas</span>
+            <Wrench size={16} /> <span>{t('header.tools_free')}</span>
           </Link>
           <div className="ys-mobile-tools-sublinks">
             <Link
-              to={`/${lang}/ferramentas/gerador-qr-code-pix`}
+              to={getToolPath(normalizeLang(lang), 'qr')}
               className="ys-mobile-sublink"
               onClick={() => setMobileOpen(false)}
             >
-              <QrCode size={14} /> <span>Gerador QR Code e Pix</span>
+              <QrCode size={14} /> <span>{t('header.tools_qr_title')}</span>
             </Link>
             <Link
-              to={`/${lang}/ferramentas/baixar-videos-youtube-redes-sociais`}
+              to={getToolPath(normalizeLang(lang), 'media')}
               className="ys-mobile-sublink"
               onClick={() => setMobileOpen(false)}
             >
-              <Video size={14} /> <span>Downloader de Mídia (YT & X)</span>
+              <Video size={14} /> <span>{t('header.tools_media_title')}</span>
             </Link>
             <Link
-              to={`/${lang}/ferramentas/criar-figurinha-whatsapp`}
+              to={getToolPath(normalizeLang(lang), 'sticker')}
               className="ys-mobile-sublink"
               onClick={() => setMobileOpen(false)}
             >
-              <Smile size={14} /> <span>Figurinhas WhatsApp</span>
+              <Smile size={14} /> <span>{t('header.tools_sticker_title')}</span>
             </Link>
           </div>
         </div>

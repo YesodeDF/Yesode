@@ -2,26 +2,33 @@ import React from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Linkedin, Github, Mail, ArrowUpRight } from 'lucide-react';
+import {
+  getLegalPath,
+  getStrategicPath,
+  getToolPath,
+  normalizeLang,
+} from '@/modules/landing/domain/ToolRoutes.ts';
 import './Footer.scss';
 
 export const Footer: React.FC = () => {
   const { t } = useTranslation();
-  const { lang = 'en' } = useParams<{ lang: string }>();
+  const { lang: rawLang = 'pt' } = useParams<{ lang: string }>();
+  const lang = normalizeLang(rawLang);
 
   const columns = [
     {
       title: t('footer.col_capabilities'),
       links: [
-        { label: t('pillars.items.0.title'), href: `/${lang}#pillars` },
-        { label: t('pillars.items.1.title'), href: `/${lang}#pillars` },
+        { label: t('header.nav_enterprise'), href: getStrategicPath(lang, 'enterprise') },
+        { label: t('header.nav_business'), href: getStrategicPath(lang, 'business') },
         { label: t('pillars.items.2.title'), href: `/${lang}#pillars` },
-        { label: t('pillars.items.3.title'), href: `/${lang}#pillars` },
+        { label: t('pillars.items.0.title'), href: `/${lang}#pillars` },
       ],
     },
     {
       title: t('footer.col_company'),
       links: [
-        { label: t('footer.link_cases'), href: `/${lang}#cases` },
+        { label: t('footer.link_cases'), href: getStrategicPath(lang, 'cases') },
         { label: t('footer.link_process'), href: `/${lang}#process` },
         { label: t('footer.link_architecture'), href: `/${lang}#proof` },
         { label: t('footer.link_faq'), href: `/${lang}#faq` },
@@ -30,9 +37,10 @@ export const Footer: React.FC = () => {
     {
       title: t('footer.col_resources'),
       links: [
+        { label: t('header.tools_free'), href: getToolPath(lang) },
         { label: t('footer.link_status'), href: 'https://status.yesode.com.br', external: true },
-        { label: t('footer.link_privacy'), href: `/${lang}/politica-de-privacidade` },
-        { label: t('footer.link_terms'), href: `/${lang}/termos-de-uso` },
+        { label: t('footer.link_privacy'), href: getLegalPath(lang, 'privacy') },
+        { label: t('footer.link_terms'), href: getLegalPath(lang, 'terms') },
       ],
     },
   ];
@@ -59,13 +67,13 @@ export const Footer: React.FC = () => {
               {t('footer.tagline')}
             </p>
             <div className="ys-footer-social">
-              <a href="https://www.linkedin.com" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
+              <a href="https://www.linkedin.com/company/yesode" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn Yesode">
                 <Linkedin size={16} strokeWidth={2} />
               </a>
-              <a href="https://github.com" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
+              <a href="https://github.com/YesodeDF" target="_blank" rel="noopener noreferrer" aria-label="GitHub Yesode">
                 <Github size={16} strokeWidth={2} />
               </a>
-              <a href="mailto:contato@yesode.com" aria-label="E-mail">
+              <a href="mailto:contato@yesode.com" aria-label="E-mail Yesode">
                 <Mail size={16} strokeWidth={2} />
               </a>
             </div>

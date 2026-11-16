@@ -1,5 +1,8 @@
 {
   "header": {
+    "nav_aria": "Navegación principal",
+    "nav_enterprise": "Enterprise",
+    "nav_business": "Business y PYMEs",
     "nav_products": "Productos",
     "nav_capabilities": "Capacidades",
     "nav_cases": "Casos",
@@ -47,43 +50,51 @@
     "items": [
       {
         "title": "Deep Search y KPIs",
+        "semantic": "Ingeniería de Datos, BI Operativo y Métricas P&L",
         "desc": "Toma de decisiones basada en datos reales e indexación profunda de la operación. Métricas conectadas al P&L.",
         "tag": "Insight"
       },
       {
         "title": "Brand Intelligence",
-        "desc": "Soluciones alineadas con la identidad y el tono de voz del negocio.",
+        "semantic": "IA Aplicada a Negocios y Automatización Inteligente",
+        "desc": "Agentes de IA, búsqueda semántica corporativa y automatización alineados con las reglas e identidad del negocio.",
         "tag": "Voice"
       },
       {
         "title": "Engineering by Design",
-        "desc": "Arquitectura a medida desde el primer token — sin concesiones.",
+        "semantic": "Arquitectura y Desarrollo de Software a Medida",
+        "desc": "Sistemas corporativos escalables, DDD y arquitectura limpia desde el primer token — sin concesiones.",
         "tag": "Core"
       },
       {
         "title": "Infra como Producto",
-        "desc": "Plataformas internas que aceleran al equipo, no que piden mantenimiento.",
+        "semantic": "Ingeniería de Plataforma, Cloud AWS y Kubernetes",
+        "desc": "Plataformas internas que aceleran al equipo de ingeniería y optimizan costos cloud sin pasivo de mantenimiento.",
         "tag": "Platform"
       },
       {
         "title": "Continuous Delivery",
-        "desc": "Pipelines determinísticos, blue/green, observabilidad end-to-end.",
+        "semantic": "Pipelines CI/CD, Automatización de Deploy y Observabilidad",
+        "desc": "Pipelines determinísticos, despliegues blue/green, métricas DORA y telemetría end-to-end en producción.",
         "tag": "Ops"
       },
       {
         "title": "Security by Default",
-        "desc": "Zero-trust, cifrado en tránsito y reposo, auditoría continua.",
+        "semantic": "DevSecOps, Cumplimiento Normativo y Seguridad Corporativa",
+        "desc": "Arquitectura zero-trust, cifrado en tránsito y reposo, gobernanza de accesos y auditoría continua.",
         "tag": "Trust"
       }
     ]
   },
   "cases": {
+    "aria_label": "Casos de estudio y resultados de ingeniería auditados",
     "eyebrow": "Resultados",
     "title": "KPIs movidos. ",
     "title_highlight": "No solo código entregado.",
-    "subtitle": "Casos anonimizados. Métricas reales. Cada compromiso comienza con un número base y termina con un número objetivo — auditado.",
+    "subtitle": "Casos anonimizados bajo NDA con metodología verificable. Cada compromiso comienza con un número base medido y termina con un objetivo auditado en producción.",
     "before": "Antes",
     "after": "Después",
+    "read_full_case": "Ver metodología y arquitectura del caso",
     "items": [
       {
         "industry": "Fintech LATAM",
@@ -91,7 +102,8 @@
         "before": "Deploy 1× por semana · lead time 14 días",
         "after": "Deploy 32× por día · lead time 3h",
         "kpiLabel": "lead time de producción",
-        "badge": "Plataforma"
+        "badge": "Plataforma",
+        "methodology": "Medido vía telemetría DORA en GitHub Actions + ArgoCD durante 16 semanas."
       },
       {
         "industry": "Healthtech BR",
@@ -99,7 +111,8 @@
         "before": "p95 de 1.2s · 4 incidentes/mes",
         "after": "p95 de 180ms · 0 incidentes en 6 meses",
         "kpiLabel": "más rápido en producción",
-        "badge": "Rendimiento"
+        "badge": "Rendimiento",
+        "methodology": "Verificado vía OpenTelemetry + Prometheus en más de 12M de solicitudes diarias."
       },
       {
         "industry": "Retail Omnichannel",
@@ -107,7 +120,8 @@
         "before": "Inventario desalineado · 3% pedidos cancelados",
         "after": "Sincronización sub-segundo · 0.2% cancelaciones",
         "kpiLabel": "cancelaciones por desalineación",
-        "badge": "Integración"
+        "badge": "Integración",
+        "methodology": "Auditado vía conciliación de eventos Kafka entre ERP SAP, e-commerce y 140+ tiendas."
       }
     ]
   },
@@ -421,8 +435,315 @@
     "es": "Español"
   },
   "seo": {
-    "title": "Yesode — Consultoría de Ingeniería de Software a Medida para Operaciones Críticas",
-    "description": "Arquitectura a medida, ingeniería directa con el equipo técnico, entregas alineadas con el P&L. Consultoría de software para empresas que tratan la tecnología como ventaja competitiva."
+    "title": "Yesode — Consultoría de Ingeniería de Software, Arquitectura y Automatización con IA",
+    "description": "Ingeniería de software corporativa, arquitectura de sistemas críticos, modernización de legados, integración ERP/CRM y automatización empresarial con IA alineada al P&L.",
+    "keywords": [
+      "consultoría de ingeniería de software",
+      "desarrollo de software a medida",
+      "arquitectura de software empresarial",
+      "modernización de sistemas legados",
+      "integración de sistemas ERP y CRM",
+      "automatización empresarial con IA",
+      "desarrollo de sistemas personalizados",
+      "consultoría tecnológica para empresas"
+    ]
+  },
+  "journeys": {
+    "aria_label": "Jornadas comerciales Yesode Enterprise y Business",
+    "eyebrow": "Dos Jornadas de Adquisición · Una Autoridad Técnica",
+    "title": "Ingeniería diseñada para la escala de ",
+    "title_highlight": "su operación",
+    "title_suffix": ".",
+    "subtitle": "Atendemos tanto grandes operaciones corporativas como empresas en expansión con soluciones adaptadas a la complejidad y etapa de su negocio.",
+    "enterprise": {
+      "badge": "Yesode Enterprise",
+      "audience": "Medianas y Grandes Empresas · CTOs y Directores",
+      "title": "Arquitectura Corporativa y Sistemas Críticos",
+      "semantic": "Consultoría de Ingeniería de Software · Modernización de Legados · Alta Escala",
+      "desc": "Para organizaciones donde las caídas, el acoplamiento arquitectónico o la lentitud de entrega impactan millones en ingresos.",
+      "bullets": [
+        "Desacoplamiento gradual de monolitos legados (Strangler Fig y Event-Driven)",
+        "Microservicios de alta disponibilidad, ingeniería de plataforma y métricas DORA",
+        "Integración de alto rendimiento entre ERPs corporativos (SAP, Oracle, TOTVS) y canales digitales",
+        "Squads sénior acoplados a su equipo interno con transferencia del 100% de propiedad intelectual"
+      ],
+      "cta": "Solicitar Diagnóstico de Arquitectura →"
+    },
+    "business": {
+      "badge": "Yesode Business",
+      "audience": "PYMEs en Crecimiento · CEOs, COOs y Operaciones",
+      "title": "Automatización Empresarial, IA y Sistemas de Gestión",
+      "semantic": "Automatización de Procesos · IA Aplicada con ROI · Integración ERP y CRM",
+      "desc": "Para empresas que necesitan eliminar trabajo manual, conectar sistemas aislados y crecer sin multiplicar los costos operativos.",
+      "bullets": [
+        "Automatización de procesos manuales, financieros, comerciales y operativos",
+        "Sistemas de gestión personalizados y portales B2B sin licencias mensuales por usuario",
+        "Sincronización automática entre CRM, ERP, WhatsApp, facturación e inventario",
+        "Agentes de Inteligencia Artificial para calificación comercial, lectura de documentos y análisis"
+      ],
+      "cta": "Solicitar Diagnóstico de Eficiencia Operativa →"
+    },
+    "cases_bar": {
+      "title": "¿Cómo comprobamos 62% menos lead time y 93% menos cancelaciones?",
+      "desc": "Explore la arquitectura, el escenario previo, el stack tecnológico y la metodología de medición de nuestros casos de estudio y artículos técnicos.",
+      "cta": "Explorar Casos de Estudio e Insights"
+    }
+  },
+  "enterprise_page": {
+    "seo_title": "Ingeniería de Software Enterprise y Arquitectura de Sistemas | Yesode",
+    "seo_desc": "Consultoría de arquitectura de software empresarial, modernización de sistemas legados, integración corporativa e ingeniería de plataformas críticas alineadas al P&L.",
+    "seo_keywords": [
+      "consultoría de ingeniería de software",
+      "arquitectura de software empresarial",
+      "desarrollo de software corporativo",
+      "modernización de sistemas legados",
+      "integración de sistemas empresariales",
+      "ingeniería de plataforma cloud",
+      "software house sistemas corporativos"
+    ],
+    "badge": "Yesode Enterprise · Operaciones Críticas",
+    "title_1": "Ingeniería de software y arquitectura para",
+    "title_highlight": "operaciones críticas.",
+    "subtitle": "Diseñamos, modernizamos y escalamos plataformas corporativas de alta exigencia. Trabajamos directamente con CTOs, VPs de Ingeniería y Directores de Tecnología para eliminar cuellos de botella estructurales.",
+    "cta_primary": "Solicitar Diagnóstico de Arquitectura",
+    "cta_secondary": "Ver Casos de Estudio Auditados",
+    "services_eyebrow": "Capacidades Enterprise",
+    "services_title": "Especialidades para medianas y grandes empresas",
+    "services_desc": "Cada frente combina rigor arquitectónico (DDD, Hexagonal, Event-Driven) con objetivos financieros y operativos auditables.",
+    "services": [
+      {
+        "tag": "Architecture",
+        "title": "Consultoría de Arquitectura de Software",
+        "problem": "Resuelve: baja velocidad de entrega, alto acoplamiento y caídas bajo picos de tráfico.",
+        "desc": "Diagnóstico profundo de topología, diseño de dominios ricos (DDD), definición de presupuestos SLO/SLA y elaboración de ADRs accionables.",
+        "deliverables": ["Diagnóstico Arquitectónico", "Mapa de Dominios DDD", "ADRs y Presupuesto SLO"]
+      },
+      {
+        "tag": "Modernization",
+        "title": "Modernización de Sistemas Legados",
+        "problem": "Resuelve: monolitos críticos difíciles de mantener, alto riesgo operativo y evolución costosa.",
+        "desc": "Migración progresiva y segura mediante Strangler Fig Pattern y mallas de eventos, manteniendo la operación 100% activa sin reescrituras riesgosas.",
+        "deliverables": ["Extracción Incremental", "Pruebas de Contrato", "Migración Zero-Downtime"]
+      },
+      {
+        "tag": "Integration",
+        "title": "Integración Corporativa y Orquestación de Datos",
+        "problem": "Resuelve: silos de datos entre ERP, CRM, core financiero, logística y canales digitales.",
+        "desc": "Buses orientados a eventos (Kafka, RabbitMQ) y APIs resilientes con idempotencia, conciliación en tiempo real y tolerancia a fallos.",
+        "deliverables": ["Event-Driven Mesh", "APIs Idempotentes", "Observabilidad OpenTelemetry"]
+      },
+      {
+        "tag": "Platform & DevSecOps",
+        "title": "Ingeniería de Plataforma, Cloud y Métricas DORA",
+        "problem": "Resuelve: despliegues manuales lentos, costos cloud elevados y falta de visibilidad ejecutiva.",
+        "desc": "Automatización de infraestructura como código (Terraform, Kubernetes), pipelines CI/CD determinísticos (Blue/Green) y optimización auditada de FinOps.",
+        "deliverables": ["Pipelines Blue/Green", "Panel DORA y FinOps", "Seguridad Zero-Trust"]
+      }
+    ],
+    "faq_title": "Preguntas frecuentes de CTOs y Directores de Tecnología",
+    "faqs": [
+      {
+        "q": "¿Cómo modernizar un sistema legado crítico sin detener la operación?",
+        "a": "Utilizamos el patrón Strangler Fig combinado con enrutamiento por API Gateway y mensajería asíncrona. Extraemos primero los dominios de mayor impacto financiero, validando con tráfico espejo (shadow traffic) y despliegues canary antes de apagar módulos antiguos."
+      },
+      {
+        "q": "¿La propiedad intelectual (IP) y el código fuente quedan 100% en nuestra empresa?",
+        "a": "Sí. Nuestra tesis es Zero Vendor Lock-in. Todo el código, infraestructura Terraform, documentación ADR y pipelines se desarrollan en los repositorios de su empresa y le pertenecen íntegramente."
+      },
+      {
+        "q": "¿Cómo se integra Yesode con nuestro equipo interno de ingeniería?",
+        "a": "Actuamos como liderazgo sénior acoplado: participamos en revisiones de código, estándares de arquitectura, pair programming y transferencia con runbooks para que su equipo interno gane autonomía."
+      },
+      {
+        "q": "¿Cuál es el primer paso para iniciar un proyecto Enterprise?",
+        "a": "Comenzamos con una sesión técnica de diagnóstico de 45 minutos bajo NDA mutuo, seguida de una fase de Discovery de 1 a 2 semanas que entrega el mapa de cuellos de botella, la arquitectura objetivo y el alcance cerrado."
+      }
+    ],
+    "crosslink_title": "¿Busca automatización de procesos y eficiencia operativa para PYMEs?",
+    "crosslink_desc": "Conozca nuestra división Yesode Business, enfocada en eliminar trabajo manual, integrar ERP/CRM y aplicar IA con retorno rápido.",
+    "crosslink_cta": "Conocer Yesode Business"
+  },
+  "business_page": {
+    "seo_title": "Automatización de Procesos Empresariales, IA y Sistemas a Medida | Yesode",
+    "seo_desc": "Reduzca costos operativos y trabajo manual con automatización empresarial, inteligencia artificial aplicada, integración ERP/CRM y sistemas de gestión personalizados.",
+    "seo_keywords": [
+      "automatización de procesos empresariales",
+      "empresa de automatización con IA",
+      "inteligencia artificial para empresas",
+      "desarrollo de sistemas personalizados",
+      "cómo integrar ERP y CRM",
+      "reducir costos operativos con tecnología",
+      "sistemas de gestión a medida"
+    ],
+    "badge": "Yesode Business · Eficiencia y Crecimiento",
+    "title_1": "Automatización inteligente y sistemas a medida para",
+    "title_highlight": "escalar su operación.",
+    "subtitle": "Transformamos procesos manuales, hojas de cálculo desconectadas y retrabajo operativo en sistemas rápidos, integrados y auditables — con el rigor de la ingeniería corporativa adaptado a PYMEs en crecimiento.",
+    "cta_primary": "Solicitar Diagnóstico de Eficiencia Operativa",
+    "cta_secondary": "Ver Resultados y Casos de Estudio",
+    "services_eyebrow": "Soluciones Business",
+    "services_title": "Cómo eliminamos cuellos de botella operativos en su empresa",
+    "services_desc": "Proyectos objetivos con retorno financiero (ROI) calculado antes de iniciar el desarrollo.",
+    "services": [
+      {
+        "tag": "Process Automation",
+        "title": "Automatización de Procesos Empresariales",
+        "problem": "Resuelve: equipos gastando horas en carga manual de datos, conciliación de planillas y tareas repetitivas.",
+        "desc": "Mapeamos y automatizamos flujos financieros, facturación, compras, alta de clientes y reportes gerenciales de punta a punta.",
+        "deliverables": ["Flujos Automatizados", "Cero Retrabajo Manual", "Alertas en Tiempo Real"]
+      },
+      {
+        "tag": "Applied AI",
+        "title": "Inteligencia Artificial Aplicada con ROI",
+        "problem": "Resuelve: atención lenta de leads, revisión manual de documentos y pérdida de oportunidades comerciales.",
+        "desc": "Implementamos agentes de IA conectados a su base de datos, CRM y WhatsApp para calificación comercial, lectura de contratos/facturas y soporte asistido.",
+        "deliverables": ["Agentes de IA Seguros", "Búsqueda en Documentos", "Integración WhatsApp y CRM"]
+      },
+      {
+        "tag": "System Integration",
+        "title": "Integración entre ERP, CRM y E-commerce",
+        "problem": "Resuelve: ventas perdidas por stock desactualizado, datos duplicados y sistemas que no se comunican.",
+        "desc": "Conectamos su ERP (SAP B1, NetSuite, TOTVS, Omie), CRM (HubSpot, Pipedrive, Salesforce) y pasarelas de pago con sincronización bidireccional automática.",
+        "deliverables": ["Sincronización Bidireccional", "Conciliación Automática", "Panel de Monitoreo"]
+      },
+      {
+        "tag": "Custom Systems",
+        "title": "Sistemas de Gestión Personalizados y Portales B2B",
+        "problem": "Resuelve: software enlatado rígido que no se adapta a sus reglas de negocio o cobra licencias caras por usuario.",
+        "desc": "Desarrollamos plataformas internas, portales de clientes/proveedores y tableros ejecutivos a medida, 100% propiedad de su empresa.",
+        "deliverables": ["Portales Web y Móvil", "Sin Costo por Usuario", "Código 100% Suyo"]
+      }
+    ],
+    "faq_title": "Preguntas frecuentes sobre Automatización, IA y Sistemas a Medida",
+    "faqs": [
+      {
+        "q": "¿Cuánto cuesta automatizar procesos o desarrollar un sistema a medida?",
+        "a": "Trabajamos con alcance cerrado tras el Diagnóstico de Eficiencia Operativa. Priorizamos entregas de rápido retorno financiero (4 a 10 semanas) donde el ahorro de horas operativas y reducción de errores paga la inversión."
+      },
+      {
+        "q": "¿Necesito cambiar mi ERP o CRM actual para automatizar mi operación?",
+        "a": "En la mayoría de los casos, no. Construimos capas de integración y automatización vía API que conectan su ERP y CRM actuales, aprovechando al máximo las herramientas que su equipo ya utiliza."
+      },
+      {
+        "q": "¿Dónde genera retorno real la Inteligencia Artificial para una PYME?",
+        "a": "El mayor ROI inmediato está en tres puntos: 1) calificación y respuesta inteligente de leads integrada al CRM; 2) extracción y validación automática de datos en facturas y pedidos; y 3) consulta rápida a bases de conocimiento e indicadores internos."
+      },
+      {
+        "q": "¿Cómo funciona el soporte después de la entrega del sistema o automatización?",
+        "a": "Entregamos toda la documentación, capacitamos a su equipo y ofrecemos acompañamiento continuo o bajo demanda para evolucionar la plataforma a medida que su empresa crece."
+      }
+    ],
+    "crosslink_title": "¿Su operación requiere arquitectura de alta escala o modernización de sistemas críticos?",
+    "crosslink_desc": "Conozca nuestra división Yesode Enterprise para arquitecturas distribuidas, microservicios y squads sénior dedicados.",
+    "crosslink_cta": "Conocer Yesode Enterprise"
+  },
+  "cases_page": {
+    "seo_title": "Casos de Estudio de Ingeniería de Software e Insights Técnicos | Yesode",
+    "seo_desc": "Conozca la metodología, arquitectura y resultados auditados de Yesode: reducción del 62% en lead time, 6,6x más velocidad y 93% menos cancelaciones.",
+    "seo_keywords": [
+      "casos de estudio ingeniería de software",
+      "caso modernización de sistemas legados",
+      "integración ERP omnicanal caso de éxito",
+      "artículos arquitectura de software",
+      "ROI automatización empresarial con IA",
+      "consultoría de software resultados"
+    ],
+    "badge": "Evidencia Verificable e Investigación Técnica",
+    "title_1": "Casos de Estudio Auditados e",
+    "title_highlight": "Insights de Ingeniería.",
+    "subtitle": "Los números sólidos requieren contexto técnico y metodología transparente. A continuación detallamos el problema, el escenario anterior, la arquitectura implementada y cómo se midió cada indicador en producción.",
+    "cta_primary": "Agendar Diagnóstico de Su Escenario",
+    "studies_eyebrow": "Casos de Estudio Documentados",
+    "studies_title": "Metodología, Arquitectura y Resultados en Producción",
+    "studies_desc": "Proyectos reales anonimizados por acuerdo de confidencialidad (NDA), con métricas auditadas antes y después de la intervención.",
+    "labels": {
+      "problem": "1. Problema y Cuello de Botella del Negocio",
+      "baseline": "2. Escenario y Arquitectura Anterior",
+      "solution": "3. Solución Arquitectónica Implementada",
+      "measurement": "4. Resultado y Metodología de Medición",
+      "takeaway": "Decisión Recomendada:"
+    },
+    "studies": [
+      {
+        "id": "fintech-latam",
+        "industry": "Fintech LATAM · Pagos B2B",
+        "period": "Ventana de ejecución: 16 semanas",
+        "title": "Desacoplamiento de monolito legado hacia malla de microservicios orientada a eventos",
+        "kpiValue": "-62%",
+        "kpiLabel": "en lead time de producción (14 días → 3h)",
+        "problem": "La operación de liquidación financiera sufría ventanas de despliegue semanales que exigían congelamiento de código y generaban rollbacks frecuentes, frenando el lanzamiento de nuevos productos de crédito.",
+        "baseline": "Monolito fuertemente acoplado con base de datos compartida por 14 módulos, pruebas manuales lentas, 1 deploy por semana y lead time promedio de 14 días entre commit y producción.",
+        "solution": "Aplicación del patrón Strangler Fig para extraer los dominios de Liquidación, Conciliación y Riesgo en servicios independientes en Go y TypeScript, con contratos asíncronos vía Kafka y pipeline CI/CD Blue/Green automatizado.",
+        "measurement": "Medido continuamente durante 90 días post-migración vía telemetría DORA en GitHub Actions y ArgoCD: la frecuencia de despliegue subió a 32×/día y el lead time cayó un 62% global (llegando a 3h en servicios críticos).",
+        "stack": ["Go", "TypeScript", "Apache Kafka", "PostgreSQL", "Kubernetes"]
+      },
+      {
+        "id": "healthtech-br",
+        "industry": "Healthtech BR · Historial Clínico Electrónico Nacional",
+        "period": "Ventana de ejecución: 12 semanas",
+        "title": "Orquestación de alto rendimiento y resiliencia para más de 12M de solicitudes diarias",
+        "kpiValue": "6.6×",
+        "kpiLabel": "más velocidad (p95 de 1.200ms → 180ms)",
+        "problem": "Hospitales y clínicas enfrentaban lentitud crítica en horas pico (08h a 11h) y un promedio de 4 incidentes mensuales de caída al abrir historiales médicos.",
+        "baseline": "Consultas N+1 directas a la base relacional primaria sin caché distribuido, ausencia de circuit breakers y falta de trazabilidad distribuida para aislar cuellos de botella.",
+        "solution": "Reingeniería de la capa de lectura con CQRS, caché inteligente en Redis invalidado por eventos, paginación basada en cursores, índices compuestos en PostgreSQL y observabilidad completa con OpenTelemetry.",
+        "measurement": "Verificado vía Prometheus y Grafana sobre el 100% del tráfico productivo durante 6 meses consecutivos: latencia p95 reducida de 1.200ms a 180ms (mejora de 6,6×) y cero incidentes severos en el semestre.",
+        "stack": ["TypeScript", "PostgreSQL", "Redis", "OpenTelemetry", "AWS ECS"]
+      },
+      {
+        "id": "retail-omnichannel",
+        "industry": "Retail Omnichannel · 140+ Tiendas y E-commerce",
+        "period": "Ventana de ejecución: 10 semanas",
+        "title": "OMS unificado y sincronización en tiempo real entre ERP, centros de distribución y canales",
+        "kpiValue": "-93%",
+        "kpiLabel": "en cancelaciones por quiebre de stock (3,0% → 0,2%)",
+        "problem": "El retraso de sincronización por lotes (45 minutos) entre el ERP corporativo y el e-commerce hacía que los clientes compraran artículos ya vendidos en tiendas físicas, generando un 3% de cancelaciones.",
+        "baseline": "Integraciones punto a punto vía cronjobs y llamadas XML/REST síncronas sin cola de reintentos, perdiendo actualizaciones de inventario durante picos promocionales.",
+        "solution": "Construcción de un motor de reserva y conciliación de stock en tiempo real (Change Data Capture + colas idempotentes), garantizando visibilidad sub-segundo del saldo disponible en las 140+ tiendas y almacenes.",
+        "measurement": "Auditado mediante reportes financieros de facturación vs. reembolsos durante 2 trimestres: la tasa de pedidos cancelados por desajuste de stock cayó del 3,0% al 0,2% (-93%), recuperando margen directo en el P&L.",
+        "stack": ["Node.js", "TypeScript", "RabbitMQ", "Redis", "REST & Webhooks"]
+      }
+    ],
+    "insights_eyebrow": "Artículos y Referencias Técnicas",
+    "insights_title": "Guías de Decisión para Líderes de Tecnología y Negocios",
+    "insights_desc": "Análisis originales elaborados por los ingenieros de Yesode para respaldar decisiones de inversión en arquitectura, modernización y automatización.",
+    "insights": [
+      {
+        "category": "Enterprise · Arquitectura",
+        "readTime": "Lectura: 6 min",
+        "title": "1. ¿Cuándo necesita su empresa una arquitectura de software propia?",
+        "summary": "Las soluciones SaaS enlatadas aceleran el inicio, pero se convierten en un freno cuando el negocio principal debe adaptarse a las limitaciones de la herramienta, las licencias por usuario crecen exponencialmente o la falta de integración crea silos operativos.",
+        "takeaway": "Construya arquitectura propia para los procesos que diferencian su margen y retención; mantenga SaaS solo para funciones estandarizadas."
+      },
+      {
+        "category": "Enterprise · Modernización",
+        "readTime": "Lectura: 8 min",
+        "title": "2. Modernización de sistemas legados: ¿cuándo reconstruir y cuándo evolucionar?",
+        "summary": "Las reescrituras completas ('big-bang') fracasan en más del 70% de los casos corporativos porque paralizan la entrega de valor durante años. La evolución incremental vía Strangler Fig permite reemplazar módulos críticos en semanas con riesgo controlado.",
+        "takeaway": "Opte por la evolución incremental siempre que las reglas de negocio estén activas en producción; solo reconstruya desde cero módulos cuyo dominio haya cambiado por completo."
+      },
+      {
+        "category": "PYMEs y Business · ROI",
+        "readTime": "Lectura: 5 min",
+        "title": "3. ¿Cuánto cuesta automatizar los procesos de una empresa y cómo calcular el ROI?",
+        "summary": "El costo real de un proceso manual no es solo el tiempo del equipo, sino el costo de los errores de carga, retrasos en facturación y pérdida de velocidad comercial. Un proyecto de automatización bien definido debe amortizarse entre 3 y 8 meses.",
+        "takeaway": "Priorice automatizar flujos con más de 50 ejecuciones semanales que impliquen transferencia manual de datos entre dos o más sistemas."
+      },
+      {
+        "category": "Enterprise y Business · Integración",
+        "readTime": "Lectura: 7 min",
+        "title": "4. ¿Cómo integrar ERP, CRM y sistemas internos con seguridad y consistencia?",
+        "summary": "Las integraciones directas punto a punto fallan silenciosamente cuando una API externa oscila. La arquitectura correcta exige claves de idempotencia, colas de mensajes (Dead Letter Queues) y registros de conciliación auditables.",
+        "takeaway": "Nunca acople el guardado de una venta a la respuesta síncrona del ERP; utilice colas asíncronas con confirmación y reintento automático."
+      },
+      {
+        "category": "IA Aplicada · Estrategia",
+        "readTime": "Lectura: 6 min",
+        "title": "5. Inteligencia artificial en las empresas: ¿dónde existe realmente retorno financiero?",
+        "summary": "Los chatbots genéricos rara vez mueven el P&L. El retorno real de la IA corporativa está en agentes conectados a datos internos (RAG estructurado), extracción automática de documentos fiscales/legales y calificación comercial asistida.",
+        "takeaway": "No implemente IA como vitrina; conecte modelos directamente a acciones transaccionales e indicadores de tiempo de respuesta y conversión."
+      }
+    ]
   },
   "tools": {
     "hero_badge": "Yesode Labs — Herramientas Gratuitas",
@@ -446,6 +767,8 @@
       "no_ads_desc": "Sin banners publicitarios, sin rastreadores invasivos y sin esperas artificiales."
     },
     "seo": {
+      "hub_title": "Yesode Free Tools — Herramientas Gratuitas de Ingeniería (Pix EMV, Videos y Stickers)",
+      "hub_desc": "Suite gratuita, sin anuncios y 100% privada de Yesode Labs: Generador y Decodificador QR Pix EMV®, Descargador de Videos y WhatsApp Sticker Studio.",
       "qr_title": "Generador de Código QR y Pix Oficial EMV® Gratis (CRC16) | Yesode",
       "qr_desc": "Crea códigos QR Pix estáticos oficiales con validación CRC16, decodifica Pix Copia e Cola y genera códigos QR limpios para enlaces. 100% gratis y sin anuncios.",
       "qr_keywords": [

@@ -20,7 +20,7 @@ export const FAQ: React.FC = () => {
   };
 
   return (
-    <section className="ys-faq ys-section" id="faq" aria-label="Perguntas frequentes">
+    <section className="ys-faq ys-section" id="faq" aria-label={t('faq.eyebrow')}>
       <div className="container">
         <div className="ys-faq-grid">
           <div className="ys-faq-head">

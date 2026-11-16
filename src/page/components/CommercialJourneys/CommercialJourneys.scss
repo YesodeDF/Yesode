@@ -1,0 +1,223 @@
+@use '@shared/styles/tokens' as *;
+
+.ys-journeys {
+  position: relative;
+  padding-top: 4rem;
+  padding-bottom: 4rem;
+}
+
+.ys-journeys-head {
+  max-width: 760px;
+  margin-bottom: 3rem;
+}
+
+.ys-journeys-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.75rem;
+
+  @media (max-width: 960px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.ys-journey-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 2.25rem;
+  border-radius: 16px;
+  background: var(--ys-surface-1, rgba(17, 24, 39, 0.72));
+  border: 1px solid var(--ys-border, rgba(255, 255, 255, 0.08));
+  transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+
+  &--enterprise {
+    border-color: rgba(196, 169, 98, 0.35);
+    box-shadow: 0 16px 40px -20px rgba(196, 169, 98, 0.15);
+  }
+
+  &--business {
+    border-color: rgba(148, 163, 184, 0.22);
+  }
+
+  &:hover {
+    transform: translateY(-3px);
+    border-color: rgba(224, 194, 119, 0.55);
+  }
+}
+
+.ys-journey-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin-bottom: 1.25rem;
+}
+
+.ys-journey-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.35rem 0.75rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+
+  &--gold {
+    background: rgba(196, 169, 98, 0.15);
+    color: #E0C277;
+    border: 1px solid rgba(196, 169, 98, 0.3);
+  }
+
+  &--violet {
+    background: rgba(99, 102, 241, 0.12);
+    color: #A5B4FC;
+    border: 1px solid rgba(99, 102, 241, 0.28);
+  }
+}
+
+.ys-journey-audience {
+  font-size: 0.75rem;
+  color: var(--ys-text-muted, #9CA3AF);
+}
+
+.ys-journey-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 0 0 0.4rem;
+  color: var(--ys-text-primary, #F9FAFB);
+}
+
+.ys-journey-semantic {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #C4A962;
+  margin: 0 0 0.85rem;
+}
+
+.ys-journey-desc {
+  font-size: 0.95rem;
+  line-height: 1.65;
+  color: var(--ys-text-secondary, #D1D5DB);
+  margin: 0 0 1.5rem;
+}
+
+.ys-journey-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+
+  li {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.6rem;
+    font-size: 0.9rem;
+    color: var(--ys-text-secondary, #E5E7EB);
+
+    svg {
+      color: #C4A962;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+  }
+}
+
+.ys-journey-footer {
+  margin-top: auto;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--ys-border, rgba(255, 255, 255, 0.08));
+}
+
+.ys-journey-cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55rem;
+  width: 100%;
+  padding: 0.85rem 1.25rem;
+  border-radius: 10px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.2s ease;
+
+  &--primary {
+    background: linear-gradient(135deg, #E0C277 0%, #C4A962 100%);
+    color: #0A0F1C;
+
+    &:hover {
+      filter: brightness(1.06);
+    }
+  }
+
+  &--secondary {
+    background: rgba(196, 169, 98, 0.12);
+    color: #E0C277;
+    border: 1px solid rgba(196, 169, 98, 0.35);
+
+    &:hover {
+      background: rgba(196, 169, 98, 0.2);
+    }
+  }
+}
+
+.ys-journeys-evidence-bar {
+  margin-top: 1.75rem;
+  padding: 1.25rem 1.75rem;
+  border-radius: 14px;
+  background: rgba(196, 169, 98, 0.07);
+  border: 1px solid rgba(196, 169, 98, 0.25);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.25rem;
+  flex-wrap: wrap;
+}
+
+.ys-journeys-evidence-text {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+
+  .ys-journeys-evidence-icon {
+    color: #C4A962;
+    flex-shrink: 0;
+  }
+
+  div {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+
+    strong {
+      font-size: 0.95rem;
+      color: var(--ys-text-primary, #F9FAFB);
+    }
+
+    span {
+      font-size: 0.85rem;
+      color: var(--ys-text-muted, #9CA3AF);
+    }
+  }
+}
+
+.ys-journeys-evidence-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #E0C277;
+  text-decoration: none;
+  white-space: nowrap;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}

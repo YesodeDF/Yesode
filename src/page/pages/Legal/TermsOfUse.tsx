@@ -2,14 +2,58 @@ import React from 'react';
 import { Lock, FileText, ArrowLeft } from 'lucide-react';
 import { Link, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { SeoHead } from '@/shared/components/SeoHead.tsx';
+import {
+  BASE_URL,
+  getLegalAlternates,
+  getLegalPath,
+  getLocaleCode,
+  normalizeLang,
+} from '@/modules/landing/domain/ToolRoutes.ts';
 import './Legal.scss';
 
 export const TermsOfUse: React.FC = () => {
   const { t } = useTranslation();
-  const { lang = 'en' } = useParams<{ lang: string }>();
+  const { lang: rawLang = 'pt' } = useParams<{ lang: string }>();
+  const lang = normalizeLang(rawLang);
+  const canonical = `${BASE_URL}${getLegalPath(lang, 'terms')}`;
 
   return (
     <div className="ys-legal-page">
+      <SeoHead
+        title={`${t('terms.title')}${t('terms.title_highlight')} | Yesode`}
+        description={t('terms.intro_1')}
+        canonicalUrl={canonical}
+        locale={getLocaleCode(lang)}
+        lang={lang}
+        alternates={getLegalAlternates('terms')}
+        jsonLd={[
+          {
+            '@type': 'WebPage',
+            name: `${t('terms.title')}${t('terms.title_highlight')} | Yesode`,
+            url: canonical,
+            inLanguage: lang,
+            description: t('terms.intro_1'),
+          },
+          {
+            '@type': 'BreadcrumbList',
+            itemListElement: [
+              {
+                '@type': 'ListItem',
+                position: 1,
+                name: t('tools.seo.breadcrumb_home'),
+                item: `${BASE_URL}/${lang}`,
+              },
+              {
+                '@type': 'ListItem',
+                position: 2,
+                name: `${t('terms.title')}${t('terms.title_highlight')}`,
+                item: canonical,
+              },
+            ],
+          },
+        ]}
+      />
       <div className="ys-grid-bg" />
       <div className="ys-orb ys-orb--legal" />
       <div className="ys-orb ys-orb--legal-2" />

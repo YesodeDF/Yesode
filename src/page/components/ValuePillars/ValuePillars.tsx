@@ -39,6 +39,7 @@ export const ValuePillars: React.FC = () => {
                 </div>
                 <div className="ys-pillar-tag">{t(`pillars.items.${index}.tag`)}</div>
                 <h3 className="ys-pillar-title">{t(`pillars.items.${index}.title`)}</h3>
+                <div className="ys-pillar-semantic">{t(`pillars.items.${index}.semantic`)}</div>
                 <p className="ys-pillar-desc">{t(`pillars.items.${index}.desc`)}</p>
                 <div className="ys-pillar-glow" aria-hidden="true" />
               </article>

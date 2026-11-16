@@ -3,12 +3,16 @@ import path from 'path';
 import {
   BASE_URL,
   LEGAL_SLUGS,
+  STRATEGIC_SLUGS,
   SUPPORTED_LANGS,
   getHomeAlternates,
   getLegalAlternates,
+  getStrategicAlternates,
+  getStrategicPath,
   getToolAlternates,
   getToolPath,
   type AlternateLink,
+  type StrategicPage,
   type ToolTab,
 } from '../src/modules/landing/domain/ToolRoutes.ts';
 
@@ -22,24 +26,40 @@ interface SitemapEntry {
 const today = new Date().toISOString().slice(0, 10);
 const entries: SitemapEntry[] = [];
 
+// 1. Homepages
 for (const lang of SUPPORTED_LANGS) {
   entries.push({
     loc: `${BASE_URL}/${lang}`,
     alternates: getHomeAlternates(),
     changefreq: 'weekly',
-    priority: lang === 'pt' ? '1.0' : '0.9',
+    priority: lang === 'pt' ? '1.0' : '0.95',
   });
 }
 
+// 2. Strategic Commercial Journeys & Case Studies (Enterprise, Business, Cases)
+const strategicPages: StrategicPage[] = ['enterprise', 'business', 'cases'];
+for (const page of strategicPages) {
+  for (const lang of SUPPORTED_LANGS) {
+    entries.push({
+      loc: `${BASE_URL}${getStrategicPath(lang, page)}`,
+      alternates: getStrategicAlternates(page),
+      changefreq: 'weekly',
+      priority: page === 'cases' ? '0.9' : '0.95',
+    });
+  }
+}
+
+// 3. Free Tools Hub
 for (const lang of SUPPORTED_LANGS) {
   entries.push({
     loc: `${BASE_URL}${getToolPath(lang)}`,
     alternates: getToolAlternates(),
-    changefreq: 'daily',
-    priority: lang === 'pt' ? '0.95' : '0.9',
+    changefreq: 'weekly',
+    priority: '0.85',
   });
 }
 
+// 4. Individual Free Tools
 const toolTabs: ToolTab[] = ['qr', 'media', 'sticker'];
 for (const tab of toolTabs) {
   for (const lang of SUPPORTED_LANGS) {
@@ -47,11 +67,12 @@ for (const tab of toolTabs) {
       loc: `${BASE_URL}${getToolPath(lang, tab)}`,
       alternates: getToolAlternates(tab),
       changefreq: 'weekly',
-      priority: '0.9',
+      priority: '0.85',
     });
   }
 }
 
+// 5. Legal Pages
 for (const type of ['privacy', 'terms'] as const) {
   for (const lang of SUPPORTED_LANGS) {
     entries.push({
@@ -62,6 +83,9 @@ for (const type of ['privacy', 'terms'] as const) {
     });
   }
 }
+
+// Validate that STRATEGIC_SLUGS is referenced
+void STRATEGIC_SLUGS;
 
 const xml = [
   '<?xml version="1.0" encoding="UTF-8"?>',
@@ -89,4 +113,4 @@ const xml = [
 
 const outPath = path.resolve(process.cwd(), 'public/sitemap.xml');
 fs.writeFileSync(outPath, xml, 'utf8');
-console.log(`[sitemap] Generated ${entries.length} URLs in public/sitemap.xml`);
+console.log(`[sitemap] Generated ${entries.length} canonical URLs in public/sitemap.xml`);

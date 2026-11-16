@@ -95,8 +95,16 @@
       font-size: 1.125rem;
       font-weight: 700;
       color: var(--headings);
-      margin-bottom: 0.5rem;
+      margin-bottom: 0.25rem;
       letter-spacing: -0.02em;
+    }
+
+    .ys-pillar-semantic {
+      font-size: 0.8125rem;
+      font-weight: 600;
+      color: $primary;
+      margin-bottom: 0.55rem;
+      line-height: 1.35;
     }
 
     &--lg .ys-pillar-title {

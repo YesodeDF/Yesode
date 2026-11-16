@@ -26,7 +26,7 @@ export const ProofOfEngineering: React.FC = () => {
           </p>
         </div>
 
-        <div className="ys-arch-window font-code" role="img" aria-label="Diagrama de arquitetura Yesode">
+        <div className="ys-arch-window font-code" role="img" aria-label={t('proof.eyebrow')}>
           <div className="ys-arch-titlebar">
             <span className="ys-dot ys-dot--red" />
             <span className="ys-dot ys-dot--yellow" />

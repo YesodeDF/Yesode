@@ -3,6 +3,15 @@ Allow: /
 Allow: /pt/
 Allow: /en/
 Allow: /es/
+Allow: /pt/enterprise
+Allow: /en/enterprise
+Allow: /es/enterprise
+Allow: /pt/business
+Allow: /en/business
+Allow: /es/business
+Allow: /pt/cases
+Allow: /en/case-studies
+Allow: /es/casos-de-estudio
 Allow: /pt/ferramentas/
 Allow: /en/tools/
 Allow: /es/herramientas/
@@ -14,52 +23,72 @@ Disallow: /admin/*
 Disallow: /login
 Disallow: /api/*
 
-User-agent: GPTBot
+User-agent: Googlebot
 Allow: /
-Allow: /llms.txt
-Allow: /llms-full.txt
+Disallow: /admin
+Disallow: /login
+Disallow: /api/*
 
-User-agent: ChatGPT-User
+User-agent: Bingbot
 Allow: /
-Allow: /llms.txt
-Allow: /llms-full.txt
+Disallow: /admin
+Disallow: /login
+Disallow: /api/*
 
 User-agent: OAI-SearchBot
 Allow: /
 Allow: /llms.txt
 Allow: /llms-full.txt
+Disallow: /admin
+Disallow: /login
+Disallow: /api/*
+
+User-agent: ChatGPT-User
+Allow: /
+Allow: /llms.txt
+Allow: /llms-full.txt
+Disallow: /admin
+Disallow: /login
+Disallow: /api/*
+
+User-agent: GPTBot
+Allow: /
+Allow: /llms.txt
+Allow: /llms-full.txt
+Disallow: /admin
+Disallow: /login
+Disallow: /api/*
 
 User-agent: ClaudeBot
 Allow: /
 Allow: /llms.txt
 Allow: /llms-full.txt
+Disallow: /admin
+Disallow: /login
+Disallow: /api/*
 
 User-agent: PerplexityBot
 Allow: /
 Allow: /llms.txt
 Allow: /llms-full.txt
+Disallow: /admin
+Disallow: /login
+Disallow: /api/*
 
 User-agent: Google-Extended
 Allow: /
 Allow: /llms.txt
 Allow: /llms-full.txt
+Disallow: /admin
+Disallow: /login
+Disallow: /api/*
 
 User-agent: Applebot-Extended
 Allow: /
 Allow: /llms.txt
 Allow: /llms-full.txt
-
-User-agent: CCBot
-Allow: /
-Allow: /llms.txt
-Allow: /llms-full.txt
-
-User-agent: meta-externalagent
-Allow: /
-Allow: /llms.txt
-Allow: /llms-full.txt
-
-User-agent: Bingbot
-Allow: /
+Disallow: /admin
+Disallow: /login
+Disallow: /api/*
 
 Sitemap: https://yesode.com/sitemap.xml

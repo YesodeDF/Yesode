@@ -58,8 +58,7 @@ export const App: React.FC = () => {
       />
 
       {/* Public Landing Page Routes */}
-      <Route path="/:lang/*" element={<PageRoutes />} />
-      <Route path="*" element={<PageRoutes />} />
+      <Route path="/*" element={<PageRoutes />} />
     </Routes>
   );
 };

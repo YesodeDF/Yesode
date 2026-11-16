@@ -70,13 +70,38 @@ export const FreeToolsPage: React.FC = () => {
     sticker: `${BASE_URL}/og-sticker.png`,
   };
 
+  const isHub = location.pathname.replace(/\/+$/, '') === getToolPath(lang);
   const steps = t(`tools.guides.${activeTab}.steps`, { returnObjects: true }) as GuideStep[];
   const faqs = t(`tools.guides.${activeTab}.faqs`, { returnObjects: true }) as GuideFaq[];
 
-  const canonical = `${BASE_URL}${getToolPath(lang, activeTab)}`;
-  const seoTitle = t(`tools.seo.${activeTab}_title`);
-  const seoDesc = t(`tools.seo.${activeTab}_desc`);
+  const canonical = `${BASE_URL}${isHub ? getToolPath(lang) : getToolPath(lang, activeTab)}`;
+  const seoTitle = isHub ? t('tools.seo.hub_title') : t(`tools.seo.${activeTab}_title`);
+  const seoDesc = isHub ? t('tools.seo.hub_desc') : t(`tools.seo.${activeTab}_desc`);
   const seoKeywords = t(`tools.seo.${activeTab}_keywords`, { returnObjects: true }) as string[];
+
+  const breadcrumbItems = [
+    {
+      '@type': 'ListItem',
+      position: 1,
+      name: t('tools.seo.breadcrumb_home'),
+      item: `${BASE_URL}/${lang}`,
+    },
+    {
+      '@type': 'ListItem',
+      position: 2,
+      name: t('tools.seo.breadcrumb_tools'),
+      item: `${BASE_URL}${getToolPath(lang)}`,
+    },
+  ];
+
+  if (!isHub) {
+    breadcrumbItems.push({
+      '@type': 'ListItem',
+      position: 3,
+      name: t(`tools.tabs.${activeTab}_name`),
+      item: canonical,
+    });
+  }
 
   const jsonLd: Record<string, any>[] = [
     {
@@ -86,6 +111,9 @@ export const FreeToolsPage: React.FC = () => {
       inLanguage: lang,
       applicationCategory: activeTab === 'qr' ? 'FinanceApplication' : 'MultimediaApplication',
       operatingSystem: 'All',
+      provider: {
+        '@id': `${BASE_URL}/#organization`,
+      },
       offers: {
         '@type': 'Offer',
         price: '0',
@@ -95,33 +123,7 @@ export const FreeToolsPage: React.FC = () => {
     },
     {
       '@type': 'BreadcrumbList',
-      itemListElement: [
-        {
-          '@type': 'ListItem',
-          position: 1,
-          name: t('tools.seo.breadcrumb_home'),
-          item: `${BASE_URL}/${lang}`,
-        },
-        {
-          '@type': 'ListItem',
-          position: 2,
-          name: t('tools.seo.breadcrumb_tools'),
-          item: `${BASE_URL}${getToolPath(lang)}`,
-        },
-        {
-          '@type': 'ListItem',
-          position: 3,
-          name: t(`tools.tabs.${activeTab}_name`),
-          item: canonical,
-        },
-      ],
-    },
-    {
-      '@type': 'Organization',
-      name: 'Yesode',
-      url: BASE_URL,
-      logo: `${BASE_URL}/logo.svg`,
-      sameAs: ['https://github.com/YesodeDF', 'https://www.linkedin.com/company/yesode'],
+      itemListElement: breadcrumbItems,
     },
   ];
 
@@ -162,10 +164,10 @@ export const FreeToolsPage: React.FC = () => {
         description={seoDesc}
         canonicalUrl={canonical}
         keywords={Array.isArray(seoKeywords) ? seoKeywords : []}
-        ogImage={ogImageMap[activeTab]}
+        ogImage={isHub ? `${BASE_URL}/og-cover.png` : ogImageMap[activeTab]}
         locale={localeMap[lang]}
         lang={lang}
-        alternates={getToolAlternates(activeTab)}
+        alternates={isHub ? getToolAlternates() : getToolAlternates(activeTab)}
         jsonLd={jsonLd}
       />
 

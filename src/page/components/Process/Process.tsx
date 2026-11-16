@@ -14,7 +14,7 @@ export const Process: React.FC = () => {
   const { t } = useTranslation();
 
   return (
-    <section className="ys-process ys-section" id="process" aria-label="Processo de engenharia">
+    <section className="ys-process ys-section" id="process" aria-label={t('process.eyebrow')}>
       <div className="container">
         <div className="ys-process-head">
           <span className="ys-eyebrow">{t('process.eyebrow')}</span>

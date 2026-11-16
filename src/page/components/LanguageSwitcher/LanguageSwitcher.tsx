@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate, useLocation, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { trackEvent } from '@shared/utils/analytics';
+import { normalizeLang, translateRoutePath } from '@/modules/landing/domain/ToolRoutes.ts';
 import './LanguageSwitcher.scss';
 
 interface LanguageOption {
@@ -42,18 +43,7 @@ export const LanguageSwitcher: React.FC = () => {
 
     trackEvent('language_change', { from: lang, to: code });
 
-    let newPath = location.pathname;
-    const supportedLangs = ['en', 'pt', 'es'];
-    
-    // Find the first segment of the path
-    const segments = location.pathname.split('/');
-    if (segments.length > 1 && supportedLangs.includes(segments[1])) {
-      segments[1] = code;
-      newPath = segments.join('/');
-    } else {
-      newPath = `/${code}${location.pathname}`;
-    }
-
+    const newPath = translateRoutePath(location.pathname, normalizeLang(code));
     navigate(`${newPath}${location.search}${location.hash}`);
   };
 

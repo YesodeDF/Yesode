@@ -1,30 +1,40 @@
-# Yesode
+# Yesode — Engineering Business Forward
 
-> Bespoke software engineering consultancy for mission-critical corporate operations, plus Yesode Labs — a suite of 100% free, ad-free, privacy-first web utilities (QR Code and Official Brazilian Pix EMV Generator, Social Media Video Downloader, and WhatsApp Animated Sticker Studio).
+> Yesode (YESODE CONSULTORIA E SERVIÇOS DE TECNOLOGIA LTDA, CNPJ 53.649.336/0001-38) is a Brazilian enterprise-first software engineering, systems architecture, and AI automation consultancy operating across two commercial divisions: **Yesode Enterprise** (for mid-market and large corporations) and **Yesode Business** (for growing SMBs), alongside **Yesode Labs** (100% free, ad-free engineering utilities).
 
-- Website: https://yesode.com (Available in [Português](https://yesode.com/pt), [English](https://yesode.com/en), [Español](https://yesode.com/es))
-- Full AI Reference: [llms-full.txt](https://yesode.com/llms-full.txt)
+- Official Domain: https://yesode.com ([Português](https://yesode.com/pt) | [English](https://yesode.com/en) | [Español](https://yesode.com/es))
+- Full AI & Technical Reference: [llms-full.txt](https://yesode.com/llms-full.txt)
 - Sitemap: [sitemap.xml](https://yesode.com/sitemap.xml)
 - GitHub: https://github.com/YesodeDF
 - LinkedIn: https://www.linkedin.com/company/yesode
-- Contact: contato@yesode.com | hello@yesode.com
+- Contact: contato@yesode.com | dpo@yesode.com.br
 
-## Software Engineering Consultancy (B2B)
+## 1. Yesode Enterprise — Corporate Software Engineering & Critical Architecture
 
-- [Yesode Home (PT)](https://yesode.com/pt): Bespoke architecture, legacy monolith modernization, internal platforms, and direct engineering with senior architects.
-- [Yesode Home (EN)](https://yesode.com/en): Custom software engineering consultancy aligned with P&L, zero vendor lock-in, and production-audited SLOs.
-- [Yesode Home (ES)](https://yesode.com/es): Consultoría de ingeniería de software a medida para operaciones críticas.
+- [Enterprise (PT)](https://yesode.com/pt/enterprise): Consultoria de engenharia de software corporativa, arquitetura de sistemas críticos (DDD, Hexagonal, Event-Driven), modernização de sistemas legados (Strangler Fig), integração de alta vazão (SAP, Oracle, TOTVS) e engenharia de plataforma Cloud/Kubernetes com métricas DORA.
+- [Enterprise (EN)](https://yesode.com/en/enterprise): Enterprise software engineering consultancy, mission-critical systems architecture, legacy monolith modernization, high-throughput ERP/CRM orchestration, and Cloud/Kubernetes platform engineering.
+- [Enterprise (ES)](https://yesode.com/es/enterprise): Consultoría de ingeniería de software corporativa, arquitectura de sistemas críticos, modernización de legados e integración empresarial.
 
-## Yesode Labs — Free Tools (No Ads, No Login)
+## 2. Yesode Business — SMB Process Automation, Applied AI & Custom Systems
 
-- [Tools Hub (PT)](https://yesode.com/pt/ferramentas): Central hub for all free Yesode Labs utilities in Portuguese.
-- [Tools Hub (EN)](https://yesode.com/en/tools): Central hub for all free Yesode Labs utilities in English.
-- [Tools Hub (ES)](https://yesode.com/es/herramientas): Centro de herramientas gratuitas de Yesode Labs en español.
-- [QR Code & Official Pix EMV Generator](https://yesode.com/pt/ferramentas/gerador-qr-code-pix): Static and dynamic EMV® BACEN Pix QR generator, CRC16-CCITT validator, reverse Copia e Cola decoder, and clean URL/text QR generator (100% client-side). Also at [EN](https://yesode.com/en/tools/qr-code-pix-generator) and [ES](https://yesode.com/es/herramientas/generador-codigo-qr-pix).
-- [YouTube & Social Media Video Downloader](https://yesode.com/pt/ferramentas/baixar-videos-youtube-redes-sociais): Download YouTube, X/Twitter, Instagram Reels, and Facebook videos in maximum compatibility MP4 (H.264 + AAC), audio (MP3/M4A), or GIF with zero pop-ups. Also at [EN](https://yesode.com/en/tools/youtube-social-video-downloader) and [ES](https://yesode.com/es/herramientas/descargar-videos-youtube-redes-sociales).
-- [WhatsApp Sticker Studio (512x512 WebP)](https://yesode.com/pt/ferramentas/criar-figurinha-whatsapp): Convert videos, GIFs, and images into official 512x512 WebP WhatsApp stickers (<500 KB, up to 6s) with interactive spatial crop (zoom, X/Y offset, size) and native WhatsApp EXIF metadata (`0x5741`). Also at [EN](https://yesode.com/en/tools/whatsapp-sticker-maker) and [ES](https://yesode.com/es/herramientas/crear-stickers-whatsapp).
+- [Business (PT)](https://yesode.com/pt/business): Automação de processos empresariais, inteligência artificial aplicada com ROI, integração entre ERP e CRM e desenvolvimento de sistemas de gestão personalizados sem mensalidade por usuário.
+- [Business (EN)](https://yesode.com/en/business): Business process automation, ROI-driven applied AI agents, bidirectional ERP/CRM integration, and custom business management systems.
+- [Business (ES)](https://yesode.com/es/business): Automatización de procesos empresariales, inteligencia artificial aplicada, integración ERP/CRM y sistemas de gestión a medida.
 
-## Legal
+## 3. Audited Case Studies & Technical Insights
+
+- [Estudos de Caso & Insights (PT)](https://yesode.com/pt/cases): Metodologia verificável dos cases (-62% lead time em Fintech LATAM, 6,6x mais velocidade em Healthtech BR, -93% cancelamentos em Retail Omnichannel) e guias técnicos de decisão.
+- [Case Studies & Insights (EN)](https://yesode.com/en/case-studies): Documented engineering case studies with baseline/after telemetry and architectural decision guides.
+- [Casos de Estudio e Insights (ES)](https://yesode.com/es/casos-de-estudio): Casos de estudio documentados con telemetría antes/después y guías de arquitectura.
+
+## 4. Yesode Labs — Free Engineering Utilities (No Ads, 100% Client-Side Privacy)
+
+- [Tools Hub (PT)](https://yesode.com/pt/ferramentas) | [EN](https://yesode.com/en/tools) | [ES](https://yesode.com/es/herramientas)
+- [QR Code & Official Pix EMV Generator](https://yesode.com/pt/ferramentas/gerador-qr-code-pix) | [EN](https://yesode.com/en/tools/qr-code-pix-generator) | [ES](https://yesode.com/es/herramientas/generador-codigo-qr-pix)
+- [YouTube & Social Media Video Downloader](https://yesode.com/pt/ferramentas/baixar-videos-youtube-redes-sociais) | [EN](https://yesode.com/en/tools/youtube-social-video-downloader) | [ES](https://yesode.com/es/herramientas/descargar-videos-youtube-redes-sociales)
+- [WhatsApp Sticker Studio (512x512 WebP)](https://yesode.com/pt/ferramentas/criar-figurinha-whatsapp) | [EN](https://yesode.com/en/tools/whatsapp-sticker-maker) | [ES](https://yesode.com/es/herramientas/crear-stickers-whatsapp)
+
+## 5. Legal & Governance (LGPD)
 
 - [Privacy Policy (PT)](https://yesode.com/pt/politica-de-privacidade) | [EN](https://yesode.com/en/privacy-policy) | [ES](https://yesode.com/es/politica-de-privacidad)
 - [Terms of Use (PT)](https://yesode.com/pt/termos-de-uso) | [EN](https://yesode.com/en/terms-of-use) | [ES](https://yesode.com/es/terminos-de-uso)

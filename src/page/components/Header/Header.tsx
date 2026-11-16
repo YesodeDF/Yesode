@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useNavigate, useLocation, Link, useParams } from 'react-router-dom';
-import { getToolPath, normalizeLang } from '@/modules/landing/domain/ToolRoutes.ts';
+import { getStrategicPath, getToolPath, normalizeLang } from '@/modules/landing/domain/ToolRoutes.ts';
 import { Button } from 'primereact/button';
 import { useTranslation } from 'react-i18next';
 import { ThemeToggle } from '../ThemeToggle/ThemeToggle';
@@ -45,11 +45,16 @@ export const Header: React.FC = () => {
 
   const isHome = location.pathname === `/${lang}` || location.pathname === `/${lang}/`;
 
+  const normalizedLang = normalizeLang(lang);
+  const routeLinks = [
+    { to: getStrategicPath(normalizedLang, 'enterprise'), label: t('header.nav_enterprise') },
+    { to: getStrategicPath(normalizedLang, 'business'), label: t('header.nav_business') },
+    { to: getStrategicPath(normalizedLang, 'cases'), label: t('header.nav_cases') },
+  ];
+
   const navLinks = [
     { id: 'products', label: t('header.nav_products') },
     { id: 'pillars', label: t('header.nav_capabilities') },
-    { id: 'cases', label: t('header.nav_cases') },
-    { id: 'process', label: t('header.nav_process') },
     { id: 'faq', label: t('header.nav_faq') },
     { id: 'contact', label: t('header.nav_contact') },
   ];
@@ -117,7 +122,12 @@ export const Header: React.FC = () => {
           <span className="ys-logo-dot">.</span>
         </Link>
 
-        <nav className="ys-nav" aria-label={t('social.aria_label')}>
+        <nav className="ys-nav" aria-label={t('header.nav_aria')}>
+          {routeLinks.map((item) => (
+            <Link key={item.to} to={item.to} className="ys-nav-link">
+              {item.label}
+            </Link>
+          ))}
           {navLinks.map((link) => (
             <button
               key={link.id}
@@ -227,6 +237,16 @@ export const Header: React.FC = () => {
       </div>
 
       <div className={`ys-mobile-panel ${mobileOpen ? 'is-open' : ''}`}>
+        {routeLinks.map((item) => (
+          <Link
+            key={item.to}
+            to={item.to}
+            className="ys-mobile-link"
+            onClick={() => setMobileOpen(false)}
+          >
+            {item.label}
+          </Link>
+        ))}
         {navLinks.map((link) => (
           <button
             key={link.id}

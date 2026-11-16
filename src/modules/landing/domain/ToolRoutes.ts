@@ -1,5 +1,6 @@
 export type SupportedLang = 'pt' | 'en' | 'es';
 export type ToolTab = 'qr' | 'media' | 'sticker';
+export type StrategicPage = 'enterprise' | 'business' | 'cases';
 
 export const BASE_URL = 'https://yesode.com';
 export const DEFAULT_LANG: SupportedLang = 'pt';
@@ -42,15 +43,47 @@ export const LEGAL_SLUGS: Record<'privacy' | 'terms', Record<SupportedLang, stri
   },
 };
 
+export const STRATEGIC_SLUGS: Record<StrategicPage, Record<SupportedLang, string>> = {
+  enterprise: {
+    pt: 'enterprise',
+    en: 'enterprise',
+    es: 'enterprise',
+  },
+  business: {
+    pt: 'business',
+    en: 'business',
+    es: 'business',
+  },
+  cases: {
+    pt: 'cases',
+    en: 'case-studies',
+    es: 'casos-de-estudio',
+  },
+};
+
 export function normalizeLang(lang?: string): SupportedLang {
   if (lang === 'en' || lang === 'es' || lang === 'pt') return lang;
   return DEFAULT_LANG;
+}
+
+export function getLocaleCode(lang: SupportedLang): string {
+  if (lang === 'pt') return 'pt_BR';
+  if (lang === 'en') return 'en_US';
+  return 'es_ES';
 }
 
 export function getToolPath(lang: SupportedLang, tab?: ToolTab): string {
   const hub = TOOL_HUB_SEGMENTS[lang];
   if (!tab) return `/${lang}/${hub}`;
   return `/${lang}/${hub}/${TOOL_SLUGS[tab][lang]}`;
+}
+
+export function getStrategicPath(lang: SupportedLang, page: StrategicPage): string {
+  return `/${lang}/${STRATEGIC_SLUGS[page][lang]}`;
+}
+
+export function getLegalPath(lang: SupportedLang, type: 'privacy' | 'terms'): string {
+  return `/${lang}/${LEGAL_SLUGS[type][lang]}`;
 }
 
 export function getTabFromPathname(pathname: string): ToolTab {
@@ -78,38 +111,89 @@ export interface AlternateLink {
   href: string;
 }
 
-export function getToolAlternates(tab?: ToolTab): AlternateLink[] {
-  const links: AlternateLink[] = SUPPORTED_LANGS.map((l) => ({
-    hreflang: l,
-    href: `${BASE_URL}${getToolPath(l, tab)}`,
-  }));
-  links.push({
-    hreflang: 'x-default',
-    href: `${BASE_URL}${getToolPath(DEFAULT_LANG, tab)}`,
-  });
+function withPtBrAndDefault(
+  pathBuilder: (lang: SupportedLang) => string
+): AlternateLink[] {
+  const links: AlternateLink[] = [
+    {
+      hreflang: 'pt-BR',
+      href: `${BASE_URL}${pathBuilder('pt')}`,
+    },
+    ...SUPPORTED_LANGS.map((l) => ({
+      hreflang: l,
+      href: `${BASE_URL}${pathBuilder(l)}`,
+    })),
+    {
+      hreflang: 'x-default',
+      href: `${BASE_URL}${pathBuilder(DEFAULT_LANG)}`,
+    },
+  ];
   return links;
+}
+
+export function getToolAlternates(tab?: ToolTab): AlternateLink[] {
+  return withPtBrAndDefault((l) => getToolPath(l, tab));
 }
 
 export function getHomeAlternates(): AlternateLink[] {
-  const links: AlternateLink[] = SUPPORTED_LANGS.map((l) => ({
-    hreflang: l,
-    href: `${BASE_URL}/${l}`,
-  }));
-  links.push({
-    hreflang: 'x-default',
-    href: `${BASE_URL}/${DEFAULT_LANG}`,
-  });
-  return links;
+  return withPtBrAndDefault((l) => `/${l}`);
 }
 
 export function getLegalAlternates(type: 'privacy' | 'terms'): AlternateLink[] {
-  const links: AlternateLink[] = SUPPORTED_LANGS.map((l) => ({
-    hreflang: l,
-    href: `${BASE_URL}/${l}/${LEGAL_SLUGS[type][l]}`,
-  }));
-  links.push({
-    hreflang: 'x-default',
-    href: `${BASE_URL}/${DEFAULT_LANG}/${LEGAL_SLUGS[type][DEFAULT_LANG]}`,
-  });
-  return links;
+  return withPtBrAndDefault((l) => getLegalPath(l, type));
+}
+
+export function getStrategicAlternates(page: StrategicPage): AlternateLink[] {
+  return withPtBrAndDefault((l) => getStrategicPath(l, page));
+}
+
+/**
+ * Translates any localized route pathname to its equivalent in `targetLang`.
+ */
+export function translateRoutePath(pathname: string, targetLang: SupportedLang): string {
+  const clean = pathname.replace(/\/+$/, '');
+  const parts = clean.split('/').filter(Boolean);
+
+  if (parts.length === 0) {
+    return `/${targetLang}`;
+  }
+
+  const hasLangPrefix = ['pt', 'en', 'es'].includes(parts[0]);
+  const rest = hasLangPrefix ? parts.slice(1) : parts;
+
+  if (rest.length === 0) {
+    return `/${targetLang}`;
+  }
+
+  const first = rest[0].toLowerCase();
+
+  // Check Tools Hub & specific tool tabs
+  if (Object.values(TOOL_HUB_SEGMENTS).includes(first)) {
+    if (rest.length === 1) {
+      return getToolPath(targetLang);
+    }
+    const tab = getTabFromPathname(clean);
+    return getToolPath(targetLang, tab);
+  }
+
+  // Check Legal routes
+  if (Object.values(LEGAL_SLUGS.privacy).includes(first)) {
+    return getLegalPath(targetLang, 'privacy');
+  }
+  if (Object.values(LEGAL_SLUGS.terms).includes(first)) {
+    return getLegalPath(targetLang, 'terms');
+  }
+
+  // Check Strategic routes
+  if (Object.values(STRATEGIC_SLUGS.enterprise).includes(first)) {
+    return getStrategicPath(targetLang, 'enterprise');
+  }
+  if (Object.values(STRATEGIC_SLUGS.business).includes(first)) {
+    return getStrategicPath(targetLang, 'business');
+  }
+  if (Object.values(STRATEGIC_SLUGS.cases).includes(first) || first === 'cases') {
+    return getStrategicPath(targetLang, 'cases');
+  }
+
+  return `/${targetLang}/${rest.join('/')}`;
 }

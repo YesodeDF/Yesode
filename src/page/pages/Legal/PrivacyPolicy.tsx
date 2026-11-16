@@ -2,14 +2,58 @@ import React from 'react';
 import { Shield, Clock, ArrowLeft } from 'lucide-react';
 import { Link, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { SeoHead } from '@/shared/components/SeoHead.tsx';
+import {
+  BASE_URL,
+  getLegalAlternates,
+  getLegalPath,
+  getLocaleCode,
+  normalizeLang,
+} from '@/modules/landing/domain/ToolRoutes.ts';
 import './Legal.scss';
 
 export const PrivacyPolicy: React.FC = () => {
   const { t } = useTranslation();
-  const { lang = 'en' } = useParams<{ lang: string }>();
+  const { lang: rawLang = 'pt' } = useParams<{ lang: string }>();
+  const lang = normalizeLang(rawLang);
+  const canonical = `${BASE_URL}${getLegalPath(lang, 'privacy')}`;
 
   return (
     <div className="ys-legal-page">
+      <SeoHead
+        title={`${t('privacy.title')}${t('privacy.title_highlight')} | Yesode`}
+        description={t('privacy.intro')}
+        canonicalUrl={canonical}
+        locale={getLocaleCode(lang)}
+        lang={lang}
+        alternates={getLegalAlternates('privacy')}
+        jsonLd={[
+          {
+            '@type': 'WebPage',
+            name: `${t('privacy.title')}${t('privacy.title_highlight')} | Yesode`,
+            url: canonical,
+            inLanguage: lang,
+            description: t('privacy.intro'),
+          },
+          {
+            '@type': 'BreadcrumbList',
+            itemListElement: [
+              {
+                '@type': 'ListItem',
+                position: 1,
+                name: t('tools.seo.breadcrumb_home'),
+                item: `${BASE_URL}/${lang}`,
+              },
+              {
+                '@type': 'ListItem',
+                position: 2,
+                name: `${t('privacy.title')}${t('privacy.title_highlight')}`,
+                item: canonical,
+              },
+            ],
+          },
+        ]}
+      />
       <div className="ys-grid-bg" />
       <div className="ys-orb ys-orb--legal" />
       <div className="ys-orb ys-orb--legal-2" />

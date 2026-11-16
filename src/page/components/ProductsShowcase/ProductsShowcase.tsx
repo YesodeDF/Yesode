@@ -17,7 +17,7 @@ export const ProductsShowcase: React.FC = () => {
   };
 
   return (
-    <section className="ys-products ys-section" id="products" aria-label="Nossos Produtos e SaaS">
+    <section className="ys-products ys-section" id="products" aria-label={t('products.eyebrow')}>
       <div className="container">
         <div className="ys-products-head">
           <span className="ys-eyebrow">{t('products.eyebrow')}</span>

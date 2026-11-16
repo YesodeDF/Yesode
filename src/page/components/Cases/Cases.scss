@@ -162,4 +162,33 @@
       font-weight: 500;
     }
   }
+
+  .ys-case-methodology {
+    margin-top: auto;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border-strong);
+    display: flex;
+    flex-direction: column;
+    gap: 0.65rem;
+
+    .ys-case-method-text {
+      font-size: 0.775rem;
+      line-height: 1.45;
+      color: var(--text-muted);
+    }
+
+    .ys-case-method-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      font-size: 0.8125rem;
+      font-weight: 600;
+      color: $primary;
+      text-decoration: none;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
 }

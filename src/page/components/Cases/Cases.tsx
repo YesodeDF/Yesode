@@ -1,19 +1,24 @@
 import React from 'react';
+import { Link, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { TrendingDown, Zap, Layers } from 'lucide-react';
+import { TrendingDown, Zap, Layers, ArrowUpRight } from 'lucide-react';
+import { getStrategicPath, normalizeLang } from '@/modules/landing/domain/ToolRoutes.ts';
 import './Cases.scss';
 
 const CASES = [
-  { kpi: '-62%', icon: TrendingDown },
-  { kpi: '6.6×', icon: Zap },
-  { kpi: '-93%', icon: Layers }
+  { kpi: '-62%', icon: TrendingDown, anchor: 'fintech-latam' },
+  { kpi: '6.6×', icon: Zap, anchor: 'healthtech-br' },
+  { kpi: '-93%', icon: Layers, anchor: 'retail-omnichannel' }
 ];
 
 export const Cases: React.FC = () => {
   const { t } = useTranslation();
+  const { lang: rawLang = 'pt' } = useParams<{ lang: string }>();
+  const lang = normalizeLang(rawLang);
+  const casesPath = getStrategicPath(lang, 'cases');
 
   return (
-    <section className="ys-cases ys-section" id="cases" aria-label="Cases de engenharia">
+    <section className="ys-cases ys-section" id="cases" aria-label={t('cases.aria_label')}>
       <div className="container">
         <div className="ys-cases-head">
           <span className="ys-eyebrow">{t('cases.eyebrow')}</span>
@@ -57,6 +62,14 @@ export const Cases: React.FC = () => {
                     <dd>{t(`cases.items.${index}.after`)}</dd>
                   </div>
                 </dl>
+
+                <div className="ys-case-methodology">
+                  <span className="ys-case-method-text">{t(`cases.items.${index}.methodology`)}</span>
+                  <Link to={`${casesPath}#${c.anchor}`} className="ys-case-method-link">
+                    <span>{t('cases.read_full_case')}</span>
+                    <ArrowUpRight size={14} strokeWidth={2.25} />
+                  </Link>
+                </div>
               </article>
             );
           })}

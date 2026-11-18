@@ -169,13 +169,19 @@ app.get('/api/tools/media-info', async (req, res) => {
 
   try {
     const mediaSource = MediaSourceUrl.create(targetUrl);
-    try {
-      const info = await YtDlpExtractorService.getInfo(mediaSource.url);
-      return res.status(200).json(info);
-    } catch {
-      const fallbackInfo = await ServerlessMediaExtractor.getInfo(mediaSource.url);
-      return res.status(200).json(fallbackInfo);
+    const shouldUseLocalYtDlp =
+      mediaSource.platform !== 'instagram' || Boolean(process.env.YTDLP_COOKIES_FILE);
+
+    if (shouldUseLocalYtDlp) {
+      try {
+        const info = await YtDlpExtractorService.getInfo(mediaSource.url);
+        return res.status(200).json(info);
+      } catch {
+        // Fallback para extrator Node.js nativo
+      }
     }
+    const fallbackInfo = await ServerlessMediaExtractor.getInfo(mediaSource.url);
+    return res.status(200).json(fallbackInfo);
   } catch (error: any) {
     return res.status(400).json({ error: error.message || 'Falha ao buscar dados da mídia.' });
   }
@@ -195,76 +201,89 @@ app.get('/api/tools/media-download', async (req, res) => {
   try {
     const mediaSource = MediaSourceUrl.create(targetUrl);
     const spec = MediaCompatibilityProfile.getSpec(format, profile);
+    const shouldUseLocalYtDlp =
+      mediaSource.platform !== 'instagram' || Boolean(process.env.YTDLP_COOKIES_FILE);
 
+    if (shouldUseLocalYtDlp) {
+      try {
+        // Executa o download real via yt-dlp + ffmpeg quando disponível localmente
+        const downloadResult = await YtDlpExtractorService.download(mediaSource.url, format, profile);
+
+        const safeTitle = (downloadResult.title || 'video')
+          .replace(/[^a-zA-Z0-9_\-]/g, '_')
+          .substring(0, 50);
+        const finalFilename = `${safeTitle}.${spec.container}`;
+        const contentType = spec.container === 'mp3' ? 'audio/mpeg' : spec.container === 'gif' ? 'image/gif' : spec.container === 'mkv' ? 'video/x-matroska' : 'video/mp4';
+
+        res.setHeader('Content-Disposition', `attachment; filename="${encodeURIComponent(finalFilename)}"; filename*=UTF-8''${encodeURIComponent(finalFilename)}`);
+        res.setHeader('Content-Type', contentType);
+        res.setHeader('Content-Length', downloadResult.size.toString());
+        res.setHeader('X-Media-Profile', profile);
+        res.setHeader('X-Media-Video-Codec', spec.videoCodec);
+        res.setHeader('X-Media-Audio-Codec', spec.audioCodec);
+
+        const fileStream = fs.createReadStream(downloadResult.filepath);
+        fileStream.pipe(res);
+
+        fileStream.on('close', () => {
+          fs.unlink(downloadResult.filepath, () => {});
+        });
+
+        fileStream.on('error', (err) => {
+          console.error('Erro na transmissão do arquivo de mídia:', err);
+          fs.unlink(downloadResult.filepath, () => {});
+        });
+        return;
+      } catch {
+        // Fallback para extrator Node.js nativo abaixo
+      }
+    }
+
+    // Fallback 100% Node.js nativo com streaming direto (sem segurar arquivos grandes em RAM)
+    const resolved = await ServerlessMediaExtractor.resolveStream(mediaSource.url, format, profile);
+    const safeTitle = (resolved.title || 'video')
+      .replace(/[^a-zA-Z0-9_\-]/g, '_')
+      .substring(0, 50);
+    const finalFilename = `${safeTitle}.${resolved.extension}`;
+
+    const connectController = new AbortController();
+    const connectTimer = setTimeout(() => connectController.abort(), 15000);
+    let upstream: globalThis.Response;
     try {
-      // Executa o download real via yt-dlp + ffmpeg quando disponível localmente
-      const downloadResult = await YtDlpExtractorService.download(mediaSource.url, format, profile);
-
-      const safeTitle = (downloadResult.title || 'video')
-        .replace(/[^a-zA-Z0-9_\-]/g, '_')
-        .substring(0, 50);
-      const finalFilename = `${safeTitle}.${spec.container}`;
-      const contentType = spec.container === 'mp3' ? 'audio/mpeg' : spec.container === 'gif' ? 'image/gif' : spec.container === 'mkv' ? 'video/x-matroska' : 'video/mp4';
-
-      res.setHeader('Content-Disposition', `attachment; filename="${encodeURIComponent(finalFilename)}"; filename*=UTF-8''${encodeURIComponent(finalFilename)}`);
-      res.setHeader('Content-Type', contentType);
-      res.setHeader('Content-Length', downloadResult.size.toString());
-      res.setHeader('X-Media-Profile', profile);
-      res.setHeader('X-Media-Video-Codec', spec.videoCodec);
-      res.setHeader('X-Media-Audio-Codec', spec.audioCodec);
-
-      const fileStream = fs.createReadStream(downloadResult.filepath);
-      fileStream.pipe(res);
-
-      fileStream.on('close', () => {
-        fs.unlink(downloadResult.filepath, () => {});
-      });
-
-      fileStream.on('error', (err) => {
-        console.error('Erro na transmissão do arquivo de mídia:', err);
-        fs.unlink(downloadResult.filepath, () => {});
-      });
-      return;
-    } catch {
-      // Fallback 100% Node.js nativo com streaming direto (sem segurar arquivos grandes em RAM)
-      const resolved = await ServerlessMediaExtractor.resolveStream(mediaSource.url, format, profile);
-      const safeTitle = (resolved.title || 'video')
-        .replace(/[^a-zA-Z0-9_\-]/g, '_')
-        .substring(0, 50);
-      const finalFilename = `${safeTitle}.${resolved.extension}`;
-
-      const upstream = await fetch(resolved.streamUrl, {
+      upstream = await fetch(resolved.streamUrl, {
         headers: resolved.requestHeaders,
         redirect: 'follow',
-        signal: AbortSignal.timeout(30000),
+        signal: connectController.signal,
       });
-
-      if (!upstream.ok || !upstream.body) {
-        const fallbackResult = await ServerlessMediaExtractor.downloadBuffer(mediaSource.url, format, profile);
-        res.setHeader('Content-Disposition', `attachment; filename="${encodeURIComponent(finalFilename)}"; filename*=UTF-8''${encodeURIComponent(finalFilename)}`);
-        res.setHeader('Content-Type', fallbackResult.contentType);
-        res.setHeader('Content-Length', fallbackResult.buffer.length.toString());
-        res.setHeader('X-Media-Profile', profile);
-        return res.status(200).send(fallbackResult.buffer);
-      }
-
-      const upstreamCt = (upstream.headers.get('content-type') || '').toLowerCase();
-      if (upstreamCt.includes('text/html')) {
-        await upstream.body.cancel().catch(() => {});
-        throw new Error('O provedor retornou HTML em vez de fluxo de vídeo.');
-      }
-
-      res.setHeader('Content-Disposition', `attachment; filename="${encodeURIComponent(finalFilename)}"; filename*=UTF-8''${encodeURIComponent(finalFilename)}`);
-      res.setHeader('Content-Type', resolved.contentType);
-      const len = upstream.headers.get('content-length') || (resolved.contentLength ? String(resolved.contentLength) : undefined);
-      if (len) {
-        res.setHeader('Content-Length', len);
-      }
-      res.setHeader('X-Media-Profile', profile);
-
-      Readable.fromWeb(upstream.body as any).pipe(res);
-      return;
+    } finally {
+      clearTimeout(connectTimer);
     }
+
+    if (!upstream.ok || !upstream.body) {
+      const fallbackResult = await ServerlessMediaExtractor.downloadBuffer(mediaSource.url, format, profile);
+      res.setHeader('Content-Disposition', `attachment; filename="${encodeURIComponent(finalFilename)}"; filename*=UTF-8''${encodeURIComponent(finalFilename)}`);
+      res.setHeader('Content-Type', fallbackResult.contentType);
+      res.setHeader('Content-Length', fallbackResult.buffer.length.toString());
+      res.setHeader('X-Media-Profile', profile);
+      return res.status(200).send(fallbackResult.buffer);
+    }
+
+    const upstreamCt = (upstream.headers.get('content-type') || '').toLowerCase();
+    if (upstreamCt.includes('text/html')) {
+      await upstream.body.cancel().catch(() => {});
+      throw new Error('O provedor retornou HTML em vez de fluxo de vídeo.');
+    }
+
+    res.setHeader('Content-Disposition', `attachment; filename="${encodeURIComponent(finalFilename)}"; filename*=UTF-8''${encodeURIComponent(finalFilename)}`);
+    res.setHeader('Content-Type', resolved.contentType);
+    const len = upstream.headers.get('content-length') || (resolved.contentLength ? String(resolved.contentLength) : undefined);
+    if (len) {
+      res.setHeader('Content-Length', len);
+    }
+    res.setHeader('X-Media-Profile', profile);
+
+    Readable.fromWeb(upstream.body as any).pipe(res);
+    return;
   } catch (error: any) {
     console.error('Erro no download de mídia:', error);
     return res.status(500).json({ error: error.message || 'Falha ao processar download do vídeo.' });

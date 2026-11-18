@@ -10,7 +10,7 @@ export class InMemoryRateLimiter {
 
   private constructor() {
     // Auto cleanup expired records every 5 minutes
-    setInterval(() => {
+    const timer = setInterval(() => {
       const now = Date.now();
       for (const [key, record] of this.hits.entries()) {
         const valid = record.timestamps.filter((t) => now - t < 3600000); // 1h window max
@@ -21,6 +21,7 @@ export class InMemoryRateLimiter {
         }
       }
     }, 300000);
+    timer.unref?.();
   }
 
   public static getInstance(): InMemoryRateLimiter {

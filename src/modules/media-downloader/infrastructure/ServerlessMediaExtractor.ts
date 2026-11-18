@@ -73,7 +73,7 @@ export class ServerlessMediaExtractor {
   private static async probeStreamHeaders(
     streamUrl: string,
     headers: Record<string, string>
-  ): Promise<{ contentLength?: number; contentType?: string }> {
+  ): Promise<{ contentLength?: number; contentType?: string; finalUrl?: string }> {
     try {
       const headRes = await fetch(streamUrl, {
         method: 'HEAD',
@@ -87,6 +87,7 @@ export class ServerlessMediaExtractor {
         return {
           contentLength: Number.isFinite(parsedLen) && parsedLen > 0 ? parsedLen : undefined,
           contentType: headRes.headers.get('content-type') || undefined,
+          finalUrl: headRes.url || streamUrl,
         };
       }
     } catch {
@@ -104,12 +105,14 @@ export class ServerlessMediaExtractor {
       const totalFromRange = contentRange?.match(/\/(\d+)$/)?.[1];
       const rawLen = totalFromRange || rangeRes.headers.get('content-length');
       const ct = rangeRes.headers.get('content-type') || undefined;
+      const finalUrl = rangeRes.url || streamUrl;
       await rangeRes.body?.cancel().catch(() => {});
 
       const parsedLen = rawLen ? Number(rawLen) : NaN;
       return {
         contentLength: Number.isFinite(parsedLen) && parsedLen > 0 ? parsedLen : undefined,
         contentType: ct,
+        finalUrl,
       };
     } catch {
       return {};
@@ -583,7 +586,7 @@ export class ServerlessMediaExtractor {
       const headers = { 'User-Agent': DEFAULT_BROWSER_UA };
       const probe = await this.probeStreamHeaders(info.videoUrl, headers);
       return {
-        streamUrl: info.videoUrl,
+        streamUrl: probe.finalUrl || info.videoUrl,
         title: info.title,
         contentType: 'video/mp4',
         extension: 'mp4',
@@ -598,15 +601,14 @@ export class ServerlessMediaExtractor {
     if (igTarget) {
       const info = await this.fetchInstagramMedia(targetUrl);
       const headers = { 'User-Agent': DEFAULT_BROWSER_UA };
-      const contentLength =
-        info.contentLength || (await this.probeStreamHeaders(info.videoUrl, headers)).contentLength;
+      const probe = await this.probeStreamHeaders(info.videoUrl, headers);
 
       return {
-        streamUrl: info.videoUrl,
+        streamUrl: probe.finalUrl || info.videoUrl,
         title: info.title,
         contentType: 'video/mp4',
         extension: 'mp4',
-        contentLength,
+        contentLength: info.contentLength || probe.contentLength,
         requestHeaders: headers,
         browserDirectSafe: true,
       };
@@ -615,15 +617,14 @@ export class ServerlessMediaExtractor {
     // 4. Facebook / Genérico
     const og = await this.fetchGenericOpenGraphVideo(targetUrl);
     const headers = { 'User-Agent': DEFAULT_BROWSER_UA };
-    const contentLength =
-      og.contentLength || (await this.probeStreamHeaders(og.videoUrl, headers)).contentLength;
+    const probe = await this.probeStreamHeaders(og.videoUrl, headers);
 
     return {
-      streamUrl: og.videoUrl,
+      streamUrl: probe.finalUrl || og.videoUrl,
       title: og.title,
       contentType: 'video/mp4',
       extension: 'mp4',
-      contentLength,
+      contentLength: og.contentLength || probe.contentLength,
       requestHeaders: headers,
       browserDirectSafe: true,
     };
@@ -637,11 +638,18 @@ export class ServerlessMediaExtractor {
       return { exceededLimit: true };
     }
 
-    const streamRes = await fetch(resolved.streamUrl, {
-      headers: resolved.requestHeaders,
-      redirect: 'follow',
-      signal: AbortSignal.timeout(30000),
-    });
+    const connectController = new AbortController();
+    const connectTimer = setTimeout(() => connectController.abort(), 15000);
+    let streamRes: Response;
+    try {
+      streamRes = await fetch(resolved.streamUrl, {
+        headers: resolved.requestHeaders,
+        redirect: 'follow',
+        signal: connectController.signal,
+      });
+    } finally {
+      clearTimeout(connectTimer);
+    }
 
     if (!streamRes.ok) {
       await streamRes.body?.cancel().catch(() => {});

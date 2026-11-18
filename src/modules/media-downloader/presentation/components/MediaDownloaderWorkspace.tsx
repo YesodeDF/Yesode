@@ -189,6 +189,39 @@ export const MediaDownloaderWorkspace: React.FC<MediaDownloaderWorkspaceProps> =
     return { blob };
   };
 
+  const downloadDirectUrlAsBlob = async (
+    directUrl: string,
+    onProgress?: (pct: number) => void
+  ): Promise<Blob> => {
+    const directRes = await fetch(directUrl);
+    if (!directRes.ok) throw new Error(`HTTP ${directRes.status}`);
+
+    const totalBytes = Number(directRes.headers.get('content-length') || 0);
+    if (!directRes.body || !totalBytes) {
+      return directRes.blob();
+    }
+
+    const reader = directRes.body.getReader();
+    const chunks: Uint8Array[] = [];
+    let received = 0;
+
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      if (value) {
+        chunks.push(value);
+        received += value.byteLength;
+        if (onProgress) {
+          const pct = Math.min(98, Math.max(20, Math.round((received / totalBytes) * 100)));
+          onProgress(pct);
+        }
+      }
+    }
+
+    const contentType = directRes.headers.get('content-type') || 'video/mp4';
+    return new Blob(chunks as BlobPart[], { type: contentType });
+  };
+
   const handleStartDownload = async (id: string) => {
     const item = queue.find((q) => q.id === id);
     if (!item || !item.media) return;
@@ -238,9 +271,11 @@ export const MediaDownloaderWorkspace: React.FC<MediaDownloaderWorkspaceProps> =
         triggerBrowserDownload(blobUrl, filename);
       } else if (result.directUrl) {
         try {
-          const directRes = await fetch(result.directUrl);
-          if (!directRes.ok) throw new Error(`HTTP ${directRes.status}`);
-          const directBlob = await directRes.blob();
+          const directBlob = await downloadDirectUrlAsBlob(result.directUrl, (pct) => {
+            setQueue((prev) =>
+              prev.map((q) => (q.id === id && q.status === 'downloading' ? { ...q, progress: pct } : q))
+            );
+          });
           blobUrl = window.URL.createObjectURL(directBlob);
           triggerBrowserDownload(blobUrl, filename);
         } catch {

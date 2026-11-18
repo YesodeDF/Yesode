@@ -2,6 +2,7 @@ import type {
   DownloadFormat,
   DownloadProfile,
 } from '../domain/value-objects/MediaCompatibilityProfile.ts';
+import { MediaSourceUrl } from '../domain/value-objects/MediaSourceUrl.ts';
 
 export interface ServerlessMediaInfo {
   title: string;
@@ -17,35 +18,102 @@ export interface ServerlessDownloadResult {
   extension: string;
 }
 
+export interface ResolvedMediaStream {
+  streamUrl: string;
+  title: string;
+  contentType: string;
+  extension: string;
+  contentLength?: number;
+  requestHeaders: Record<string, string>;
+  browserDirectSafe: boolean;
+}
+
+const DEFAULT_BROWSER_UA =
+  'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36';
+const DISCORD_CRAWLER_UA = 'Mozilla/5.0 (compatible; Discordbot/2.0; +https://discordapp.com)';
+const REQUEST_TIMEOUT_MS = 12000;
+
+function decodeHtmlEntities(input: string): string {
+  return input
+    .replace(/&amp;/g, '&')
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;/g, "'")
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .trim();
+}
+
+function extractMetaTag(html: string, propertyName: string): string {
+  const escaped = propertyName.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  const patternA = new RegExp(
+    `<meta\\s+[^>]*(?:property|name)=["']${escaped}["'][^>]*content=["']([^"']+)["']`,
+    'i'
+  );
+  const patternB = new RegExp(
+    `<meta\\s+[^>]*content=["']([^"']+)["'][^>]*(?:property|name)=["']${escaped}["']`,
+    'i'
+  );
+  const match = html.match(patternA) || html.match(patternB);
+  return match?.[1] ? decodeHtmlEntities(match[1]) : '';
+}
+
+function resolveAbsoluteUrl(candidate: string, baseUrl: string): string {
+  try {
+    return new URL(candidate, baseUrl).toString();
+  } catch {
+    return candidate;
+  }
+}
+
 /**
  * Extrator 100% Node.js nativo (Zero Python / Zero Binários Externos)
- * Projetado especificamente para rodar no runtime Serverless da Vercel.
+ * Projetado especificamente para rodar no runtime Serverless da Vercel e como fallback local.
  */
 export class ServerlessMediaExtractor {
-  private static extractYouTubeId(rawUrl: string): string | null {
+  private static async probeStreamHeaders(
+    streamUrl: string,
+    headers: Record<string, string>
+  ): Promise<{ contentLength?: number; contentType?: string }> {
     try {
-      const parsed = new URL(rawUrl);
-      if (parsed.hostname.includes('youtu.be')) {
-        return parsed.pathname.split('/').filter(Boolean)[0] || null;
+      const headRes = await fetch(streamUrl, {
+        method: 'HEAD',
+        headers,
+        redirect: 'follow',
+        signal: AbortSignal.timeout(8000),
+      });
+      if (headRes.ok) {
+        const rawLen = headRes.headers.get('content-length');
+        const parsedLen = rawLen ? Number(rawLen) : NaN;
+        return {
+          contentLength: Number.isFinite(parsedLen) && parsedLen > 0 ? parsedLen : undefined,
+          contentType: headRes.headers.get('content-type') || undefined,
+        };
       }
-      if (parsed.searchParams.has('v')) {
-        return parsed.searchParams.get('v');
-      }
-      const pathParts = parsed.pathname.split('/').filter(Boolean);
-      const shortsIdx = pathParts.findIndex((p) => p === 'shorts' || p === 'embed' || p === 'v' || p === 'live');
-      if (shortsIdx !== -1 && pathParts[shortsIdx + 1]) {
-        return pathParts[shortsIdx + 1];
-      }
-      const match = rawUrl.match(/(?:v=|\/)([0-9A-Za-z_-]{11})(?:[?&/]|$)/);
-      return match ? match[1] : null;
     } catch {
-      return null;
+      // Alguns servidores retornam 405 em HEAD; tenta GET com Range mínimo
     }
-  }
 
-  private static extractTweetId(rawUrl: string): string | null {
-    const match = rawUrl.match(/(?:status|statuses)\/(\d+)/i);
-    return match ? match[1] : null;
+    try {
+      const rangeRes = await fetch(streamUrl, {
+        method: 'GET',
+        headers: { ...headers, Range: 'bytes=0-0' },
+        redirect: 'follow',
+        signal: AbortSignal.timeout(8000),
+      });
+      const contentRange = rangeRes.headers.get('content-range');
+      const totalFromRange = contentRange?.match(/\/(\d+)$/)?.[1];
+      const rawLen = totalFromRange || rangeRes.headers.get('content-length');
+      const ct = rangeRes.headers.get('content-type') || undefined;
+      await rangeRes.body?.cancel().catch(() => {});
+
+      const parsedLen = rawLen ? Number(rawLen) : NaN;
+      return {
+        contentLength: Number.isFinite(parsedLen) && parsedLen > 0 ? parsedLen : undefined,
+        contentType: ct,
+      };
+    } catch {
+      return {};
+    }
   }
 
   private static async fetchYouTubePlayer(videoId: string): Promise<{
@@ -56,10 +124,10 @@ export class ServerlessMediaExtractor {
     try {
       const watchRes = await fetch(`https://www.youtube.com/watch?v=${videoId}`, {
         headers: {
-          'User-Agent':
-            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36',
+          'User-Agent': DEFAULT_BROWSER_UA,
           Cookie: 'SOCS=CAI; PREF=hl=en&tz=UTC',
         },
+        signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS),
       });
       if (watchRes.ok) {
         const html = await watchRes.text();
@@ -131,6 +199,7 @@ export class ServerlessMediaExtractor {
                 },
               },
             }),
+            signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS),
           }
         );
 
@@ -151,6 +220,45 @@ export class ServerlessMediaExtractor {
     throw new Error('Não foi possível extrair os streams do YouTube para este vídeo.');
   }
 
+  private static async resolveYouTubePipedStream(
+    videoId: string,
+    format: DownloadFormat
+  ): Promise<ResolvedMediaStream | null> {
+    const pipedInstances = [
+      'https://pipedapi.kavin.rocks',
+      'https://pipedapi.tokhmi.xyz',
+      'https://pipedapi.moomoo.me',
+    ];
+    for (const instance of pipedInstances) {
+      try {
+        const pRes = await fetch(`${instance}/streams/${videoId}`, {
+          headers: { 'User-Agent': 'Mozilla/5.0 (compatible; YesodeMediaEngine/1.0)' },
+          signal: AbortSignal.timeout(8000),
+        });
+        if (!pRes.ok) continue;
+        const pData = await pRes.json();
+        const streams: any[] =
+          format === 'audio_only' ? pData?.audioStreams || [] : pData?.videoStreams || [];
+        const chosen =
+          streams.find((s) => !s.videoOnly && s.format === 'MPEG_4') || streams[0];
+        if (chosen?.url) {
+          return {
+            streamUrl: chosen.url,
+            title: pData?.title || `youtube-${videoId}`,
+            contentType: format === 'audio_only' ? 'audio/mp4' : 'video/mp4',
+            extension: format === 'audio_only' ? 'm4a' : 'mp4',
+            contentLength: Number(chosen.contentLength || 0) || undefined,
+            requestHeaders: { 'User-Agent': DEFAULT_BROWSER_UA },
+            browserDirectSafe: false,
+          };
+        }
+      } catch {
+        continue;
+      }
+    }
+    return null;
+  }
+
   private static async fetchTwitterMedia(tweetId: string): Promise<{
     title: string;
     duration: number;
@@ -158,12 +266,12 @@ export class ServerlessMediaExtractor {
     uploader: string;
     videoUrl: string;
   }> {
-    // Estratégia 1: FxTwitter API (JSON limpo com URL direta MP4 avc1+mp4a)
     try {
       const fxRes = await fetch(`https://api.fxtwitter.com/status/${tweetId}`, {
         headers: {
           'User-Agent': 'Mozilla/5.0 (compatible; YesodeMediaEngine/1.0)',
         },
+        signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS),
       });
       if (fxRes.ok) {
         const fxData = await fxRes.json();
@@ -188,17 +296,14 @@ export class ServerlessMediaExtractor {
       // Tenta fallback Syndication
     }
 
-    // Estratégia 2: Twitter Syndication API oficial
     const token = ((Number(tweetId) / 1e15) * Math.PI)
       .toString(36)
       .replace(/(0+|\.)/g, '');
     const synRes = await fetch(
       `https://cdn.syndication.twimg.com/tweet-result?id=${tweetId}&token=${token}`,
       {
-        headers: {
-          'User-Agent':
-            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36',
-        },
+        headers: { 'User-Agent': DEFAULT_BROWSER_UA },
+        signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS),
       }
     );
 
@@ -229,52 +334,138 @@ export class ServerlessMediaExtractor {
     throw new Error('Não foi possível localizar um vídeo público neste post do X/Twitter.');
   }
 
-  private static async fetchGenericOpenGraphVideo(targetUrl: string): Promise<{
+  private static async resolveSocialMirror(
+    mirrorUrl: string,
+    fallbackTitle: string,
+    defaultUploader: string
+  ): Promise<{
     title: string;
     thumbnail: string;
+    uploader: string;
     videoUrl: string;
+    contentLength?: number;
   }> {
-    // Para Instagram / Facebook, tenta extrair og:video ou vxinstagram
-    const normalizedUrl = targetUrl.replace(
-      /^(https?:\/\/)(?:www\.)?instagram\.com/i,
-      '$1ddinstagram.com'
-    );
-
-    const res = await fetch(normalizedUrl, {
-      headers: {
-        'User-Agent': 'Mozilla/5.0 (compatible; Discordbot/2.0; +https://discordapp.com)',
-      },
+    const res = await fetch(mirrorUrl, {
+      headers: { 'User-Agent': DISCORD_CRAWLER_UA },
+      redirect: 'follow',
+      signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS),
     });
 
     if (!res.ok) {
-      throw new Error(`Falha ao acessar mídia (${res.status}).`);
+      await res.body?.cancel().catch(() => {});
+      throw new Error(`HTTP ${res.status} em ${mirrorUrl}`);
+    }
+
+    const contentType = (res.headers.get('content-type') || '').toLowerCase();
+    if (contentType.startsWith('video/') || contentType.includes('application/octet-stream')) {
+      const rawLen = res.headers.get('content-length');
+      const parsedLen = rawLen ? Number(rawLen) : NaN;
+      const finalUrl = res.url || mirrorUrl;
+      await res.body?.cancel().catch(() => {});
+      return {
+        title: fallbackTitle,
+        thumbnail: '',
+        uploader: defaultUploader,
+        videoUrl: finalUrl,
+        contentLength: Number.isFinite(parsedLen) && parsedLen > 0 ? parsedLen : undefined,
+      };
     }
 
     const html = await res.text();
-    const videoMatch =
-      html.match(/<meta\s+property=["']og:video(?::secure_url)?["']\s+content=["']([^"']+)["']/i) ||
-      html.match(/content=["']([^"']+)["']\s+property=["']og:video(?::secure_url)?["']/i);
-    const titleMatch =
-      html.match(/<meta\s+property=["']og:title["']\s+content=["']([^"']+)["']/i) ||
-      html.match(/<title>([^<]+)<\/title>/i);
-    const thumbMatch = html.match(
-      /<meta\s+property=["']og:image["']\s+content=["']([^"']+)["']/i
-    );
+    const rawVideoUrl =
+      extractMetaTag(html, 'og:video:secure_url') ||
+      extractMetaTag(html, 'og:video') ||
+      extractMetaTag(html, 'twitter:player:stream');
 
-    if (!videoMatch?.[1]) {
-      throw new Error('Não foi possível localizar o stream direto de vídeo nesta URL.');
+    if (!rawVideoUrl) {
+      throw new Error(`Stream og:video ausente em ${mirrorUrl}`);
     }
 
+    const videoUrl = resolveAbsoluteUrl(rawVideoUrl, res.url || mirrorUrl);
+    if (!/^https?:\/\//i.test(videoUrl)) {
+      throw new Error('URL de vídeo extraída é inválida.');
+    }
+
+    const ogTitle =
+      extractMetaTag(html, 'og:title') ||
+      extractMetaTag(html, 'twitter:title') ||
+      decodeHtmlEntities(html.match(/<title>([^<]+)<\/title>/i)?.[1] || '');
+    const ogDesc = extractMetaTag(html, 'og:description');
+    const title = ogTitle || (ogDesc ? ogDesc.slice(0, 70) : '') || fallbackTitle;
+    const rawThumb = extractMetaTag(html, 'og:image');
+
     return {
-      title: titleMatch?.[1]?.trim() || 'social-video',
-      thumbnail: thumbMatch?.[1] || '',
-      videoUrl: videoMatch[1].replace(/&amp;/g, '&'),
+      title,
+      thumbnail: rawThumb ? resolveAbsoluteUrl(rawThumb, res.url || mirrorUrl) : '',
+      uploader: ogTitle || defaultUploader,
+      videoUrl,
     };
   }
 
+  private static async fetchInstagramMedia(targetUrl: string): Promise<{
+    title: string;
+    thumbnail: string;
+    uploader: string;
+    videoUrl: string;
+    contentLength?: number;
+  }> {
+    const target = MediaSourceUrl.extractInstagramTarget(targetUrl);
+    if (!target) {
+      throw new Error('Link do Instagram inválido. Informe um link de Reel, Post (/p/) ou IGTV.');
+    }
+
+    const fallbackTitle = `instagram-${target.kind}-${target.shortcode}`;
+    const mirrors = [
+      `https://vxinstagram.com/${target.kind}/${target.shortcode}/`,
+      `https://kkinstagram.com/${target.kind}/${target.shortcode}/`,
+      `https://ddinstagram.com/${target.kind}/${target.shortcode}/`,
+    ];
+
+    const errors: string[] = [];
+    for (const mirror of mirrors) {
+      try {
+        return await this.resolveSocialMirror(mirror, fallbackTitle, 'Instagram');
+      } catch (err: any) {
+        errors.push(err?.message || mirror);
+      }
+    }
+
+    throw new Error(
+      `Não foi possível extrair o vídeo público deste link do Instagram (${errors[0] || 'sem resposta'}). Verifique se o perfil é público.`
+    );
+  }
+
+  private static async fetchGenericOpenGraphVideo(targetUrl: string): Promise<{
+    title: string;
+    thumbnail: string;
+    uploader: string;
+    videoUrl: string;
+    contentLength?: number;
+  }> {
+    return this.resolveSocialMirror(targetUrl, 'social-video', 'Social Media');
+  }
+
   public static async getInfo(targetUrl: string): Promise<ServerlessMediaInfo> {
-    const ytId = this.extractYouTubeId(targetUrl);
+    const ytId = MediaSourceUrl.extractYouTubeId(targetUrl);
     if (ytId) {
+      try {
+        const oembedRes = await fetch(
+          `https://www.youtube.com/oembed?url=${encodeURIComponent(`https://www.youtube.com/watch?v=${ytId}`)}&format=json`,
+          { signal: AbortSignal.timeout(8000) }
+        );
+        if (oembedRes.ok) {
+          const oembed = await oembedRes.json();
+          return {
+            title: oembed.title || `youtube-${ytId}`,
+            duration: 0,
+            thumbnail: oembed.thumbnail_url || `https://i.ytimg.com/vi/${ytId}/hqdefault.jpg`,
+            uploader: oembed.author_name || 'YouTube',
+          };
+        }
+      } catch {
+        // Fallback para player completo abaixo
+      }
+
       const { playerData } = await this.fetchYouTubePlayer(ytId);
       const details = playerData?.videoDetails || {};
       const thumbs = details?.thumbnail?.thumbnails || [];
@@ -286,7 +477,7 @@ export class ServerlessMediaExtractor {
       };
     }
 
-    const tweetId = this.extractTweetId(targetUrl);
+    const tweetId = MediaSourceUrl.extractTweetId(targetUrl);
     if (tweetId) {
       const info = await this.fetchTwitterMedia(tweetId);
       return {
@@ -297,137 +488,231 @@ export class ServerlessMediaExtractor {
       };
     }
 
+    const igTarget = MediaSourceUrl.extractInstagramTarget(targetUrl);
+    if (igTarget) {
+      const info = await this.fetchInstagramMedia(targetUrl);
+      return {
+        title: info.title,
+        duration: 0,
+        thumbnail: info.thumbnail,
+        uploader: info.uploader,
+      };
+    }
+
     const og = await this.fetchGenericOpenGraphVideo(targetUrl);
     return {
       title: og.title,
       duration: 0,
       thumbnail: og.thumbnail,
-      uploader: 'Social Media',
+      uploader: og.uploader,
     };
+  }
+
+  public static async resolveStream(
+    targetUrl: string,
+    format: DownloadFormat,
+    _profile: DownloadProfile = 'compatibility'
+  ): Promise<ResolvedMediaStream> {
+    // 1. YouTube
+    const ytId = MediaSourceUrl.extractYouTubeId(targetUrl);
+    if (ytId) {
+      try {
+        const { playerData, userAgent } = await this.fetchYouTubePlayer(ytId);
+        const title = playerData?.videoDetails?.title || `youtube-${ytId}`;
+        const muxedFormats: any[] = playerData?.streamingData?.formats || [];
+        const adaptiveFormats: any[] = playerData?.streamingData?.adaptiveFormats || [];
+
+        let targetStream: any = null;
+        let useRangeParam = false;
+        let contentType = 'video/mp4';
+        let extension = 'mp4';
+
+        if (format === 'audio_only') {
+          targetStream =
+            adaptiveFormats.find(
+              (f) => f.itag === 140 || (f.mimeType && f.mimeType.includes('audio/mp4'))
+            ) ||
+            adaptiveFormats.find((f) => f.mimeType && f.mimeType.includes('audio/'));
+          useRangeParam = !!targetStream?.contentLength;
+          contentType = 'audio/mp4';
+          extension = 'm4a';
+        } else if (format === 'video_only') {
+          const avcStreams = adaptiveFormats
+            .filter((f) => f.mimeType && f.mimeType.includes('video/mp4') && f.mimeType.includes('avc1'))
+            .sort((a, b) => (b.height || 0) - (a.height || 0));
+          targetStream = avcStreams[0] || muxedFormats.find((f) => f.itag === 18) || muxedFormats[0];
+          useRangeParam = !!targetStream?.contentLength;
+        } else {
+          targetStream =
+            muxedFormats.find((f) => f.itag === 18) ||
+            muxedFormats.find((f) => f.mimeType && f.mimeType.includes('video/mp4')) ||
+            muxedFormats[0];
+          useRangeParam = false;
+        }
+
+        if (targetStream?.url) {
+          const downloadUrl =
+            useRangeParam && targetStream.contentLength
+              ? `${targetStream.url}&range=0-${targetStream.contentLength}`
+              : targetStream.url;
+
+          const parsedLen = targetStream.contentLength ? Number(targetStream.contentLength) : undefined;
+          return {
+            streamUrl: downloadUrl,
+            title,
+            contentType,
+            extension,
+            contentLength: Number.isFinite(parsedLen) && parsedLen! > 0 ? parsedLen : undefined,
+            requestHeaders: { 'User-Agent': userAgent },
+            browserDirectSafe: false,
+          };
+        }
+      } catch {
+        // Fallback Piped abaixo
+      }
+
+      const piped = await this.resolveYouTubePipedStream(ytId, format);
+      if (piped) return piped;
+      throw new Error('Formato de stream compatível não encontrado para este vídeo do YouTube.');
+    }
+
+    // 2. X / Twitter
+    const tweetId = MediaSourceUrl.extractTweetId(targetUrl);
+    if (tweetId) {
+      const info = await this.fetchTwitterMedia(tweetId);
+      const headers = { 'User-Agent': DEFAULT_BROWSER_UA };
+      const probe = await this.probeStreamHeaders(info.videoUrl, headers);
+      return {
+        streamUrl: info.videoUrl,
+        title: info.title,
+        contentType: 'video/mp4',
+        extension: 'mp4',
+        contentLength: probe.contentLength,
+        requestHeaders: headers,
+        browserDirectSafe: true,
+      };
+    }
+
+    // 3. Instagram
+    const igTarget = MediaSourceUrl.extractInstagramTarget(targetUrl);
+    if (igTarget) {
+      const info = await this.fetchInstagramMedia(targetUrl);
+      const headers = { 'User-Agent': DEFAULT_BROWSER_UA };
+      const contentLength =
+        info.contentLength || (await this.probeStreamHeaders(info.videoUrl, headers)).contentLength;
+
+      return {
+        streamUrl: info.videoUrl,
+        title: info.title,
+        contentType: 'video/mp4',
+        extension: 'mp4',
+        contentLength,
+        requestHeaders: headers,
+        browserDirectSafe: true,
+      };
+    }
+
+    // 4. Facebook / Genérico
+    const og = await this.fetchGenericOpenGraphVideo(targetUrl);
+    const headers = { 'User-Agent': DEFAULT_BROWSER_UA };
+    const contentLength =
+      og.contentLength || (await this.probeStreamHeaders(og.videoUrl, headers)).contentLength;
+
+    return {
+      streamUrl: og.videoUrl,
+      title: og.title,
+      contentType: 'video/mp4',
+      extension: 'mp4',
+      contentLength,
+      requestHeaders: headers,
+      browserDirectSafe: true,
+    };
+  }
+
+  public static async fetchBufferWithLimit(
+    resolved: ResolvedMediaStream,
+    maxBytes?: number
+  ): Promise<{ buffer?: Buffer; exceededLimit: boolean }> {
+    if (maxBytes && resolved.contentLength && resolved.contentLength > maxBytes) {
+      return { exceededLimit: true };
+    }
+
+    const streamRes = await fetch(resolved.streamUrl, {
+      headers: resolved.requestHeaders,
+      redirect: 'follow',
+      signal: AbortSignal.timeout(30000),
+    });
+
+    if (!streamRes.ok) {
+      await streamRes.body?.cancel().catch(() => {});
+      throw new Error(`Erro ao baixar arquivo de mídia (HTTP ${streamRes.status}).`);
+    }
+
+    const ct = (streamRes.headers.get('content-type') || '').toLowerCase();
+    if (ct.includes('text/html')) {
+      await streamRes.body?.cancel().catch(() => {});
+      throw new Error('O provedor retornou uma página HTML em vez de um fluxo de mídia válido.');
+    }
+
+    const headerLen = Number(streamRes.headers.get('content-length') || 0);
+    if (maxBytes && headerLen > maxBytes) {
+      await streamRes.body?.cancel().catch(() => {});
+      return { exceededLimit: true };
+    }
+
+    if (!streamRes.body) {
+      const buffer = Buffer.from(await streamRes.arrayBuffer());
+      if (maxBytes && buffer.length > maxBytes) {
+        return { exceededLimit: true };
+      }
+      if (buffer.length < 500) {
+        throw new Error('Stream de mídia retornado está vazio ou incompleto.');
+      }
+      return { buffer, exceededLimit: false };
+    }
+
+    const reader = streamRes.body.getReader();
+    const chunks: Uint8Array[] = [];
+    let total = 0;
+
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      if (value) {
+        total += value.byteLength;
+        if (maxBytes && total > maxBytes) {
+          await reader.cancel().catch(() => {});
+          return { exceededLimit: true };
+        }
+        chunks.push(value);
+      }
+    }
+
+    const buffer = Buffer.concat(chunks);
+    if (buffer.length < 500) {
+      throw new Error('Stream de mídia retornado está vazio ou incompleto.');
+    }
+
+    return { buffer, exceededLimit: false };
   }
 
   public static async downloadBuffer(
     targetUrl: string,
     format: DownloadFormat,
-    _profile: DownloadProfile = 'compatibility'
+    profile: DownloadProfile = 'compatibility'
   ): Promise<ServerlessDownloadResult> {
-    // 1. YouTube
-    const ytId = this.extractYouTubeId(targetUrl);
-    if (ytId) {
-      const { playerData, userAgent } = await this.fetchYouTubePlayer(ytId);
-      const title = playerData?.videoDetails?.title || `youtube-${ytId}`;
-      const muxedFormats: any[] = playerData?.streamingData?.formats || [];
-      const adaptiveFormats: any[] = playerData?.streamingData?.adaptiveFormats || [];
+    const resolved = await this.resolveStream(targetUrl, format, profile);
+    const { buffer } = await this.fetchBufferWithLimit(resolved);
 
-      let targetStream: any = null;
-      let useRangeParam = false;
-      let contentType = 'video/mp4';
-      let extension = 'mp4';
-
-      if (format === 'audio_only') {
-        targetStream =
-          adaptiveFormats.find(
-            (f) => f.itag === 140 || (f.mimeType && f.mimeType.includes('audio/mp4'))
-          ) ||
-          adaptiveFormats.find((f) => f.mimeType && f.mimeType.includes('audio/'));
-        useRangeParam = !!targetStream?.contentLength;
-        contentType = 'audio/mp4';
-        extension = 'm4a';
-      } else if (format === 'video_only') {
-        const avcStreams = adaptiveFormats
-          .filter((f) => f.mimeType && f.mimeType.includes('video/mp4') && f.mimeType.includes('avc1'))
-          .sort((a, b) => (b.height || 0) - (a.height || 0));
-        targetStream = avcStreams[0] || muxedFormats.find((f) => f.itag === 18) || muxedFormats[0];
-        useRangeParam = !!targetStream?.contentLength;
-      } else {
-        // video_muxed ou gif -> máxima compatibilidade H.264 + AAC pré-muxado (itag 18)
-        targetStream =
-          muxedFormats.find((f) => f.itag === 18) ||
-          muxedFormats.find((f) => f.mimeType && f.mimeType.includes('video/mp4')) ||
-          muxedFormats[0];
-        useRangeParam = false;
-      }
-
-      if (!targetStream?.url) {
-        throw new Error('Formato de stream compatível não encontrado para este vídeo do YouTube.');
-      }
-
-      const downloadUrl =
-        useRangeParam && targetStream.contentLength
-          ? `${targetStream.url}&range=0-${targetStream.contentLength}`
-          : targetStream.url;
-
-      const streamRes = await fetch(downloadUrl, {
-        headers: {
-          'User-Agent': userAgent,
-        },
-      });
-
-      if (!streamRes.ok) {
-        throw new Error(`Erro ao baixar stream do YouTube (HTTP ${streamRes.status}).`);
-      }
-
-      const buffer = Buffer.from(await streamRes.arrayBuffer());
-      if (buffer.length < 500) {
-        throw new Error('Stream retornado pelo YouTube está vazio ou incompleto.');
-      }
-
-      return {
-        buffer,
-        title,
-        contentType,
-        extension,
-      };
+    if (!buffer) {
+      throw new Error('Falha ao transferir buffer da mídia.');
     }
 
-    // 2. X / Twitter
-    const tweetId = this.extractTweetId(targetUrl);
-    if (tweetId) {
-      const info = await this.fetchTwitterMedia(tweetId);
-      const streamRes = await fetch(info.videoUrl, {
-        headers: {
-          'User-Agent':
-            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36',
-        },
-      });
-
-      if (!streamRes.ok) {
-        throw new Error(`Erro ao baixar vídeo do X/Twitter (HTTP ${streamRes.status}).`);
-      }
-
-      const buffer = Buffer.from(await streamRes.arrayBuffer());
-      if (buffer.length < 500) {
-        throw new Error('Stream retornado pelo X/Twitter está vazio.');
-      }
-
-      return {
-        buffer,
-        title: info.title,
-        contentType: 'video/mp4',
-        extension: 'mp4',
-      };
-    }
-
-    // 3. Instagram / Facebook (OpenGraph / ddinstagram)
-    const og = await this.fetchGenericOpenGraphVideo(targetUrl);
-    const streamRes = await fetch(og.videoUrl, {
-      headers: {
-        'User-Agent':
-          'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36',
-      },
-    });
-
-    if (!streamRes.ok) {
-      throw new Error(`Erro ao baixar mídia social (HTTP ${streamRes.status}).`);
-    }
-
-    const buffer = Buffer.from(await streamRes.arrayBuffer());
     return {
       buffer,
-      title: og.title,
-      contentType: 'video/mp4',
-      extension: 'mp4',
+      title: resolved.title,
+      contentType: resolved.contentType,
+      extension: resolved.extension,
     };
   }
 }
-

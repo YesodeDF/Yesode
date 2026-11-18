@@ -1,7 +1,25 @@
 import os
 import sys
 import json
+import re
 import yt_dlp
+
+
+def normalize_media_url(url):
+    match = re.match(r'^https?://(?:www\.)?instagram\.com/(reel|reels|p|tv)/([A-Za-z0-9_-]+)', url, re.IGNORECASE)
+    if match:
+        kind = match.group(1).lower()
+        if kind == 'reels':
+            kind = 'reel'
+        return f"https://www.instagram.com/{kind}/{match.group(2)}/"
+    return url
+
+
+def apply_optional_cookies(opts):
+    cookies_file = os.environ.get('YTDLP_COOKIES_FILE', '').strip()
+    if cookies_file and os.path.isfile(cookies_file):
+        opts['cookiefile'] = cookies_file
+    return opts
 
 def find_ffmpeg_path():
     # 1. Checa repositório local yt-donwloader
@@ -26,14 +44,15 @@ def find_ffmpeg_path():
     return None
 
 def extract_info(url):
-    opts = {
+    normalized_url = normalize_media_url(url)
+    opts = apply_optional_cookies({
         'quiet': True,
         'no_warnings': True,
         'nocheckcertificate': True,
         'noplaylist': True,
-    }
+    })
     with yt_dlp.YoutubeDL(opts) as ydl:
-        info = ydl.extract_info(url, download=False)
+        info = ydl.extract_info(normalized_url, download=False)
         return {
             'title': info.get('title') or 'Mídia',
             'duration': info.get('duration') or 0,
@@ -42,6 +61,7 @@ def extract_info(url):
         }
 
 def download_media(url, format_type, profile, output_dir, out_id):
+    url = normalize_media_url(url)
     ffmpeg_path = find_ffmpeg_path()
     extra_opts = {}
 
@@ -90,7 +110,7 @@ def download_media(url, format_type, profile, output_dir, out_id):
 
     out_tmpl = os.path.join(output_dir, f"{out_id}.%(ext)s")
 
-    ydl_opts = {
+    ydl_opts = apply_optional_cookies({
         'format': format_str,
         'outtmpl': out_tmpl,
         'noplaylist': True,
@@ -100,7 +120,7 @@ def download_media(url, format_type, profile, output_dir, out_id):
         'concurrent_fragment_downloads': 16,
         'http_chunk_size': 10485760,
         **extra_opts
-    }
+    })
 
     if merge_format:
         ydl_opts['merge_output_format'] = merge_format

@@ -21,6 +21,7 @@ import { MediaSourceUrl } from './src/modules/media-downloader/domain/value-obje
 import { YtDlpExtractorService } from './src/modules/media-downloader/infrastructure/YtDlpExtractorService.ts';
 import { ServerlessMediaExtractor } from './src/modules/media-downloader/infrastructure/ServerlessMediaExtractor.ts';
 import fs from 'fs';
+import { Readable } from 'stream';
 
 dotenv.config();
 
@@ -225,18 +226,44 @@ app.get('/api/tools/media-download', async (req, res) => {
       });
       return;
     } catch {
-      // Fallback 100% Node.js nativo (ServerlessMediaExtractor)
-      const fallbackResult = await ServerlessMediaExtractor.downloadBuffer(mediaSource.url, format, profile);
-      const safeTitle = (fallbackResult.title || 'video')
+      // Fallback 100% Node.js nativo com streaming direto (sem segurar arquivos grandes em RAM)
+      const resolved = await ServerlessMediaExtractor.resolveStream(mediaSource.url, format, profile);
+      const safeTitle = (resolved.title || 'video')
         .replace(/[^a-zA-Z0-9_\-]/g, '_')
         .substring(0, 50);
-      const finalFilename = `${safeTitle}.${fallbackResult.extension}`;
+      const finalFilename = `${safeTitle}.${resolved.extension}`;
+
+      const upstream = await fetch(resolved.streamUrl, {
+        headers: resolved.requestHeaders,
+        redirect: 'follow',
+        signal: AbortSignal.timeout(30000),
+      });
+
+      if (!upstream.ok || !upstream.body) {
+        const fallbackResult = await ServerlessMediaExtractor.downloadBuffer(mediaSource.url, format, profile);
+        res.setHeader('Content-Disposition', `attachment; filename="${encodeURIComponent(finalFilename)}"; filename*=UTF-8''${encodeURIComponent(finalFilename)}`);
+        res.setHeader('Content-Type', fallbackResult.contentType);
+        res.setHeader('Content-Length', fallbackResult.buffer.length.toString());
+        res.setHeader('X-Media-Profile', profile);
+        return res.status(200).send(fallbackResult.buffer);
+      }
+
+      const upstreamCt = (upstream.headers.get('content-type') || '').toLowerCase();
+      if (upstreamCt.includes('text/html')) {
+        await upstream.body.cancel().catch(() => {});
+        throw new Error('O provedor retornou HTML em vez de fluxo de vídeo.');
+      }
 
       res.setHeader('Content-Disposition', `attachment; filename="${encodeURIComponent(finalFilename)}"; filename*=UTF-8''${encodeURIComponent(finalFilename)}`);
-      res.setHeader('Content-Type', fallbackResult.contentType);
-      res.setHeader('Content-Length', fallbackResult.buffer.length.toString());
+      res.setHeader('Content-Type', resolved.contentType);
+      const len = upstream.headers.get('content-length') || (resolved.contentLength ? String(resolved.contentLength) : undefined);
+      if (len) {
+        res.setHeader('Content-Length', len);
+      }
       res.setHeader('X-Media-Profile', profile);
-      return res.status(200).send(fallbackResult.buffer);
+
+      Readable.fromWeb(upstream.body as any).pipe(res);
+      return;
     }
   } catch (error: any) {
     console.error('Erro no download de mídia:', error);

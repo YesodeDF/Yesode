@@ -146,6 +146,49 @@ export const MediaDownloaderWorkspace: React.FC<MediaDownloaderWorkspaceProps> =
     setQueue((prev) => prev.filter((item) => item.id !== id));
   };
 
+  const triggerBrowserDownload = (href: string, filename: string, openInNewTab = false) => {
+    const link = document.createElement('a');
+    link.href = href;
+    link.download = filename;
+    if (openInNewTab) {
+      link.target = '_blank';
+      link.rel = 'noopener noreferrer';
+    }
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
+  const fetchMediaPayload = async (
+    queryUrl: string
+  ): Promise<{ blob?: Blob; directUrl?: string; filename?: string }> => {
+    const response = await fetch(queryUrl);
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => null);
+      throw new Error(errorData?.error || t('tools.media.err_server'));
+    }
+
+    const contentType = (response.headers.get('content-type') || '').toLowerCase();
+    if (contentType.includes('application/json')) {
+      const payload = await response.json();
+      if (payload?.mode === 'direct_url' && payload?.directUrl) {
+        return {
+          directUrl: payload.directUrl,
+          filename: payload.filename,
+        };
+      }
+      throw new Error(payload?.error || t('tools.media.err_server'));
+    }
+
+    const blob = await response.blob();
+    if (blob.size < 500) {
+      const errorText = await blob.text();
+      throw new Error(`${t('tools.media.err_invalid_blob')} (${blob.size} bytes): ${errorText.substring(0, 100)}`);
+    }
+
+    return { blob };
+  };
+
   const handleStartDownload = async (id: string) => {
     const item = queue.find((q) => q.id === id);
     if (!item || !item.media) return;
@@ -173,37 +216,37 @@ export const MediaDownloaderWorkspace: React.FC<MediaDownloaderWorkspaceProps> =
         }
       }, 500);
 
-      const response = await fetch(`/api/tools/media-download?${queryParams.toString()}`);
-      clearInterval(progressTimer);
-
-      if (!response.ok) {
-        const errorData = await response.json().catch(() => null);
-        throw new Error(errorData?.error || t('tools.media.err_server'));
+      let result: { blob?: Blob; directUrl?: string; filename?: string };
+      try {
+        result = await fetchMediaPayload(`/api/tools/media-download?${queryParams.toString()}`);
+      } finally {
+        clearInterval(progressTimer);
       }
 
       setQueue((prev) =>
         prev.map((q) => (q.id === id ? { ...q, progress: 95 } : q))
       );
 
-      const blob = await response.blob();
-
-      if (blob.size < 500) {
-        const errorText = await blob.text();
-        throw new Error(`${t('tools.media.err_invalid_blob')} (${blob.size} bytes): ${errorText.substring(0, 100)}`);
-      }
-
       const safeTitle = (item.title || `yesode-${item.media.platform}`)
         .replace(/[^a-zA-Z0-9_\-\u00C0-\u00FF]/g, '_')
         .substring(0, 45);
-      const filename = `${safeTitle}.${spec.container}`;
+      const filename = result.filename || `${safeTitle}.${spec.container}`;
 
-      const blobUrl = window.URL.createObjectURL(blob);
-      const link = document.createElement('a');
-      link.href = blobUrl;
-      link.download = filename;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
+      let blobUrl: string | undefined;
+      if (result.blob) {
+        blobUrl = window.URL.createObjectURL(result.blob);
+        triggerBrowserDownload(blobUrl, filename);
+      } else if (result.directUrl) {
+        try {
+          const directRes = await fetch(result.directUrl);
+          if (!directRes.ok) throw new Error(`HTTP ${directRes.status}`);
+          const directBlob = await directRes.blob();
+          blobUrl = window.URL.createObjectURL(directBlob);
+          triggerBrowserDownload(blobUrl, filename);
+        } catch {
+          triggerBrowserDownload(result.directUrl, filename, true);
+        }
+      }
 
       setQueue((prev) =>
         prev.map((q) =>
@@ -248,9 +291,21 @@ export const MediaDownloaderWorkspace: React.FC<MediaDownloaderWorkspaceProps> =
     try {
       let videoBlobUrl = item.blobUrl;
       if (!videoBlobUrl) {
-        const resp = await fetch(`/api/tools/media-download?url=${encodeURIComponent(item.media.url)}&format=video_muxed&profile=compatibility`);
-        const blob = await resp.blob();
-        videoBlobUrl = window.URL.createObjectURL(blob);
+        const result = await fetchMediaPayload(
+          `/api/tools/media-download?url=${encodeURIComponent(item.media.url)}&format=video_muxed&profile=compatibility`
+        );
+        if (result.blob) {
+          videoBlobUrl = window.URL.createObjectURL(result.blob);
+        } else if (result.directUrl) {
+          const directRes = await fetch(result.directUrl);
+          if (!directRes.ok) throw new Error(`HTTP ${directRes.status}`);
+          const directBlob = await directRes.blob();
+          videoBlobUrl = window.URL.createObjectURL(directBlob);
+        }
+      }
+
+      if (!videoBlobUrl) {
+        throw new Error(t('tools.media.error_fallback'));
       }
 
       setQueue((prev) =>
